@@ -1,0 +1,74 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<div class="auth-wrapper login-page">
+    <div class="auth-image">
+        <img src="{% static 'img/auth_bg.png' %}" alt="Login">
+    </div>
+
+    <div class="auth-form-container">
+        <form class="auth-form" method="POST">
+            {% csrf_token %}
+            <h2>ЛОГІН</h2>
+            
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder=" " required>
+                <label for="email">Електронна пошта</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder=" " required>
+                <label for="password">Пароль</label>
+            </div>
+
+            <div class="auth-options">
+                <label class="checkbox-container">
+                    <input type="checkbox"> <span>Запам'ятати мене</span>
+                </label>
+                <a href="#">Забули пароль?</a>
+            </div>
+
+            <button type="submit" class="btn-auth-submit">УВІЙТИ</button>
+            <p class="auth-footer">Немає акаунту? <a href="{% url 'register' %}">Зареєструватися</a></p>
+        </form>
+    </div>
+</div>
+<table alt="info-content">
+        <td>
+            <img src="{% static 'img/logo.png' %}">
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+    </table>
+    <hr>
+{% endblock %}
+
+<script src="{% static 'js/main.js' %}"></script>

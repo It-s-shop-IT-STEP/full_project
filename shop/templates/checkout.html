@@ -1,0 +1,48 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<main class="container">
+    <div class="checkout-layout">
+        <section>
+            <h2>ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</h2>
+            <h4 style="margin: 30px 0 15px;">КОНТАКТНІ ДАНІ ОДЕРЖУВАЧА</h4>
+            <div class="form-group">
+                <input type="text" placeholder="Ім'я">
+                <input type="text" placeholder="Прізвище">
+                <input type="email" placeholder="E-Mail">
+                <input type="tel" placeholder="Телефон">
+            </div>
+
+            <h4 style="margin: 20px 0 10px;">ОБЕРІТЬ СПОСІБ ДОСТАВКИ</h4>
+            <div style="border: 1px solid var(--border); padding: 20px; border-radius: 8px;">
+                <label><input type="radio" name="del" checked> Нова Пошта - Відділення</label>
+                <div class="form-group" style="margin-top: 15px;">
+                    <select><option>Оберіть місто</option></select>
+                    <select><option>Оберіть відділення</option></select>
+                </div>
+            </div>
+        </section>
+
+        <aside style="background: var(--gray); padding: 30px; border-radius: 12px; height: fit-content;">
+            <h3>Ваші товари</h3>
+            <div style="display: flex; gap: 15px; margin: 20px 0;">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=200&auto=format&fit=crop" width="80">
+                <div>
+                    <p><strong>ФУТБОЛКА</strong></p>
+                    <p>Розмір: S | Колір: Білий</p>
+                    <p><strong>100$</strong></p>
+                </div>
+            </div>
+            <hr style="margin: 20px 0;">
+            <div style="display: flex; justify-content: space-between; font-size: 1.2rem;">
+                <strong>Разом:</strong>
+                <strong>200$</strong>
+            </div>
+            <button class="btn btn-blue" style="width: 100%; margin-top: 20px;">Замовлення підтверджую</button>
+        </aside>
+    </div>
+</main>
+
+<script src="{% static 'js/main.js' %}"></script>

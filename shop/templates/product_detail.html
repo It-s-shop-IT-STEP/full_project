@@ -1,0 +1,55 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="product-page">
+    <div class="product-container">
+        <div class="product-image-container">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </div>
+
+        <div class="product-details">
+            <h1 class="product-title">{{ product.name }}</h1>
+            <p class="product-article">Артикул: {{ product.article }}</p>
+
+            <p class="product-price">{{ product.price }} грн</p>
+
+            <div class="option-group">
+                <h3>КОЛІР <span>БІЛИЙ</span></h3>
+                <div class="color-options">
+                    <label class="color-dot white active"><input type="radio" name="color" value="Білий" checked></label>
+                    <label class="color-dot black"><input type="radio" name="color" value="Чорний"></label>
+                    <label class="color-dot gray"><input type="radio" name="color" value="Сірий"></label>
+                </div>
+            </div>
+
+            <div class="option-group">
+                <h3>РОЗМІР <span>S</span></h3>
+                <div class="size-options">
+                    <label class="size-item active"><input type="radio" name="size" value="S" checked> S</label>
+                    <label class="size-item"><input type="radio" name="size" value="M"> M</label>
+                    <label class="size-item"><input type="radio" name="size" value="L"> L</label>
+                </div>
+            </div>
+
+            <div class="product-info-text">
+                <div class="info-section">
+                    <h3>ОПИС</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+                <div class="info-section">
+                    <h3>СКЛАД ТА ДОГЛЯД</h3>
+                    <p>{{ product.composition }}</p>
+                </div>
+            </div>
+
+            <button class="btn-to-catalog" onclick="addToCart('{{ product.id }}', '{{ product.name }}', '{{ product.price }}', '{{ product.image.url }}')">В кошик</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<script src="{% static 'js/main.js' %}"></script>

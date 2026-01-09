@@ -1,0 +1,191 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+/* Основне компонування */
+.auth-wrapper {
+    display: flex;
+    min-height:70vh;
+    width: 100%;
+}
+
+.auth-image {
+    flex: 1;
+    position: relative;
+    display: none;
+}
+
+@media (min-width: 992px) { .auth-image { display: block; } }
+
+.auth-image img { width: 100%; height: 100%; object-fit: cover; }
+
+.auth-overlay-text {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    color: white;
+}
+
+.auth-form-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: #fff;
+}
+
+.auth-form { width: 100%; max-width: 420px; }
+
+.auth-form h2 { font-size: 32px; font-weight: 500; margin-bottom: 100px; text-align: center; font-family: 'Montserrat', sans-serif; }
+
+.auth-subtitle { color: #666; margin-bottom: 30px; font-family: 'Montserrat', sans-serif; }
+
+/* --- МАГІЯ FLOATING LABELS --- */
+
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-row { display: flex; gap: 15px; }
+
+.input-group input {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    outline: none;
+    background: transparent;
+    font-family: 'Montserrat', sans-serif;
+    transition: 0.3s;
+}
+
+.input-group label {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white; /* Має збігатися з фоном форми */
+    padding: 0 5px;
+    color: #888;
+    font-size: 16px;
+    font-weight: 600;
+    pointer-events: none;
+    transition: 0.3s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Стан при фокусі або заповненні */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 13px;
+    color: #000;
+}
+
+.input-group input:focus {
+    border-color: #0000FF;
+    border-width: 2px;
+}
+
+/* Кнопка та інше */
+.btn-auth-submit {
+    width: 100%;
+    padding: 16px;
+    background: #0000FF;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: 500;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    align-items: center;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.auth-options a, .auth-footer a { color: #0000FF; text-decoration: none; font-weight: 700; }
+
+/* Базовий стиль для обох сторінок */
+.auth-wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* СТОРІНКА ЛОГІНУ (Фото зліва - стандарт) */
+.login-page {
+    flex-direction: row; /* Фото [1], Форма [2] */
+}
+
+/* СТОРІНКА РЕЄСТРАЦІЇ (Фото справа) */
+.register-page {
+    flex-direction: row-reverse; /* Форма [2], Фото [1] — візуально фото стане справа */
+}
+
+/* Налаштування для блоків зображень */
+.auth-image {
+    flex: 1;
+    height: 100vh;
+    display: none; /* Ховаємо на мобільних */
+}
+
+@media (min-width: 992px) {
+    .auth-image {
+        display: block;
+    }
+}
+
+.auth-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Фото заповнює весь простір без деформації */
+}
+
+.auth-form-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+table {
+    width: 70%;
+    margin: 100px auto 0 auto;
+    align-items: center;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+td {
+    vertical-align: top;
+}
+
+td>:first-child {
+    color: #0000FF;
+}
+
+td h2 {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 100;
+}
+
+hr {
+    height: 2px;
+    background-color:#0000FF;
+    width: 65%;
+    border: none;
+    margin:50px auto 50px auto;
+}

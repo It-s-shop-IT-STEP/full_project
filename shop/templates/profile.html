@@ -1,0 +1,52 @@
+{% extends 'header.html' %} 
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<section class="home-bg">
+    <div class="welcome-content">
+        <h1>Вітаємо на сайті мерчу IT Степ Університету!</h1>
+        <h2>Вже маєте акаунт, чи хочете створити?</h2>
+        <div class="welcome-buttons">
+            <a href="{% url 'register' %}" class="btn btn-blue">Я новий клієнт</a>
+            <a href="{% url 'login' %}" class="btn btn-outline">Вже маю акаунт</a>
+        </div>
+    </div>
+    <table alt="info-content">
+        <td>
+            <img src="{% static 'img/logo.png' %}">
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+    </table>
+    <hr>
+</section>
+{% endblock %}
+
+<script src="{% static 'js/main.js' %}"></script>

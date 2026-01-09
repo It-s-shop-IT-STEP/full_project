@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT'SHOP - Каталог</title>
+    <link rel="stylesheet" href="{% static 'css/catalog.css' %}">
+</head>
+<body>
+
+    <div class="hero-section">
+        <header class="catalog-navbar">
+            <div class="logo-container">
+                <a href="{% url 'main' %}" class="logo">IT'SHOP</a>
+                <nav class="nav-links">
+                    <a href="{% url 'catalog' %}" class="active">Каталог</a>
+                </nav>
+            </div>
+            <div class="user-menu">
+                <a href="/favorites/" class="icon">
+                    <img src="{% static 'img/Group1.png' %}" alt="saved" class="icon">
+                    <span id="fav-count" class="badge">0</span>
+                </a>
+
+                <a href="/cart/" class="icon">
+                    <img src="{% static 'img/Group2.png' %}" alt="cart" class="icon">
+                    <span id="cart-count" class="badge">0</span>
+                </a>
+
+                <nav class="nav-links">
+                    <a href="{% url 'profile' %}" class="profile-text">Профіль</a>
+                </nav>
+            </div>
+            
+        </header>
+
+
+        <div class="hero-content">
+            <h1>КАТАЛОГ ТОВАРІВ</h1>
+            <div class="search-container">
+                <input type="text" placeholder="Що ви шукаєте?">
+                <button type="submit" class="search-btn">Знайти</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="catalog-main">
+        <nav class="category-filters">
+            <a href="#" class="cat-link active">Футболки</a>
+            <a href="#" class="cat-link">Худі</a>
+            <a href="#" class="cat-link">Шопери</a>
+            <a href="#" class="cat-link">Шапки</a>
+        </nav>
+
+    <main class="catalog">
+    <div class="product-grid">
+        {% for product in products %}
+<div class="product-card">
+    <div class="image-container">
+        <div class="card-actions">
+            <button class="wishlist-btn" onclick="toggleFavorite('{{ product.id }}', '{{ product.name }}', '{{ product.price }}', '{{ product.image.url }}')">
+                <img src="{% static 'img/heart_icon.png' %}" alt="Favorite">
+            </button>
+            <button class="cart-btn" onclick="addToCart('{{ product.id }}', '{{ product.name }}', '{{ product.price }}', '{{ product.image.url }}')">
+                <img src="{% static 'img/bag_icon.png' %}" alt="Add to Cart">
+            </button>
+        </div>
+
+        <a href="{% url 'product_detail' product.id %}">
+            <div class="image-box">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% endif %}
+            </div>
+        </a>
+    </div>
+
+    <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-price">{{ product.price }} грн</p>
+    </div>
+</div>
+{% endfor %}
+    </div>
+</main>
+
+        <div class="pagination">
+            <button class="load-more-btn">Загрузити ще</button>
+        </div>
+    </main>
+
+    <table alt="info-content">
+        <td>
+            <img src="{% static 'img/logo.png' %}">
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+    </table>
+    <hr>
+
+</body>
+</html>
+
+<script src="{% static 'js/main.js' %}"></script>

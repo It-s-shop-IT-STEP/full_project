@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>{% block title %}IT'SHOP{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo-container">
+            <a href="{% url 'main' %}" class="logo">
+                <img src="{% static 'img/logo.png' %}" alt="Logo">
+            </a>
+            <nav class="nav-links">
+                <a href="{% url 'catalog' %}">Каталог</a>
+            </nav>
+        </div>
+        <div class="user-icons">
+            <a href="/favorites/" class="icon-link">
+                <img src="{% static 'img/Group1.png' %}" alt="saved" class="icon">
+                <span id="fav-count" class="badge">0</span>
+            </a>
+
+            <a href="/cart/" class="icon-link">
+                <img src="{% static 'img/Group2.png' %}" alt="cart" class="icon">
+                <span id="cart-count" class="badge">0</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="{% url 'profile' %}" class="profile-link">Профіль</a>
+            </nav>
+        </div>
+    </header>
+    {% block content %}{% endblock %}
+    {% include 'modals.html' %}
+
+</body>
+</html>
+
+<script src="{% static 'js/main.js' %}"></script>
