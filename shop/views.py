@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
@@ -10,6 +11,7 @@ from .forms import RegistrationForm
 # -------------------------
 # ГОЛОВНІ СТОРІНКИ
 # -------------------------
+from django.shortcuts import render
 
 def main_page(request):
     return render(request, 'main.html')
