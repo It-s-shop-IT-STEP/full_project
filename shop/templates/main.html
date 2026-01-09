@@ -1,0 +1,83 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block title %}IT'S SHOP - Головна{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% endblock %}
+
+{% block content %}
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<main class="main-page">
+    
+    <section class="merch-hero">
+        <div class="hero-content">
+            <p class="subtitle">Одяг і аксесуари, які роблять тебе частиною спільноти.</p>
+            <h1 class="main-title">MERCH</h1>
+            <h2 class="university-name">IT СТЕП Університету</h2>
+            <a href="{% url 'catalog' %}" class="btn-catalog">В каталог</a>
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'img/students_hoodie.png' %}" alt="Students in hoodies">
+        </div>
+    </section>
+    <div class="itstep-logo">
+            <img src="{% static 'img/IT-STEP_logo_icon 1.png' %}" alt="IT STEP Logo">
+        </div>
+    <section class="our-goal">
+        <div class="goal-container">
+            <div class="goal-image">
+                <img src="{% static 'img/goal_back.png' %}" alt="Back view merch">
+            </div>
+            <div class="goal-text">
+                <h2>НАША МЕТА</h2>
+                <p>
+                    Ми хочемо зробити бренд ІТ СТЕП Університету відомим і гордим символом якості освіти та сучасного підходу до навчання. Обирайте мерч, носіть з гордістю та долучайтеся до великої сім'ї ІТ СТЕП!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="full-screen-photo">
+        <img src="{% static 'img/bg-main.png' %}" alt="Full team photo">
+        <div class="photo-overlay">
+            <p class="overlay-subtitle">Наш мерч створений для студентів, викладачів та випускників, які живуть у ритмі технологій. Ми робимо речі, що виглядають круто, носяться довго і не встидаєшся вдягнути не тільки в універ.</p>
+    </div>
+    </section>
+
+    <table alt="info-content">
+        <td>
+            <img src="{% static 'img/logo.png' %}">
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+    </table>
+    <hr>
+
+
+</main>
+{% endblock %}
+<script src="{% static 'js/main.js' %}"></script>

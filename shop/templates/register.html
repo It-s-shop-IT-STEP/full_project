@@ -1,0 +1,83 @@
+{% extends 'header.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<head>
+    <!-- <script src="{% static 'js/main.js' %}"></script> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<div class="auth-wrapper register-page">
+    <div class="auth-image">
+        <img src="{% static 'img/register_photo.png' %}" alt="Register">
+    </div>
+
+    <div class="auth-form-container">
+        <form class="auth-form" method="POST">
+            {% csrf_token %}
+            <h2>РЕЄСТРАЦІЯ</h2>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <input type="text" id="first_name" name="first_name" placeholder=" " required>
+                    <label for="first_name">Ім'я</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="last_name" name="last_name" placeholder=" " required>
+                    <label for="last_name">Прізвище</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder=" " required>
+                <label for="email">Електронна пошта</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder=" " required>
+                <label for="password">Пароль</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="confirm_password" name="confirm_password" placeholder=" " required>
+                <label for="confirm_password">Підтвердіть пароль</label>
+            </div>
+
+            <button type="submit" class="btn-auth-submit">ЗАРЕЄСТРУВАТИСЯ</button>
+            <p class="auth-footer">Вже маєте акаунт? <a href="{% url 'login' %}">Увійти</a></p>
+        </form>
+    </div>
+</div>
+
+<table alt="info-content">
+        <td>
+            <img src="{% static 'img/logo.png' %}">
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+    </table>
+    <hr>
+{% endblock %}
