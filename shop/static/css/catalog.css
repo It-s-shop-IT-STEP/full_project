@@ -59,7 +59,7 @@ body {
     cursor: pointer;
 }
 
-.profile-text { 
+.welcome-text { 
     text-decoration: none; 
     color: #FFFFFF; /* Білий колір */
     font-weight: 500; 
@@ -120,44 +120,10 @@ body {
 .cat-link.active { color: #000; border-bottom: 2px solid #000; }
 
 /* СІТКА 3x4 */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px 25px;
-}
 
-.product-card { background: #fff; display: flex; flex-direction: column; }
 
-.img-wrapper {
-    background: #F3F3F3;
-    padding: 40px;
-    border-radius: 15px;
-    position: relative;
-}
-.img-wrapper img { width: 100%; height: auto; }
 
-.wishlist-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-}
 
-.product-meta { display: flex; justify-content: space-between; margin: 15px 0; font-weight: bold; }
-.product-price { color: #0000FF; }
-
-.buy-btn {
-    background: #0000FF;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
-}
 
 .pagination { text-align: center; margin: 100px auto 150px auto; }
 .load-more-btn {
@@ -171,100 +137,20 @@ body {
     cursor: pointer;
 }
 
-/* Сітка для карток */
-.product-grid {
-    display: grid;
-    /* Створюємо 3 колонки однакової ширини */
-    grid-template-columns: repeat(3, 1fr); 
-    /* Відстань між картками (горизонтальна та вертикальна) */
-    gap: 40px; 
-    /* Зовнішні відступи від країв екрана */
-    padding: 20px;
-    max-width: 1300px;
-    margin: 0 auto;
-}
 
-/* Контейнер картки */
-.product-card {
-    width: 300px; /* Можна змінити під вашу сітку */
-    background: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* М'яка тінь як на скріншоті */
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    box-sizing: border-box;
-    transition: transform 0.3s ease;
-}
 
-.product-card:hover {
-    transform: translateY(-5px);
-}
 
-/* Контейнер для фото та іконок */
-.product-image-container {
-    position: relative;
-    width: 100%;
-    background-color: #fcfcfc; /* Легкий фон під фото */
-    text-align: center;
-}
 
-.product-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
 
-/* Позиціювання іконок у кутку */
-.product-actions {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    gap: 10px;
-}
 
-.action-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-}
 
-.action-btn img {
-    width: 20px;
-    height: 20px;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-}
 
-.action-btn:hover img {
-    opacity: 1;
-}
 
-/* Текстова частина */
-.product-details {
-    margin-top: 20px;
-    text-align: left;
-}
 
-.product-name {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700; /* Bold */
-    font-size: 25px;
-    color: #000;
-    margin: 0;
-    text-transform: uppercase;
-}
 
-.product-price {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 22px;
-    color: #0000FF; /* Ваш фірмовий синій */
-    margin: 5px 0 0 0;
-}
+
+
+
 
 
 
@@ -298,145 +184,89 @@ hr {
     margin:50px auto 50px auto;
 }
 
-.product-card-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
 
-/* СІТКА ТОВАРІВ */
-.product-link {
-    text-decoration: none; /* Прибираємо підкреслення тексту */
-    color: inherit;       /* Залишаємо колір тексту чорним */
-    display: block;        /* Робимо посилання блоком на всю ширину картки */
-    cursor: pointer;
-}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* СІТКА ТОВАРІВ: рівно 3 в ряд */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 50px;
-    padding: 50px 10%;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 40px 30px; /* Відступи між картками */
+    padding: 20px 0;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Клас для посилання, яке обгортає картку */
-.product-card a {
-    text-decoration: none;
-    color: inherit;
-    display: block; /* Важливо: посилання тепер займає весь простір картки */
-    width: 100%;
-    height: 100%;
-}
-
+/* КАРТКА ТОВАРУ */
 .product-card {
-    position: relative; /* Створює контекст накладання */
+    background: #ffffff; /* Чистий білий фон */
+    border-radius: 0;    /* Прямі кути (без заокруглень) */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08); /* Легка тінь за макетом */
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* КОНТЕЙНЕР ДЛЯ ФОТО */
+.image-container {
+    position: relative;
+    background-color: #ffffff; /* Прибрано сірий фон */
+    aspect-ratio: 1 / 1.1;     /* Пропорції як у Figma */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .image-box {
     width: 100%;
-    aspect-ratio: 1 / 1; /* Робить блок ідеально квадратним */
-    background-color: #F5F5F5;
-    margin-bottom: 15px;
-    overflow: hidden;
+    aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .image-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Картинка не обрізається, а вписується */
-    padding: 10px;
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
 }
 
-.product-actions-overlay {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    opacity: 0; /* Приховані за замовчуванням */
-    transition: opacity 0.3s ease;
-}
-
-.product-card:hover .product-actions-overlay {
-    opacity: 1; /* З'являються при наведенні на картку */
-}
-
-.action-btn {
-    background: white;
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.action-btn.active i {
-    color: #ff4d4d; /* Колір для активного улюбленого */
-}
-
-.product-info h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}
-
-.article {
-    color: #808080;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.price {
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 15px;
-    color: #0000FF;
-}
-
-/*
-.buy-btn {
-    background-color: #000;
-    color: #fff;
-    border: none;
-    padding: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: 0.3s;
-}
-
-.buy-btn:hover {
-    background-color: #333;
-}
-
-
-/* Контейнер для фото та кнопок */
-.image-container {
-    position: relative;
-    background-color: #F5F5F5;
-    border-radius: 10px;
-    overflow: hidden;
-    aspect-ratio: 1 / 1.1;
-}
-
-/* Блок з кнопками у верхньому правому куті */
+/* ІКОНКИ (Серце та Кошик) */
 .card-actions {
     position: absolute;
     top: 15px;
     right: 15px;
     display: flex;
-    flex-direction: row;
-    gap: 8px;
-    z-index: 10; /* Щоб кнопки були поверх фото */
+    flex-direction: row; /* Іконки в ряд (поряд) */
+    gap: 10px;           /* Відстань між іконками */
+    z-index: 10;
 }
 
 .card-actions button {
@@ -444,37 +274,46 @@ hr {
     border: none;
     cursor: pointer;
     padding: 0;
-    transition: transform 0.2s ease;
-}
-
-.card-actions button:hover {
-    transform: scale(1.1);
+    display: flex;
+    align-items: flex-end;
 }
 
 .card-actions img {
-    width: 24px; /* Розмір іконок як на макеті */
-    height: 24px;
+    width: 18px;  /* Маленький розмір за макетом */
+    height: 18px;
+    opacity: 0.6; /* Напівпрозорі в спокої */
+    transition: opacity 0.2s ease;
 }
 
-/* Текст під фото */
+.card-actions .cart-btn img {
+    width: 20px;  /* Трохи більший розмір для кошика */
+    height: 20px;
+}
+
+.card-actions button:hover img {
+    opacity: 1;   /* Стають яскравішими при наведенні */
+}
+
+/* ІНФОРМАЦІЯ ПРО ТОВАР */
 .product-info {
-    padding: 15px 5px;
+    padding: 15px 15px 25px 15px; /* Відступи всередині карти */
+    text-align: left;
 }
 
 .product-name {
-    font-size: 18px;
-    font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;      /* Менший шрифт назви */
+    font-weight: 700;     /* Жирний (Bold) */
+    color: #000000;
     text-transform: uppercase;
-    margin: 0;
+    margin: 0 0 8px 0;
+    letter-spacing: 0.5px;
 }
 
 .product-price {
-    font-size: 16px;
-    font-weight: 700;
-    color: #2E31FF; /* Синій колір для ціни */
-    margin-top: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;      /* Менший шрифт ціни */
+    font-weight: 600;     /* Semi-bold */
+    color: #0000FF;       /* Ваш фірмовий синій */
+    margin: 0;
 }
-
-
-
-

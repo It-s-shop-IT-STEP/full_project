@@ -33,7 +33,7 @@
                 </a>
 
                 <nav class="nav-links">
-                    <a href="{% url 'profile' %}" class="profile-text">Профіль</a>
+                    <a href="{% url 'welcome' %}" class="welcome-text">Профіль</a>
                 </nav>
             </div>
             
@@ -50,11 +50,18 @@
     </div>
 
     <main class="catalog-main">
-        <nav class="category-filters">
-            <a href="#" class="cat-link active">Футболки</a>
-            <a href="#" class="cat-link">Худі</a>
-            <a href="#" class="cat-link">Шопери</a>
-            <a href="#" class="cat-link">Шапки</a>
+        <nav class="category-filters">    
+            <a href="{% url 'catalog' %}?category=tshirts" 
+                class="cat-link {% if current_category == 'tshirts' %}active{% endif %}">Футболки</a>
+       
+            <a href="{% url 'catalog' %}?category=hoodies" 
+                class="cat-link {% if current_category == 'hoodies' %}active{% endif %}">Худі</a>
+       
+            <a href="{% url 'catalog' %}?category=shoppers" 
+                class="cat-link {% if current_category == 'shoppers' %}active{% endif %}">Шопери</a>
+       
+            <a href="{% url 'catalog' %}?category=hats" 
+                class="cat-link {% if current_category == 'hats' %}active{% endif %}">Шапки</a>
         </nav>
 
     <main class="catalog">

@@ -1,0 +1,134 @@
+.checkout-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: 40px;
+}
+
+h1 {
+    font-weight: 800;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+/* Картки товарів */
+.checkout-item-row {
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.checkout-item-img img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    background: #F5F5F5;
+    border-radius: 10px;
+}
+
+.checkout-item-info {
+    flex-grow: 1;
+    margin-left: 25px;
+}
+
+.checkout-item-info h3 {
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 18px;
+    margin: 0 0 10px 0;
+}
+
+.checkout-item-info p {
+    color: #777;
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+.price-blue {
+    color: #2E31FF;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+/* Кількість */
+.qty-box {
+    border: 1px solid #E0E0E0;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+/* Права колонка - підсумок */
+.checkout-summary-card {
+    background: #FFFFFF;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 800;
+    font-size: 26px;
+    margin-top: 20px;
+}
+
+.btn-confirm-order {
+    background: #2E31FF;
+    color: white;
+    width: 100%;
+    border: none;
+    padding: 18px;
+    border-radius: 35px;
+    font-weight: 800;
+    font-size: 16px;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.btn-confirm-order:hover {
+    background: #1a1dc2;
+}
+
+.btn-continue-shopping {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #777;
+    text-decoration: underline;
+    font-size: 14px;
+}
+
+.btn-remove-checkout {
+    background: none;
+    border: none;
+    color: #BCBCBC;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 20px;
+}

@@ -1,39 +1,40 @@
-
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth import authenticate, logout
-from django.contrib.auth import login as auth_login
-from django.contrib.auth.models import User
 from .models import Product
 from .forms import RegistrationForm
-
 
 # -------------------------
 # ГОЛОВНІ СТОРІНКИ
 # -------------------------
-from django.shortcuts import render
 
 def main_page(request):
     return render(request, 'main.html')
 
 
-def profile(request):
-    return render(request, 'profile.html')
+def welcome(request):
+    return render(request, 'welcome.html')
 
+
+# -------------------------
+# АВТОРИЗАЦІЯ ТА РЕЄСТРАЦІЯ
+# -------------------------
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+        # Використовуємо email як username для authenticate
+        user = authenticate(request, username=email, password=password)
 
         if user is not None:
-            auth_login(request, user)
-            return redirect('main')
+            login(request, user)
+            return redirect('main') 
         else:
-            messages.error(request, 'Invalid username or password')
-
+            messages.error(request, "Невірний email або пароль.")
+            
     return render(request, 'login.html')
 
 
@@ -42,71 +43,69 @@ def logout_view(request):
     return redirect('login')
 
 
-# -------------------------
-# РЕЄСТРАЦІЯ (ВИПРАВЛЕНО)
-# -------------------------
-
 def register_view(request):
     if request.method == 'POST':
-        # 1. Отримуємо дані з форми
         form = RegistrationForm(request.POST)
-
-        # 2. Перевіряємо форму
         if form.is_valid():
             user = form.save(commit=False)
-
-            # 3. Формуємо username з імені та прізвища
-            f_name = form.cleaned_data.get('first_name', '').lower()
-            l_name = form.cleaned_data.get('last_name', '').lower()
-            base_username = f"{f_name}{l_name}"
-
-            username = base_username
-            counter = 1
-
-            # 4. Гарантуємо унікальність username
-            while User.objects.filter(username=username).exists():
-                username = f"{base_username}{counter}"
-                counter += 1
-
-            user.username = username
-
-            # 5. Обовʼязково хешуємо пароль
+            email = form.cleaned_data.get('email')
+            user.username = email 
+            user.email = email
             user.set_password(form.cleaned_data['password'])
-
-            # 6. Звичайний користувач (НЕ персонал)
-            user.is_staff = False
-            user.is_superuser = False
-
-            # 7. Зберігаємо користувача
             user.save()
 
-            messages.success(request, 'Account created successfully')
+            messages.success(request, 'Акаунт створено успішно!')
             return redirect('login')
-
         else:
-            messages.error(request, 'Registration failed. Please check the form.')
-
+            messages.error(request, 'Помилка реєстрації. Перевірте дані.')
     else:
         form = RegistrationForm()
-
     return render(request, 'register.html', {'form': form})
+
+
 # -------------------------
-# КАТАЛОГ ТОВАРІВ
+# КАТАЛОГ ТОВАРІВ (З ФІЛЬТРАЦІЄЮ)
 # -------------------------
 
 def catalog(request):
-    # Цей рядок витягує всі товари з бази
-    products = Product.objects.all()
+    # Отримуємо категорію з посилання, наприклад: /catalog/?category=hoodies
+    category_slug = request.GET.get('category')
+    
+    if category_slug:
+        # Фільтруємо товари за категорією
+        products = Product.objects.filter(category=category_slug)
+    else:
+        # Якщо категорія не обрана, показуємо всі товари
+        products = Product.objects.all()
 
-    # Ми передаємо список 'products' у HTML
-    return render(request, 'catalog.html', {'products': products})
+    context = {
+        'products': products,
+        'current_category': category_slug  # Передаємо в HTML, щоб виділити активну кнопку
+    }
+    return render(request, 'catalog.html', context)
 
 
 def product_detail(request, id):
-    # Отримуємо товар за ID або видаємо помилку 404
     product = get_object_or_404(Product, id=id)
     return render(request, 'product_detail.html', {'product': product})
 
 
-def checkout(request):
+# -------------------------
+# ПРОФІЛЬ ТА ЗАМОВЛЕННЯ
+# -------------------------
+
+@login_required(login_url='login')
+def profile_view(request):
+    return render(request, 'profile.html', {'user': request.user})
+
+
+@login_required(login_url='login')
+def checkout_view(request):
+    # Сторінка кошика перед фінальним замовленням
     return render(request, 'checkout.html')
+
+
+@login_required(login_url='login')
+def order_view(request):
+    # Сторінка з формою Нової Пошти та Telegram-ботом
+    return render(request, 'order.html', {'user': request.user})

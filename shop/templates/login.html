@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
+
 <div class="auth-wrapper login-page">
     <div class="auth-image">
         <img src="{% static 'img/auth_bg.png' %}" alt="Login">
@@ -21,6 +22,16 @@
             {% csrf_token %}
             <h2>ЛОГІН</h2>
             
+            {% if messages %}
+                <div class="messages" style="margin-bottom: 20px;">
+                    {% for message in messages %}
+                        <p class="error-message" style="color: #ff4d4d; font-size: 14px; text-align: center; font-weight: 600;">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="input-group">
                 <input type="email" id="email" name="email" placeholder=" " required>
                 <label for="email">Електронна пошта</label>
@@ -33,7 +44,8 @@
 
             <div class="auth-options">
                 <label class="checkbox-container">
-                    <input type="checkbox"> <span>Запам'ятати мене</span>
+                    <input type="checkbox" name="remember_me"> 
+                    <span>Запам'ятати мене</span>
                 </label>
                 <a href="#">Забули пароль?</a>
             </div>
@@ -43,9 +55,11 @@
         </form>
     </div>
 </div>
+
 <table alt="info-content">
+    <tr>
         <td>
-            <img src="{% static 'img/logo.png' %}">
+            <img src="{% static 'img/logo.png' %}" alt="Logo">
         </td>
         <td>
             <h2>LOREM IPSUM</h2>
@@ -67,8 +81,9 @@
             <h2>LOREM IPSUM</h2>
             <h2>LOREM IPSUM</h2>
         </td>
-    </table>
-    <hr>
-{% endblock %}
+    </tr>
+</table>
+<hr>
 
 <script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

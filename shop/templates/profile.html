@@ -1,52 +1,55 @@
-{% extends 'header.html' %} 
+{% extends 'header.html' %}
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
 {% block content %}
 <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
-<section class="home-bg">
-    <div class="welcome-content">
-        <h1>Вітаємо на сайті мерчу IT Степ Університету!</h1>
-        <h2>Вже маєте акаунт, чи хочете створити?</h2>
-        <div class="welcome-buttons">
-            <a href="{% url 'register' %}" class="btn btn-blue">Я новий клієнт</a>
-            <a href="{% url 'login' %}" class="btn btn-outline">Вже маю акаунт</a>
+
+<div class="auth-wrapper profile-page">
+    <div class="auth-form-container" style="max-width: 600px; margin: 0 auto; padding: 40px;">
+        <div class="auth-form">
+            <h2 style="text-align: left; margin-bottom: 30px;">МІЙ ПРОФІЛЬ</h2>
+
+            <div class="profile-info-group" style="margin-bottom: 20px;">
+                <label style="color: #777; font-size: 12px; text-transform: uppercase; font-weight: 700;">Ім'я</label>
+                <p style="font-size: 18px; font-weight: 600; margin-top: 5px;">{{ user.first_name }}</p>
+            </div>
+
+            <div class="profile-info-group" style="margin-bottom: 20px;">
+                <label style="color: #777; font-size: 12px; text-transform: uppercase; font-weight: 700;">Прізвище</label>
+                <p style="font-size: 18px; font-weight: 600; margin-top: 5px;">{{ user.last_name }}</p>
+            </div>
+
+            <div class="profile-info-group" style="margin-bottom: 30px;">
+                <label style="color: #777; font-size: 12px; text-transform: uppercase; font-weight: 700;">Електронна пошта</label>
+                <p style="font-size: 18px; font-weight: 600; margin-top: 5px;">{{ user.email }}</p>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <a href="{% url 'main' %}" class="btn-auth-submit" style="text-decoration: none; text-align: center; background: #eee; color: #000;">НА ГОЛОВНУ</a>
+                <a href="/logout/" class="btn-auth-submit" style="text-decoration: none; text-align: center; background: #ff4d4d; color: #fff;">ВИЙТИ</a>
+            </div>
         </div>
     </div>
-    <table alt="info-content">
-        <td>
-            <img src="{% static 'img/logo.png' %}">
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-    </table>
-    <hr>
-</section>
-{% endblock %}
+</div>
 
-<script src="{% static 'js/main.js' %}"></script>
+<table alt="info-content">
+    <tr>
+        <td><img src="{% static 'img/logo.png' %}"></td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+        <td>
+            <h2>LOREM IPSUM</h2>
+            <h2>LOREM IPSUM</h2>
+        </td>
+    </tr>
+</table>
+<hr>
+{% endblock %}

@@ -22,6 +22,27 @@ if(orderBtn) {
     });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const checkoutBtn = document.getElementById('checkout-redirect-btn');
+
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', (e) => {
+            // Зупиняємо стандартну поведінку, якщо це потрібно
+            e.preventDefault(); 
+            
+            const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+            
+            if (cart.length === 0) {
+                alert("Ваш кошик порожній!");
+                return;
+            }
+            
+            console.log("Redirecting to checkout..."); // Для перевірки в консолі
+            window.location.href = '/checkout/';
+        });
+    }
+});
+
 
 document.querySelectorAll('.size-item').forEach(item => {
     item.addEventListener('click', function() {
@@ -479,8 +500,7 @@ function calculateTotal() {
     totalPriceElement.innerText = `${total}`;
 }
 
-
-//telegram bot//
+//telegram
 async function sendOrderToTelegram() {
     const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     
@@ -489,42 +509,77 @@ async function sendOrderToTelegram() {
         return;
     }
 
-    // --- НОВА ПЕРЕВІРКА ---
-    // Шукаємо хоча б один товар, де не вибрано колір або розмір
-    const hasIncompleteItems = cart.some(item => 
-        item.color === "Не обрано" || 
-        item.size === "Не обрано" ||
-        item.color === "on" // про всяк випадок, якщо десь залишився старий баг
-    );
+    // 1. Збір контактних даних (додаємо перевірку на пусті поля)
+    const firstName = document.getElementById('cust-first-name')?.value.trim() || "Не вказано";
+    const lastName = document.getElementById('cust-last-name')?.value.trim() || "Не вказано";
+    const email = document.getElementById('cust-email')?.value.trim() || "Не вказано";
+    const phone = document.getElementById('cust-phone')?.value.trim() || "Не вказано";
 
-    if (hasIncompleteItems) {
-        alert("Будь ласка, оберіть колір та розмір для всіх товарів у кошику або видаліть некоректні товари.");
-        return; // Зупиняємо виконання функції, повідомлення в ТГ не піде
+    // 2. Збір даних про доставку
+    const methodRadio = document.querySelector('input[name="delivery_method"]:checked');
+    if (!methodRadio) {
+        alert("Будь ласка, оберіть спосіб доставки!");
+        return;
     }
 
-    // ВСТАВТЕ СВОЇ ДАНІ СЮДИ
+    const methodType = methodRadio.value; // Warehouse, Postomat або Address
+    const parent = methodRadio.closest('.delivery-option-group');
+    
+    // Отримуємо місто
+    const cityInput = parent.querySelector('.city-input, .np-search-input-address');
+    const city = cityInput ? cityInput.value.trim() : "Місто не вказано";
+    
+    // Отримуємо відділення або адресу
+    let deliveryPoint = "";
+    if (methodType === "Address") {
+        deliveryPoint = document.getElementById('address-details')?.value.trim() || "Адреса не вказана";
+    } else {
+        deliveryPoint = parent.querySelector('.point-input')?.value.trim() || "Відділення не обрано";
+    }
+
+    // 3. Спосіб оплати та коментар
+    const paymentRadio = document.querySelector('input[name="payment"]:checked');
+    const paymentMethod = paymentRadio ? paymentRadio.value : "Не обрано";
+    const comment = document.getElementById('order-comment')?.value.trim() || "Без коментаря";
+
+    // ВАШІ ДАНІ ТЕЛЕГРАМ
     const TELEGRAM_BOT_TOKEN = '8312173871:AAEjQGFJlQ6D3SJMPpTJsDHhbKqDle2dOhY';
     const TELEGRAM_CHAT_ID = '628064779';
 
-    // Формуємо заголовок повідомлення
+    // 4. Формування тексту повідомлення
     let message = `🚀 **НОВЕ ЗАМОВЛЕННЯ**\n\n`;
+    
+    message += `👤 **КЛІЄНТ:**\n`;
+    message += `• ПІБ: ${firstName} ${lastName}\n`;
+    message += `• Тел: ${phone}\n`;
+    message += `• Email: ${email}\n\n`;
+
+    message += `📦 **ДОСТАВКА:**\n`;
+    message += `• Тип: ${methodType}\n`;
+    message += `• Місто: ${city}\n`;
+    message += `• Точка/Адреса: ${deliveryPoint}\n\n`;
+
+    message += `💳 **ОПЛАТА ТА ІНШЕ:**\n`;
+    message += `• Метод: ${paymentMethod}\n`;
+    message += `• Коментар: ${comment}\n\n`;
+
+    message += `🛒 **ТОВАРИ:**\n`;
     let totalSum = 0;
 
-    // Додаємо кожен товар у текст
     cart.forEach((item, index) => {
         const itemTotal = item.price * item.quantity;
         totalSum += itemTotal;
-        message += `${index + 1}. **${item.name}**\n`;
-        message += `   🎨 Колір: ${item.color}\n`;
-        message += `   📏 Розмір: ${item.size}\n`;
-        message += `   🔢 Кількість: ${item.quantity} шт.\n`;
-        message += `   💰 Ціна: ${item.price} грн\n\n`;
+        // Екрануємо назву товару, щоб не зламати Markdown
+        const cleanName = item.name.replace(/[*_`]/g, ''); 
+        message += `${index + 1}. ${cleanName}\n`;
+        message += `   🎨 Колір: ${item.color}, 📏 Розмір: ${item.size}\n`;
+        message += `   🔢 ${item.quantity} шт. x ${item.price}$ = ${itemTotal}$\n\n`;
     });
 
     message += `__________________\n`;
-    message += `💵 **ВСЬОГО ДО ОПЛАТИ: ${totalSum} грн**`;
+    message += `💰 **РАЗОМ ДО ОПЛАТИ: ${totalSum}$**`;
 
-    // Відправка запиту до Telegram API
+    // 5. Відправка запиту
     try {
         const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
             method: 'POST',
@@ -537,18 +592,19 @@ async function sendOrderToTelegram() {
         });
 
         if (response.ok) {
-            alert("Замовлення успішно відправлено! Ми зв'яжемося з вами.");
-            localStorage.removeItem('it_shop_cart'); // Очищуємо кошик
-            location.reload(); // Оновлюємо сторінку
+            alert("Дякуємо! Ваше замовлення успішно відправлено.");
+            localStorage.removeItem('it_shop_cart'); // Очищення кошика
+            window.location.href = "/"; // Повернення на головну
         } else {
-            alert("Помилка при відправці. Спробуйте ще раз.");
+            const errorData = await response.json();
+            console.error("Помилка Telegram API:", errorData);
+            alert("Помилка при відправці в Телеграм. Перевірте консоль.");
         }
     } catch (error) {
-        console.error("Помилка:", error);
-        alert("Не вдалося з'єднатися з сервером Telegram.");
+        console.error("Критична помилка:", error);
+        alert("Не вдалося відправити замовлення. Перевірте інтернет-з'єднання.");
     }
 }
-
 function moveToCart(id, name, price, image, color, size) {
     // 1. Створюємо об'єкт товару (як ми робили раніше)
     const product = {
