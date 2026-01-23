@@ -96,7 +96,7 @@
                 <div id="order-preview-items"></div>
                 <div class="summary-total-line">
                     <span>Разом:</span>
-                    <span id="final-total-val">0$</span>
+                    <span id="final-total-val">0 грн</span>
                 </div>
                 <button class="btn-final-order" id="submit-btn" onclick="sendOrderToTelegram()" style="background: #2E31FF; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold;">
                     ОФОРМИТИ ЗАМОВЛЕННЯ
@@ -120,6 +120,7 @@
 .np-sub-fields.active { display: flex; }
 </style>
 
+<!--
 <script>
     const API_KEY = '49f64034109f180560a35b4829c1ee5a';
     let validAddressCities = new Set(); 
@@ -301,4 +302,8 @@
         document.getElementById('final-total-val').innerText = total + '$';
     }
 </script>
+-->
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/order.js' %}"></script>
 {% endblock %}

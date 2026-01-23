@@ -5,6 +5,9 @@ body {
 /* Загальні налаштування */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
 
+/**/
+
+
 /* ГЕРОЙ-СЕКЦІЯ (Банер з картинкою) */
 .hero-section {
     background-image: url('/static/img/bottom_students.png');
@@ -16,63 +19,6 @@ body {
     display: flex;
     flex-direction: column;
 }
-
-
-
-/* НОВИЙ ХЕДЕР ВСЕРЕДИНІ БАНЕРА (БІЛИЙ КОЛІР) */
-.catalog-navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 5%;
-    position: sticky;
-    border-bottom: 1px solid #888;
-    background: transparent; /* Залишаємо прозорим */
-}
-
-.logo-container { display: flex; justify-content: space-between; align-items: center; gap: 50px;}
-
-/* Логотип: текст білий, частина 'HOP' синя (як у брендбуку) */
-.logo { 
-    font-size: 24px; 
-    font-weight: bold; 
-    text-decoration: none; 
-    cursor: pointer;
-    color: #FFFFFF;
-}
-
-/* Навігаційні посилання */
-.nav-links a { 
-    text-decoration: none; 
-    color: #FFFFFF; /* Білий колір */
-    font-weight: 500; 
-    position: relative;
-    cursor: pointer;
-    margin: 0 15px;
-}
-
-/* Користувацьке меню (Профіль та іконки) */
-.user-menu { 
-    display: flex; 
-    align-items: center; 
-    gap: 25px; 
-    cursor: pointer;
-}
-
-.welcome-text { 
-    text-decoration: none; 
-    color: #FFFFFF; /* Білий колір */
-    font-weight: 500; 
-}
-
-/* Якщо твої іконки чорні, цей фільтр зробить їх білими */
-.user-menu .icon { 
-    width: 24px; 
-    height: 24px; 
-    cursor: pointer; 
-    filter: brightness(0) invert(1); /* Магія: перетворює чорні іконки на білі */
-}
-
 
 
 /* КОНТЕНТ БАНЕРА */
@@ -107,7 +53,7 @@ body {
 }
 
 /* КАТАЛОГ ТА СІТКА */
-.catalog-main { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.catalog-main { max-width: 1200px; margin: 40px auto; padding: 0 20px; align-items: center; text-align: center; }
 
 .category-filters {
     display: flex;
@@ -135,6 +81,9 @@ body {
     font-weight: 100;
     font-size: 20px;
     cursor: pointer;
+    width: fit-content;
+    margin: auto;
+    display: block;
 }
 
 

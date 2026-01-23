@@ -52,4 +52,6 @@
 </div>
 {% endblock %}
 
-<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}
+<script src="{% static 'js/product-detail.js' %}"></script>
+{% endblock %}

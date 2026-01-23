@@ -18,16 +18,16 @@
             <div class="summary-details">
                 <div class="summary-line">
                     <span>Сума замовлення:</span>
-                    <span id="subtotal-price">0$</span>
+                    <span id="subtotal-price">0 грн</span>
                 </div>
                 <div class="summary-line">
                     <span>Знижка:</span>
-                    <span>0$</span>
+                    <span>0 грн</span>
                 </div>
                 <hr>
                 <div class="summary-total">
                     <span>Разом:</span>
-                    <span id="total-price">0$</span>
+                    <span id="total-price">0 грн</span>
                 </div>
             </div>
             
@@ -41,14 +41,25 @@
         </div>
     </div>
 </div>
-
+<!--
 <script>
+    function getProductWord(n) {
+        n = Math.abs(n) % 100; 
+        const n1 = n % 10;
+        if (n > 10 && n < 20) return 'ТОВАРІВ';
+        if (n1 === 1) return 'ТОВАР';
+        if (n1 > 1 && n1 < 5) return 'ТОВАРИ';
+        return 'ТОВАРІВ';
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const checkoutList = document.getElementById('checkout-items-list');
         const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
         const countTitle = document.getElementById('checkout-count-title');
 
-        countTitle.innerText = `У КОШИКУ ${cart.length} ТОВАРИ`;
+        const totalCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
+        countTitle.innerText = `У КОШИКУ ${totalCount} ${getProductWord(totalCount)}`;
 
         if (cart.length === 0) {
             checkoutList.innerHTML = '<p class="empty-msg">Кошик порожній</p>';
@@ -82,8 +93,13 @@
             `;
         }).join('');
 
-        document.getElementById('subtotal-price').innerText = total + '$';
-        document.getElementById('total-price').innerText = total + '$';
+        document.getElementById('subtotal-price').innerText = total + 'грн';
+        document.getElementById('total-price').innerText = total + 'грн';
     });
 </script>
+-->
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/checkout.js' %}"></script>
 {% endblock %}
