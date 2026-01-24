@@ -6,6 +6,8 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
+
 <div class="order-wrapper">
     <div class="order-header">
         <a href="{% url 'checkout' %}" class="back-link">← ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</a>

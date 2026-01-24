@@ -135,66 +135,64 @@ function checkCourierError(input) {
 }
 
 // 4. ВІДПРАВКА В ТЕЛЕГРАМ
+
+// Функція для отримання захисного токена Django
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 async function sendOrderToTelegram() {
     const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     if (cart.length === 0) return alert("Кошик порожній!");
 
-    const btn = document.getElementById('submit-btn');
-    const fName = document.getElementById('cust-first-name').value.trim();
-    const lName = document.getElementById('cust-last-name').value.trim();
-    const phone = document.getElementById('cust-phone').value.trim();
-    const email = document.getElementById('cust-email').value.trim();
+    const orderData = {
+        first_name: document.getElementById('cust-first-name').value.trim(),
+        last_name: document.getElementById('cust-last-name').value.trim(),
+        phone: document.getElementById('cust-phone').value.trim(),
+        email: document.getElementById('cust-email').value.trim(),
+        address: document.querySelector('.city-input, .np-search-input-address').value + ", " + 
+                 document.querySelector('.point-input').value,
+        total_price: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        cart: cart
+    };
 
-    const method = document.querySelector('input[name="delivery_method"]:checked');
-    if(!method) return alert("Оберіть спосіб доставки!");
-
-    const parent = method.closest('.delivery-option-group');
-    const city = parent.querySelector('.city-input, .np-search-input-address').value;
-    const point = (method.value === "Кур'єр") ? document.getElementById('address-details').value : parent.querySelector('.point-input').value;
-
-    if(!city || !point || !fName || !phone) { 
-        return alert("Заповніть обов'язкові поля: Ім'я, Телефон, Місто та Адреса/Відділення!"); 
+    // Отримання CSRF токена для Django
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    if (!csrfToken) {
+        console.error("CSRF token not found! Переконайтеся, що {% csrf_token %} додано в HTML.");
+        return;
     }
-
-    btn.innerText = "ОБРОБКА...";
-    btn.disabled = true;
-
-    const payment = document.querySelector('input[name="payment"]:checked').value;
-    const comment = document.getElementById('order-comment').value;
-
-    const TOKEN = '8312173871:AAEjQGFJlQ6D3SJMPpTJsDHhbKqDle2dOhY';
-    const CHAT_ID = '628064779';
-
-    let msg = `🚀 **НОВЕ ЗАМОВЛЕННЯ**\n\n`;
-    msg += `👤 **Клієнт:** ${fName} ${lName}\n📞 **Тел:** ${phone}\n📧 **Email:** ${email}\n\n`;
-    msg += `📦 **Доставка:** ${method.value}\n📍 **Місто:** ${city}\n🏠 **Адреса/№:** ${point}\n\n`;
-    msg += `💳 **Оплата:** ${payment}\n`;
-    if(comment) msg += `💬 **Коментар:** ${comment}\n\n`;
-    msg += `🛒 **ТОВАРИ:**\n`;
-
-    let total = 0;
-    cart.forEach((item, i) => {
-        const sum = item.price * item.quantity;
-        total += sum;
-        msg += `${i+1}. ${item.name.replace(/[*_`]/g, '')} [${item.color}, ${item.size}] - ${item.quantity}шт. - ${sum}$\n`;
-    });
-    msg += `\n💰 **РАЗОМ до сплати: ${total} грн**`;
-
     try {
-        const res = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        const res = await fetch('/checkout/', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: 'Markdown' })
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken 
+            },
+            body: JSON.stringify(orderData)
         });
+
         if (res.ok) {
-            alert("Дякуємо! Ваше замовлення прийнято.");
+            alert("Замовлення збережено в базі та відправлено!");
             localStorage.removeItem('it_shop_cart');
             window.location.href = "/";
-        } else { alert("Помилка відправки. Спробуйте пізніше."); }
-    } catch (e) { alert("Проблема з мережею."); }
-    
-    btn.disabled = false; 
-    btn.innerText = "ОФОРМИТИ ЗАМОВЛЕННЯ";
+        } else {
+            alert("Помилка при збереженні замовлення.");
+        }
+    } catch (e) {
+        alert("Помилка з'єднання з сервером.");
+    }
 }
 
 // 5. ПОПЕРЕДНІЙ ПЕРЕГЛЯД ТОВАРІВ У КОЛОНЦІ

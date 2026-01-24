@@ -12,4 +12,3 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('order/', views.order_view, name='order_page'),
 ]
-

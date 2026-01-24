@@ -1,3 +1,6 @@
+import json, requests
+from django.http import JsonResponse
+from .models import Order, OrderItem
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -109,3 +112,55 @@ def checkout_view(request):
 def order_view(request):
     # Сторінка з формою Нової Пошти та Telegram-ботом
     return render(request, 'order.html', {'user': request.user})
+
+TELEGRAM_BOT_TOKEN = '8312173871:AAEjQGFJlQ6D3SJMPpTJsDHhbKqDle2dOhY'
+TELEGRAM_CHAT_ID = '628064779'
+
+@login_required(login_url='login')
+def checkout_view(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            cart = data.get('cart', [])
+
+            # 1. Створюємо замовлення в базі
+            order = Order.objects.create(
+                first_name=data.get('first_name'),
+                last_name=data.get('last_name', ''),
+                email=data.get('email'),
+                phone=data.get('phone'),
+                address=data.get('address'),
+                total_price=data.get('total_price')
+            )
+
+            # 2. Зберігаємо товари та готуємо текст для бота
+            items_msg = ""
+            for item in cart:
+                OrderItem.objects.create(
+                    order=order,
+                    product_name=item['name'],
+                    price=item['price'],
+                    quantity=item.get('quantity', 1),
+                    size=item.get('size', '—'),
+                    color=item.get('color', '—')
+                )
+                items_msg += f"• {item['name']} [{item.get('color')}, {item.get('size')}] x{item.get('quantity')} — {item['price']} грн\n"
+
+            # 3. Відправка в Telegram через сервер
+            full_msg = (
+                f"📦 <b>ЗАМОВЛЕННЯ №{order.id}</b>\n"
+                f"👤 Клієнт: {order.first_name} {order.last_name}\n"
+                f"📞 Тел: {order.phone}\n"
+                f"📍 Адреса: {order.address}\n\n"
+                f"<b>Товари:</b>\n{items_msg}\n"
+                f"💰 <b>РАЗОМ: {order.total_price} грн</b>"
+            )
+            
+            requests.post(f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage", 
+                          json={"chat_id": TELEGRAM_CHAT_ID, "text": full_msg, "parse_mode": "HTML"})
+
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+    return render(request, 'checkout.html')
