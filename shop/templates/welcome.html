@@ -21,32 +21,8 @@
             <a href="{% url 'profile' %}" class="btn btn-outline">Мій профіль</a>
         </div>
     </div>
-    <table alt="info-content">
-        <td>
-            <img src="{% static 'img/logo.png' %}">
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-    </table>
-    <hr>
+    {% include 'info_table.html' %}
+    
 </section>
 {% endblock %}
 

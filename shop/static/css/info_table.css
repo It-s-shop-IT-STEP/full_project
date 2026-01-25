@@ -1,0 +1,33 @@
+.site-footer {
+    border-top: none;
+}
+
+table {
+    width: 70%;
+    margin: 0 auto;
+    align-items: center;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+td {
+    vertical-align: top;
+}
+
+td>:first-child {
+    color: #0000FF;
+}
+
+td h2 {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 100;
+}
+
+hr {
+    height: 2px;
+    background-color:#0000FF;
+    width: 65%;
+    border: none;
+    margin:50px auto 50px auto;
+}

@@ -4,9 +4,11 @@ from .models import Order, OrderItem
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.template.loader import render_to_string
 from django.contrib import messages
 from .models import Product
 from .forms import RegistrationForm
+from django.db.models import Q
 
 # -------------------------
 # ГОЛОВНІ СТОРІНКИ
@@ -70,23 +72,25 @@ def register_view(request):
 # КАТАЛОГ ТОВАРІВ (З ФІЛЬТРАЦІЄЮ)
 # -------------------------
 
-def catalog(request):
-    # Отримуємо категорію з посилання, наприклад: /catalog/?category=hoodies
-    category_slug = request.GET.get('category')
+def catalog(request):  
+    query = request.GET.get('q')
+    category = request.GET.get('category')
     
-    if category_slug:
-        # Фільтруємо товари за категорією
-        products = Product.objects.filter(category=category_slug)
-    else:
-        # Якщо категорія не обрана, показуємо всі товари
-        products = Product.objects.all()
+    products = Product.objects.all()
 
-    context = {
+    if query:
+        products = products.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+
+    if category:
+        products = products.filter(category=category)
+
+    return render(request, 'catalog.html', {
         'products': products,
-        'current_category': category_slug  # Передаємо в HTML, щоб виділити активну кнопку
-    }
-    return render(request, 'catalog.html', context)
-
+        'current_category': category,
+        'query': query
+    })
 
 def product_detail(request, id):
     product = get_object_or_404(Product, id=id)

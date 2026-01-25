@@ -63,11 +63,11 @@ body {
     font-size: 18px;
     transition: 0.3s;
     position: absolute;
+    z-index: 1000;
 }
 
 .btn-catalog:hover {
     background-color: #0000CC;
-    transform: translateY(-3px);
 }
 
 .itstep-logo {
@@ -177,34 +177,4 @@ body {
     .hero-image, .goal-image { margin-top: 50px; }
     .hero-content { order: 1; }
     .hero-image { order: 2; }
-}
-
-table {
-    width: 70%;
-    margin: 70px auto 0 auto;
-    align-items: center;
-    text-align: center;
-    border-collapse: collapse;
-}
-
-td {
-    vertical-align: top;
-}
-
-td>:first-child {
-    color: #0000FF;
-}
-
-td h2 {
-    font-size: 1rem;
-    margin: 0;
-    font-weight: 100;
-}
-
-hr {
-    height: 2px;
-    background-color:#0000FF;
-    width: 65%;
-    border: none;
-    margin:50px auto 50px auto;
 }

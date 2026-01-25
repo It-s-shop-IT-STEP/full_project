@@ -56,34 +56,8 @@
     </div>
 </div>
 
-<table alt="info-content">
-    <tr>
-        <td>
-            <img src="{% static 'img/logo.png' %}" alt="Logo">
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-        <td>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-            <h2>LOREM IPSUM</h2>
-        </td>
-    </tr>
-</table>
-<hr>
+{% include 'info_table.html' %}
+
 {% endblock %}
 
 {% block extra_js %}

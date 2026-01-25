@@ -11,8 +11,10 @@
         <div class="hero-content">
             <h1>КАТАЛОГ ТОВАРІВ</h1>
             <div class="search-container">
-                <input type="text" placeholder="Що ви шукаєте?">
-                <button type="submit" class="search-btn">Знайти</button>
+                <form action="{% url 'catalog' %}" method="GET" class="search-form" style="display: flex; width: 100%;">
+                    <input type="text" name="q" placeholder="Що ви шукаєте?" value="{{ query|default:'' }}">
+                    <button type="submit" class="search-btn">Знайти</button>
+                </form>
             </div>
         </div>
     </div>
@@ -68,16 +70,8 @@
     </div>
 </main>
 
-<table class="info-table">
-    <tr>
-        <td><img src="{% static 'img/logo.png' %}"></td>
-        <td><h2>LOREM IPSUM</h2><h2>LOREM IPSUM</h2><h2>LOREM IPSUM</h2></td>
-        <td><h2>LOREM IPSUM</h2><h2>LOREM IPSUM</h2><h2>LOREM IPSUM</h2></td>
-        <td><h2>LOREM IPSUM</h2><h2>LOREM IPSUM</h2></td>
-        <td><h2>LOREM IPSUM</h2><h2>LOREM IPSUM</h2><h2>LOREM IPSUM</h2><h2>LOREM IPSUM</h2></td>
-    </tr>
-</table>
-<hr>
+{% include 'info_table.html' %}
+
 {% endblock %}
 
 {% block extra_js %}

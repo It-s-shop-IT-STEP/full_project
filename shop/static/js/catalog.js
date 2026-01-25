@@ -52,6 +52,7 @@ function toggleFavorite(id, name, price, image) {
 document.addEventListener("DOMContentLoaded", function() {
     const products = document.querySelectorAll('.product-card');
     const loadMoreBtn = document.querySelector('.load-more-btn');
+    const searchInput = document.querySelector('.search-container input');
     let visibleCount = 12;
 
     function updateVisibility() {
@@ -63,6 +64,29 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    // 2. Логіка ЖИВОГО ПОШУКУ
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value;
+
+            fetch(`?q=${query}`, {
+                headers: {
+                    'x-requested-with': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Оновлюємо сітку новим HTML
+                productGrid.innerHTML = data.html;
+                
+                // Скидаємо лічильник при новому пошуку та оновлюємо видимість
+                visibleCount = 12;
+                updateVisibility();
+            })
+            .catch(err => console.error('Помилка пошуку:', err));
+        });
+    }
+
     if (loadMoreBtn) {
         updateVisibility();
         loadMoreBtn.addEventListener('click', () => {
@@ -70,4 +94,6 @@ document.addEventListener("DOMContentLoaded", function() {
             updateVisibility();
         });
     }
+
+    updateVisibility();
 });

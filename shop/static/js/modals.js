@@ -49,17 +49,14 @@ function renderCart() {
                 <img src="${item.image}" alt="${item.name}">
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
-                    <p>Розмір: ${item.size || 'S'} | Колір: ${item.color || 'Стандарт'}</p>
+                    <p>Артикул: ${item.id}</p>
+                    <p>Розмір: ${item.size || 'S'}</p>
+                    <p>Колір: ${item.color || 'Стандарт'}</p>
                     <div class="price-row">
-                        <span class="price-blue">${item.price} грн</span>
-                        <div class="quantity-controls">
-                            <button onclick="changeQty('${item.id}', -1)">-</button>
-                            <span>${item.quantity || 1}</span>
-                            <button onclick="changeQty('${item.id}', 1)">+</button>
-                        </div>
+                        <span class="price-blue">${item.price}грн x ${item.quantity || 1}шт.</span>
                     </div>
                 </div>
-                <button class="delete-item" onclick="removeFromCart('${item.id}')">🗑️</button>
+                <button class="delete-item" onclick="removeFromCart('${item.id}')">Видалити 🗑️</button>
             </div>
         `;
     }).join('');
@@ -108,3 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// <div class="quantity-controls">
+    // <button onclick="changeQty('${item.id}', -1)">-</button>
+    // <span>${item.quantity || 1}</span>
+    // <button onclick="changeQty('${item.id}', 1)">+</button>
+// </div>
