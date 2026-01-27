@@ -3,12 +3,38 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from .models import Product, Order, OrderItem
+from .models import Product, ProductColor, ProductImage, Order, OrderItem
 
 # --- АДМІНКА ТОВАРІВ ---
+def apply_10_percent_discount(modeladmin, request, queryset):
+    queryset.update(discount_percentage=10)
+apply_10_percent_discount.short_description = "Встановити знижку 10%% на обрані товари"
+
+def clear_discount(modeladmin, request, queryset):
+    queryset.update(discount_percentage=0)
+clear_discount.short_description = "Прибрати всі знижки"
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1 # Скільки порожніх полів для фото виводити відразу
+
+class ProductColorInline(admin.StackedInline):
+    model = ProductColor
+    extra = 1
+    # Це дозволить додавати фото до кольору прямо тут
+    show_change_link = True
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'article')
+    readonly_fields = ('article',)
+    inlines = [ProductColorInline]
+    list_display = ('name', 'price', 'discount_percentage', 'article')
+    list_editable = ('discount_percentage',)
+    actions = [apply_10_percent_discount, clear_discount]
+
+@admin.register(ProductColor)
+class ProductColorAdmin(admin.ModelAdmin):
+    inlines = [ProductImageInline]
 
 # --- ЕКСПОРТ ЗАМОВЛЕНЬ В EXCEL ---
 def export_to_excel(modeladmin, request, queryset):

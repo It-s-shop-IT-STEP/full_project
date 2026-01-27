@@ -218,6 +218,11 @@ body {
     opacity: 1;   /* Стають яскравішими при наведенні */
 }
 
+.wishlist-btn.active img, 
+.cart-btn.active img {
+    opacity: 1;
+}
+
 /* ІНФОРМАЦІЯ ПРО ТОВАР */
 .product-info {
     padding: 15px 15px 25px 15px; /* Відступи всередині карти */
@@ -234,10 +239,18 @@ body {
     letter-spacing: 0.5px;
 }
 
-.product-price {
+.product-price, .discount-price {
     font-family: 'Montserrat', sans-serif;
     font-size: 14px;      /* Менший шрифт ціни */
-    font-weight: 600;     /* Semi-bold */
-    color: #0000FF;       /* Ваш фірмовий синій */
-    margin: 0;
+    color: #0000FF;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.old-price {
+    font-size: 0.9em;
+    margin-left: 10px;
+    font-weight: 400;
+    color: #888;
+    text-decoration: line-through;
 }

@@ -10,6 +10,8 @@ from .models import Product
 from .forms import RegistrationForm
 from django.db.models import Q
 
+products = Product.objects.prefetch_related('colors__images').all()
+
 # -------------------------
 # ГОЛОВНІ СТОРІНКИ
 # -------------------------

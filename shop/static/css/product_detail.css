@@ -23,6 +23,7 @@
     align-items: center;
     overflow: hidden;
     aspect-ratio: 1 / 1;
+    position: relative;
 }
 
 .product-image-container img {
@@ -30,6 +31,60 @@
     height: auto;
     object-fit: contain;
 }
+
+#main-display-image {
+    width: 100%;
+    transition: opacity 0.2s ease-in-out;
+    border-radius: 8px;
+}
+
+.gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    font-size: 24px;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.gallery-arrow:hover {
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.gallery-arrow.prev { left: 10px; }
+.gallery-arrow.next { right: 10px; }
+
+/* Кольори */
+.color-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 10px;
+    border: 2px solid #eee;
+    transition: 0.2s;
+    position: relative;
+}
+
+.color-dot.active {
+    border: 2px solid #000;
+    transform: scale(1.1);
+}
+
+.color-dot input { display: none; }
+
+/* Кольори фону (збігаються з choices у моделі) */
+.color-dot.black { background-color: #000; }
+.color-dot.white { background-color: #fff; border: 1px solid #ddd; }
+.color-dot.grey { background-color: #808080; }
+
 
 /* Секція деталей */
 .product-details {
@@ -50,10 +105,18 @@
     margin-bottom: 25px;
 }
 
-.product-price {
+.product-price, .discount-price {
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 40px;
+}
+
+.old-price {
+    font-size: 0.9em;
+    margin-left: 10px;
+    font-weight: 400;
+    color: #888;
+    text-decoration: line-through;
 }
 
 /* Групи опцій (Колір, Розмір) */
@@ -78,27 +141,6 @@
     display: flex;
     gap: 15px;
 }
-
-.color-dot {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 1px solid #ddd;
-    position: relative;
-    transition: 0.3s;
-}
-
-.color-dot input { display: none; }
-
-.color-dot.active {
-    outline: 2px solid #000;
-    outline-offset: 3px;
-}
-
-.white { background-color: #fff; }
-.black { background-color: #000; }
-.gray  { background-color: #808080; }
 
 /* Вибір розміру */
 .size-options {

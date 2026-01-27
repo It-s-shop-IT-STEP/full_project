@@ -16,17 +16,15 @@ body {
 }
 .logo { cursor: pointer;}
 .logo-container { display: flex; justify-content: space-between; align-items: center; gap: 50px;}
-.user-icons { display: flex; gap: 25px; align-items: center; cursor: pointer;}
+.user-icons { display: flex; gap: 35px; align-items: center; cursor: pointer;}
 .nav-links a { text-decoration: none; color: #000; margin: 0 15px; font-weight: 500; }
 .badge {
     position: absolute;
-    top: -5px;
-    right: -10px;
-    background-color: #2E31FF;
-    color: white;
-    font-size: 10px;
+    top: -10px;
+    right: -15px;
+    color: black;
+    font-size: 12px;
     padding: 2px 6px;
-    border-radius: 50%;
     font-weight: bold;
 }
 

@@ -10,12 +10,14 @@ function renderFavTab() {
         return;
     }
 
-    list.innerHTML = favorites.map(item => `
+    list.innerHTML = favorites.map(item => {
+        const displayPrice = Math.ceil(item.price);
+        return `
         <div class="fav-item-row">
             <img src="${item.image}" alt="${item.name}">
             <div class="fav-item-details">
                 <h4>${item.name}</h4>
-                <p class="price">${item.price} грн</p>
+                <p class="price">${displayPrice} грн</p>
                 <button class="move-btn" onclick="transferToCartFromFav('${item.id}')">
                     ПЕРЕМІСТИТИ В КОШИК
                 </button>
@@ -24,7 +26,7 @@ function renderFavTab() {
                 &times;
             </button>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 // 2. РЕНДЕР КОШИКА (CART)
@@ -43,25 +45,26 @@ function renderCart() {
 
     let total = 0;
     container.innerHTML = cart.map(item => {
-        total += item.price * (item.quantity || 1);
+        const itemPrice = Math.ceil(item.price);
+        total += itemPrice * (item.quantity || 1);
         return `
             <div class="cart-item">
                 <img src="${item.image}" alt="${item.name}">
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
-                    <p>Артикул: ${item.id}</p>
-                    <p>Розмір: ${item.size || 'S'}</p>
-                    <p>Колір: ${item.color || 'Стандарт'}</p>
+                    <p>Артикул: ${item.article}</p>
+                    <p>Розмір: ${item.size || 'Не обрано'}</p>
+                    <p>Колір: ${item.color || 'Не обрано'}</p>
                     <div class="price-row">
-                        <span class="price-blue">${item.price}грн x ${item.quantity || 1}шт.</span>
+                        <span class="price-blue">${itemPrice} грн x ${item.quantity || 1}шт.</span>
                     </div>
+                    <button class="delete-item" onclick="removeFromCart('${item.id}')">Видалити 🗑️</button>
                 </div>
-                <button class="delete-item" onclick="removeFromCart('${item.id}')">Видалити 🗑️</button>
             </div>
         `;
     }).join('');
 
-    if (totalPriceElement) totalPriceElement.innerText = total;
+    if (totalPriceElement) totalPriceElement.innerText = Math.ceil(total);
 }
 
 // 3. ДОПОМІЖНІ ФУНКЦІЇ ДЛЯ МОДАЛОК

@@ -4,25 +4,47 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
 {% endblock %}
+
 {% block content %}
 <div class="product-page">
     <div class="product-container">
         <div class="product-image-container">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            <button class="gallery-arrow prev" onclick="changeImage(-1)">&#10094;</button>
+            
+            <div class="main-image-wrapper">
+                <img id="main-display-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+
+            <button class="gallery-arrow next" onclick="changeImage(1)">&#10095;</button>
         </div>
 
         <div class="product-details">
             <h1 class="product-title">{{ product.name }}</h1>
             <p class="product-article">Артикул: {{ product.article }}</p>
 
-            <p class="product-price">{{ product.price }} грн</p>
+            {% if product.discount_percentage > 0 %}
+                <p class="product-price">
+                    <span class="discount-price" style="color: blue; font-weight: bold;">
+                        {{ product.discount_price }} грн
+                    </span>
+                    <span class="old-price" style="text-decoration: line-through; color: gray; margin-left: 10px;">
+                        {{ product.price }} грн
+                    </span>
+                </p>
+            {% else %}
+                <p class="product-price" style="color: blue; font-weight: bold;">{{ product.price }} грн</p>
+            {% endif %}
 
             <div class="option-group">
-                <h3>КОЛІР <span>БІЛИЙ</span></h3>
+                <h3>КОЛІР: <span id="selected-color-name">НЕ ОБРАНО</span></h3>
                 <div class="color-options">
-                    <label class="color-dot white active"><input type="radio" name="color" value="Білий" checked></label>
-                    <label class="color-dot black"><input type="radio" name="color" value="Чорний"></label>
-                    <label class="color-dot gray"><input type="radio" name="color" value="Сірий"></label>
+                    {% for color_obj in product.colors.all %}
+                    <label class="color-dot {{ color_obj.color }}" 
+                           onclick="updateGallery('{{ color_obj.get_color_display }}', this)"
+                           data-images='[{% for img in color_obj.images.all %}"{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}]'>
+                        <input type="radio" name="color" value="{{ color_obj.get_color_display }}">
+                    </label>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -46,13 +68,12 @@
                 </div>
             </div>
 
-            <button class="btn-to-catalog" onclick="addToCart('{{ product.id }}', '{{ product.name }}', '{{ product.price }}', '{{ product.image.url }}')">В кошик</button>
+            <button class="btn-to-catalog" onclick="addToCart('{{ product.id }}', '{{ product.name }}', '{{ product.discount_price }}', document.getElementById('main-display-image').src)">В кошик</button>
         </div>
     </div>
 </div>
 
 {% include 'info_table.html' %}
-
 {% endblock %}
 
 {% block extra_js %}

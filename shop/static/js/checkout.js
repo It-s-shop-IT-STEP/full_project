@@ -48,7 +48,9 @@ function renderCheckoutPage() {
                     </div>
                 </div>
                 <div class="checkout-item-qty">
-                    <div class="qty-box">${item.quantity || 1}</div>
+                    <button onclick="changeQty('${item.id}', -1)">-</button>
+                    <span>${item.quantity || 1}</span>
+                    <button onclick="changeQty('${item.id}', 1)">+</button>
                 </div>
                 <button class="btn-remove-checkout" onclick="removeFromCheckout('${item.id}')">
                     Видалити 🗑️

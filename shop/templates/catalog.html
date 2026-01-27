@@ -37,13 +37,19 @@
 
     <div class="product-grid">
         {% for product in products %}
-        <div class="product-card">
+        <div class="product-card"
+            data-id="{{ product.id }}"
+            data-article="{{ product.article }}"
+            data-price="{{ product.discount_price }}"
+            onmouseenter="startImageCycle(this)" 
+            onmouseleave="stopImageCycle(this)">
+
             <div class="image-container">
                 <div class="card-actions">
-                    <button class="wishlist-btn" onclick="toggleFavorite('{{ product.id }}', '{{ product.name }}', '{{ product.price }}', '{{ product.image.url }}')">
+                    <button class="wishlist-btn" onclick="toggleFavorite(this)">
                         <img src="{% static 'img/heart_icon.png' %}" alt="Favorite">
                     </button>
-                    <button class="cart-btn" onclick="addToCart('{{ product.id }}', '{{ product.name }}', '{{ product.price }}', '{{ product.image.url }}')">
+                    <button class="cart-btn" onclick="addToCart(this)">
                         <img src="{% static 'img/bag_icon.png' %}" alt="Add to Cart">
                     </button>
                 </div>
@@ -51,15 +57,34 @@
                 <a href="{% url 'product_detail' product.id %}">
                     <div class="image-box">
                         {% if product.image %}
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            <img src="{{ product.image.url }}" class="main-img" alt="{{ product.name }}">
                         {% endif %}
+
+                        <div class="extra-images" style="display:none;">
+                            {% for color in product.colors.all %}
+                                {% for img in color.images.all %}
+                                    <span data-src="{{ img.image.url }}"></span>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
                 </a>
             </div>
 
             <div class="product-info">
                 <h3 class="product-name">{{ product.name }}</h3>
-                <p class="product-price">{{ product.price }} грн</p>
+                {% if product.discount_percentage > 0 %}
+                    <p class="product-price">
+                        <span class="discount-price">
+                            {{ product.discount_price }} грн
+                        </span>
+                        <span class="old-price">
+                            {{ product.price }} грн
+                        </span>
+                    </p>
+                {% else %}
+                    <p class="product-price">{{ product.price }} грн</p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

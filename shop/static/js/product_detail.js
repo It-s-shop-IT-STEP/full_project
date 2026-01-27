@@ -94,3 +94,83 @@ function addToCart(id, name, price, image) {
         updateHeaderBadges();
     }
 }
+
+
+let currentImages = []; // Фотографії поточного кольору
+let currentIndex = 0;
+
+function updateGallery(colorName, element, isManual = true) {
+    // Оновлюємо текст назви кольору
+    document.getElementById('selected-color-name').innerText = colorName.toUpperCase();
+        
+    const imagesData = element.getAttribute('data-images');
+    currentImages = JSON.parse(imagesData);
+    if (isManual) currentIndex = 0;
+
+    // Знімаємо активність з усіх точок і додаємо поточній
+    document.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
+    element.classList.add('active');
+
+    // Показуємо перше фото з нового списку
+    if (currentImages.length > 0) {
+        displayImage();
+    }
+}
+
+function displayImage() {
+    const mainImg = document.getElementById('main-display-image');
+    mainImg.style.opacity = '0.5'; // Ефект плавного переходу
+    setTimeout(() => {
+        mainImg.src = currentImages[currentIndex];
+        mainImg.style.opacity = '1';
+    }, 150);
+}
+
+function changeImage(step) {
+    if (currentImages.length === 0) return;
+    let newIndex = currentIndex + step;
+
+    // Перевірка: чи вийшли ми за межі фотографій ПОТОЧНОГО кольору
+    if (newIndex >= currentImages.length) {
+        // Йдемо до наступного кольору
+        switchColor(1); 
+    } else if (newIndex < 0) {
+        // Йдемо до попереднього кольору
+        switchColor(-1);
+    } else {
+        // Залишаємось в поточному кольорі
+        currentIndex = newIndex;
+        displayImage();
+    }
+}
+
+function switchColor(direction) {
+    const dots = Array.from(document.querySelectorAll('.color-dot'));
+    const activeDot = document.querySelector('.color-dot.active');
+    let nextIndex = dots.indexOf(activeDot) + direction;
+
+    // Циклічне перемикання між кольорами
+    if (nextIndex >= dots.length) nextIndex = 0;
+    if (nextIndex < 0) nextIndex = dots.length - 1;
+
+    const nextDot = dots[nextIndex];
+    
+    // Оновлюємо галерею для нового кольору
+    // Якщо йдемо вперед (1), ставимо currentIndex = 0 (перше фото)
+    // Якщо йдемо назад (-1), ставимо currentIndex = остання фотографія
+    updateGallery(nextDot.querySelector('input').value, nextDot, false);
+    
+    if (direction === -1) {
+        currentIndex = currentImages.length - 1;
+        displayImage();
+    } else {
+        currentIndex = 0;
+        displayImage();
+    }
+}
+
+// При завантаженні автоматично обираємо перший колір
+document.addEventListener('DOMContentLoaded', () => {
+    const firstColor = document.querySelector('.color-dot');
+    if (firstColor) firstColor.click();
+});
