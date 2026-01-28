@@ -19,7 +19,7 @@ td>:first-child {
 }
 
 td h2 {
-    font-size: 1rem;
+    font-size: 1rem; 
     margin: 0;
     font-weight: 100;
 }
@@ -31,3 +31,5 @@ hr {
     border: none;
     margin:50px auto 50px auto;
 }
+
+

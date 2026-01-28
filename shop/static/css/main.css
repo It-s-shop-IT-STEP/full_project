@@ -34,7 +34,7 @@ body {
 }
 
 .main-title {
-    font-size: 180px; /* Величезний розмір для акценту */
+    font-size: 180px; 
     font-weight: 800;
     line-height: 0.8;
     margin: 0 -10px ;
@@ -42,28 +42,58 @@ body {
     color: #0000FF;
     font-family: 'Montserrat', serif;
 
+/* 
+    font-size: clamp(64px, 15vw, 180px);
+    margin: 0 ;
+    word-break: break-word; ////////////////////////////*/
+
+
+
 }
 
 .university-name {
     font-size: 50px;
     font-weight: 500;
     margin-bottom: 40px;
-    margin-left: 100px;
+     margin-left: 100px; 
     font-family: 'Montserrat', serif;
+   
+
+
+    /* margin-left: 0; */
+
 }
 
 .btn-catalog {
     display: inline-block;
     padding: 10px 30px;
-    background-color: #0000FF; /* Фірмовий синій */
+    background-color: #0000FF; 
     color: #FFFFFF;
     text-decoration: none;
     border-radius: 40px;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 25px;
     transition: 0.3s;
     position: absolute;
     z-index: 1000;
+
+
+
+    position: absolute;
+    left: 50%;                    /* центр по горизонталі */
+    transform: translateX(-50%);  /* точне центрування */
+    margin-top: 290px; 
+    /* top: 90%;  */
+} 
+
+
+
+    /* margin-top: 150px;      опускаємо вниз */
+
+
+.catalog-wrapper {
+    margin-top: 30px;
+    text-align: center;
 }
 
 .btn-catalog:hover {
@@ -75,6 +105,10 @@ body {
     top: 30vh;
     left: 0px;
     height: auto;
+
+
+    max-width: 90vw;
+
 }
 
 .itstep-logo img {
@@ -90,7 +124,11 @@ body {
 }
 
 .hero-image img {
-    width: 500px;
+    /* width: 500px; */
+
+    
+    width: 100%;
+    max-width: 500px;
     height: auto;
 }
 
@@ -157,6 +195,8 @@ body {
     text-align: left;
     width: 50%;
     padding: 0 20px;
+
+     max-width: 90vw;
 }
 
 .overlay-subtitle {
@@ -166,6 +206,19 @@ body {
     color: #FFFFFF;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
+
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+
 
 /* Адаптивність для планшетів та телефонів */
 @media (max-width: 1024px) {
@@ -177,4 +230,36 @@ body {
     .hero-image, .goal-image { margin-top: 50px; }
     .hero-content { order: 1; }
     .hero-image { order: 2; }
+    .goal-text {margin-bottom: 30px;}
 }
+
+
+@media (max-width: 768px) {
+    .photo-overlay {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        padding: 0 10px;
+        /* text-align: center; */
+    }
+
+    .overlay-subtitle {
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+     .university-name {
+        margin-left: 0;
+        /* font-size: 38px; */
+        font-size: 28px;
+
+        text-align: center;
+        line-height: 1.2;
+    }
+   
+
+    
+}
+
+

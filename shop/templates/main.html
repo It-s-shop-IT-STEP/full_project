@@ -5,7 +5,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-{% endblock %}
+{% endblock %} 
 
 {% block content %}
 <head>
@@ -20,7 +20,10 @@
             <p class="subtitle">Одяг і аксесуари, які роблять тебе частиною спільноти.</p>
             <h1 class="main-title">MERCH</h1>
             <h2 class="university-name">IT СТЕП Університету</h2>
-            <a href="{% url 'catalog' %}" class="btn-catalog">В каталог</a>
+            <div class="catalog-wrapper">
+                <a href="{% url 'catalog' %}" class="btn-catalog">В каталог</a>
+            </div>
+            
         </div>
         <div class="hero-image">
             <img src="{% static 'img/students_hoodie.png' %}" alt="Students in hoodies">
