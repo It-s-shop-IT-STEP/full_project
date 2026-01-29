@@ -12,7 +12,6 @@
     height: 100px;
     object-fit: contain;
     background: #F5F5F5;
-    border-radius: 10px;
 }
 
 .fav-item-details {
@@ -20,28 +19,28 @@
 }
 
 .fav-item-details h4 {
-    margin: 0;
+    margin: 0; 
     font-size: 16px;
     text-transform: uppercase;
     font-weight: 800;
 }
 
 .fav-item-details .price {
-    color: #2E31FF;
+    color: #000000;
     font-weight: 700;
     margin: 5px 0;
+    font-size: 15px;
 }
 
 /* Кнопка переміщення */
 .move-btn {
     background: none;
     border: none;
-    color: #2E31FF;
     font-weight: 700;
     cursor: pointer;
     padding: 0;
     font-size: 13px;
-    text-decoration: underline;
+    /* text-decoration: underline; */
 }
 
 /* Кнопка видалення (хрестик або смітник) */
@@ -49,22 +48,56 @@
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 23px;
     color: #ccc;
 }
 
-.cart-modal {
-    display: none; /* Це має повністю ховати блок */
+ .cart-modal {
+    display: none; 
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    /* background-color: rgba(118, 112, 112, 0.5); */
     overflow-y: auto;
     pointer-events: auto; 
+} 
+
+
+
+
+
+#fav-items-list {
+    max-height: 400px;      /* така ж висота, як у кошика */
+    overflow-y: auto;       /* вмикаємо вертикальну прокрутку */
+    padding-right: 25px;    /* щоб скрол не налазив на контент */
 }
+
+/* Стилізація скролу */
+#fav-items-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#fav-items-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#fav-items-list::-webkit-scrollbar-thumb {
+    background: #2E31FF;
+    border-radius: 10px;
+}
+
+#fav-items-list::-webkit-scrollbar-thumb:hover {
+    background: #1a1dbf;
+}
+
+
+
+
+
 
 
 /* Коли модалка відкрита (стиль, який ми будемо додавати через JS) */
@@ -73,15 +106,26 @@
 }
 
 
+
+
+
 .cart-content {
     background-color: #fff;
-    margin: 10% auto;
     padding: 30px;
-    width: 400px;
-    border-radius: 15px;
-    position: relative;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    width: 500px;
+    position: fixed;
+    top: 100px;
+    height: calc(75vh - 90px);
+    /* top: 9.5vh; */
+    right: 3%;          /* ← головне */
+       /* на всю висоту */
+    box-shadow: -4px 0 20px rgba(80, 76, 76, 0.3);
+    overflow-y: auto;
 }
+
+
+
+
 
 .order-btn {
     width: 100%;
@@ -121,6 +165,13 @@
     background: #1a1dbf; /* Колір при наведенні */
 }
 
+
+
+
+
+
+
+
 /* --- СТИЛІ ДЛЯ КОШИКА (Додайте це!) --- */
 
 .cart-item {
@@ -136,7 +187,7 @@
     height: 100px !important;     /* Обмежуємо висоту */
     object-fit: contain !important;
     background: #f9f9f9;
-    border-radius: 8px;
+    
     flex-shrink: 0;             /* Забороняємо картинці стискатися */
 }
 
@@ -144,19 +195,22 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
 }
+
+
+
 
 .cart-item-info h4 {
     margin: 0;
-    font-size: 14px;
+    font-size: 17px;
     text-transform: uppercase;
     font-weight: 700;
 }
 
 .cart-item-info p {
     margin: 0;
-    font-size: 11px;
+    font-size: 15px;
     color: #777;
 }
 
@@ -169,9 +223,8 @@
 }
 
 .price-blue {
-    color: #2E31FF;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 17px;
 }
 
 /* Кнопки кількості */
@@ -201,8 +254,15 @@
     font-size: 16px;
     opacity: 0.5;
     transition: 0.3s;
-    text-align: left;
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+
 }
+
+
+
+
 
 .delete-item:hover {
     opacity: 1;

@@ -55,11 +55,19 @@ function renderCart() {
                     <p>Артикул: ${item.article}</p>
                     <p>Розмір: ${item.size || 'Не обрано'}</p>
                     <p>Колір: ${item.color || 'Не обрано'}</p>
+                    <p>Артикул: ${item.id}</p>
+                    <p>Розмір: ${item.size || 'S'}</p>
+                    <p>Колір: ${item.color || 'Стандарт'}</p>
+                    
                     <div class="price-row">
                         <span class="price-blue">${itemPrice} грн x ${item.quantity || 1}шт.</span>
                     </div>
                     <button class="delete-item" onclick="removeFromCart('${item.id}')">Видалити 🗑️</button>
                 </div>
+<<<<<<< HEAD
+=======
+                
+>>>>>>> origin/feature/my-feature
             </div>
         `;
     }).join('');
@@ -107,6 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+
+
+
+    
 });
 
 // <div class="quantity-controls">

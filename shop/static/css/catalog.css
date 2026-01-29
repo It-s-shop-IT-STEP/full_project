@@ -7,7 +7,7 @@ body {
 
 /**/
 
-
+ 
 /* ГЕРОЙ-СЕКЦІЯ (Банер з картинкою) */
 .hero-section {
     background-image: url('/static/img/bottom_students.png');
@@ -31,13 +31,13 @@ body {
     text-align: center;
 }
 
-.hero-content h1 { font-size: 100px; font-weight: 900; margin-bottom: 50px; color: white; letter-spacing: 2px; }
+.hero-content h1 { font-size: 106px; font-weight: 900; margin-bottom: 50px; color: white; letter-spacing: 2px; }
 
-.search-container { display: flex; gap: 10px; width: 100%; max-width: 1000px; }
+.search-container { display: flex; gap: 10px; width: 100%; max-width: 1000px;  }
 .search-container input {
     flex-grow: 1;
     padding: 10px 20px;
-    border-radius: 30px;
+    border-radius: 15px;
     border: 1px solid #ccc;
     outline: none;
     font-size: 16px;
@@ -51,6 +51,7 @@ body {
     border-radius: 30px;
     cursor: pointer;
     transition: 0.3s;
+    margin-left: 13px;
 }
 .search-btn:hover { background: #0000CC; }
 
@@ -91,6 +92,22 @@ body {
 
 .load-more-btn:hover {
     background: #0000CC;
+}
+
+
+.load-more-btn{
+    background: #0000FF;
+    color: white;
+    border: none;
+    padding: 15px 50px;
+    border-radius: 30px;
+    font-weight: 100;
+    font-size: 20px;
+    cursor: pointer;
+    width: fit-content;
+    margin: auto;
+    display: block;
+    transition: 0.3s;
 }
 
 

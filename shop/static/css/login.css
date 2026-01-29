@@ -29,7 +29,7 @@ body {
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; 
     padding: 40px;
     background: #fff;
 }
@@ -87,6 +87,7 @@ body {
 .input-group input:focus {
     border-color: #0000FF;
     border-width: 2px;
+    background-color: #ffffff;
 }
 
 /* Кнопка та інше */
@@ -158,4 +159,32 @@ body {
     align-items: center;
     justify-content: center;
     padding: 40px;
+}
+
+
+
+
+
+
+
+
+
+/* Завжди білий фон інпутів */
+.input-group input {
+    background-color: #fff !important;
+}
+
+/* При фокусі */
+.input-group input:focus {
+    background-color: #fff !important;
+}
+
+/* Chrome / Edge autofill (синя або жовта заливка) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: #000 !important;
 }
