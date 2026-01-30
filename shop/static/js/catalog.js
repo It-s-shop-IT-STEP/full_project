@@ -10,41 +10,107 @@ function getProductData(el) {
     };
 }
 
+// function addToCart(btn) {
+//     const data = getProductData(btn);
+
+//     let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+//     const item = cart.find(i => i.id === data.id);
+    
+//     if (item) {
+//         item.quantity += 1;
+//         item.price = data.price; // ОНОВЛЕННЯ ЦІНИ, якщо вона змінилась в адмінці
+//     } else {
+//         cart.push({ ...data, quantity: 1, color: "Не обрано", size: "Не обрано" });
+//     }
+
+//     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
+//     if (typeof updateHeaderBadges === 'function') updateHeaderBadges();
+//     if (typeof renderCart === 'function') renderCart();
+// }
+
+
 function addToCart(btn) {
     const data = getProductData(btn);
+    const img = btn.querySelector('img');
 
     let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     const item = cart.find(i => i.id === data.id);
     
     if (item) {
         item.quantity += 1;
-        item.price = data.price; // ОНОВЛЕННЯ ЦІНИ, якщо вона змінилась в адмінці
+        item.price = data.price;
     } else {
         cart.push({ ...data, quantity: 1, color: "Не обрано", size: "Не обрано" });
     }
 
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
+
+    // 🔥 робимо іконку чорною (ОДИН РАЗ)
+    btn.classList.add('active');
+    img.src = img.dataset.active;
+
     if (typeof updateHeaderBadges === 'function') updateHeaderBadges();
     if (typeof renderCart === 'function') renderCart();
 }
 
+
+
+
+
+
 // 2. Додавання/видалення з улюблених
+// function toggleFavorite(btn) {
+//     const data = getProductData(btn);
+//     btn.classList.toggle('active');
+
+//     let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+//     const index = favorites.findIndex(i => i.id === data.id);
+
+//     if (index > -1) {
+//         favorites.splice(index, 1);
+//     } else {
+//         favorites.push(data);
+//     }
+
+//     localStorage.setItem('it_shop_favorites', JSON.stringify(favorites));
+//     if (typeof updateHeaderBadges === 'function') updateHeaderBadges();
+// }
+
 function toggleFavorite(btn) {
     const data = getProductData(btn);
-    btn.classList.toggle('active');
+    const img = btn.querySelector('img');
 
     let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
     const index = favorites.findIndex(i => i.id === data.id);
 
     if (index > -1) {
+        // ВИДАЛЯЄМО З УЛЮБЛЕНИХ
         favorites.splice(index, 1);
+        btn.classList.remove('active');
+        img.src = img.dataset.default;
     } else {
+        // ДОДАЄМО В УЛЮБЛЕНІ
         favorites.push(data);
+        btn.classList.add('active');
+        img.src = img.dataset.active;
     }
 
     localStorage.setItem('it_shop_favorites', JSON.stringify(favorites));
     if (typeof updateHeaderBadges === 'function') updateHeaderBadges();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 3. Логіка пагінації та пошуку
 document.addEventListener("DOMContentLoaded", function() {
@@ -77,32 +143,129 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem('it_shop_cart', JSON.stringify(cart));
             localStorage.setItem('it_shop_favorites', JSON.stringify(favorites));
         }
+
+        restoreActiveStates();
+
     }
 
     // --- ФУНКЦІЯ ВІДНОВЛЕННЯ СТАНУ ІКОНОК ---
-    function restoreActiveStates() {
-        // Отримуємо актуальні дані з глобальних масивів або LocalStorage
-        const currentFavIds = favorites.map(item => String(item.id));
+    // function restoreActiveStates() {
+    //     // Отримуємо актуальні дані з глобальних масивів або LocalStorage
+    //     const currentFavIds = favorites.map(item => String(item.id));
 
-        // Підсвічуємо кнопки обраного
-        document.querySelectorAll('.wishlist-btn').forEach(btn => {
-            const onclickAttr = btn.getAttribute('onclick');
-            const idMatch = onclickAttr.match(/'(\d+)'/);
-            if (idMatch && currentFavIds.includes(idMatch[1])) {
-                btn.classList.add('active');
+    //     // Підсвічуємо кнопки обраного
+    //     document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    //         const onclickAttr = btn.getAttribute('onclick');
+    //         const idMatch = onclickAttr.match(/'(\d+)'/);
+    //         if (idMatch && currentFavIds.includes(idMatch[1])) {
+    //             btn.classList.add('active');
+    //         }
+    //     });
+    // }
+
+    // function updateVisibility() {
+    //     const products = document.querySelectorAll('.product-card');
+    //     products.forEach((p, index) => {
+    //         p.style.display = (index < visibleCount) ? 'flex' : 'none';
+    //     });
+    //     if (loadMoreBtn) {
+    //         loadMoreBtn.style.display = (visibleCount >= products.length) ? 'none' : 'block';
+    //     }
+    // }
+
+
+
+// function restoreActiveStates() {
+//     const favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+//     const favIds = favorites.map(item => String(item.id));
+
+//     document.querySelectorAll('.product-card').forEach(card => {
+//         const id = card.dataset.id;
+//         const btn = card.querySelector('.wishlist-btn');
+//         const img = btn.querySelector('img');
+
+//         if (favIds.includes(id)) {
+//             btn.classList.add('active');
+//             img.src = img.dataset.active;
+//         } else {
+//             btn.classList.remove('active');
+//             img.src = img.dataset.default;
+//         }
+//     });
+
+
+
+
+//     /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//     function restoreActiveStates() {
+//     const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+//     const cartIds = cart.map(item => String(item.id));
+
+//     document.querySelectorAll('.product-card').forEach(card => {
+//         const id = card.dataset.id;
+//         const btn = card.querySelector('.cart-btn');
+//         const img = btn.querySelector('img');
+
+//         if (cartIds.includes(id)) {
+//             btn.classList.add('active');
+//             img.src = img.dataset.active;
+//         } else {
+//             btn.classList.remove('active');
+//             img.src = img.dataset.default;
+//         }
+//     });
+// }
+
+// }
+
+
+function restoreActiveStates() {
+    const favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+    const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+
+    const favIds = favorites.map(item => String(item.id));
+    const cartIds = cart.map(item => String(item.id));
+
+    document.querySelectorAll('.product-card').forEach(card => {
+        const id = String(card.dataset.id);
+
+        /* ❤️ УЛЮБЛЕНІ */
+        const favBtn = card.querySelector('.wishlist-btn');
+        if (favBtn) {
+            const favImg = favBtn.querySelector('img');
+            if (favIds.includes(id)) {
+                favBtn.classList.add('active');
+                favImg.src = favImg.dataset.active;
+            } else {
+                favBtn.classList.remove('active');
+                favImg.src = favImg.dataset.default;
             }
-        });
-    }
-
-    function updateVisibility() {
-        const products = document.querySelectorAll('.product-card');
-        products.forEach((p, index) => {
-            p.style.display = (index < visibleCount) ? 'flex' : 'none';
-        });
-        if (loadMoreBtn) {
-            loadMoreBtn.style.display = (visibleCount >= products.length) ? 'none' : 'block';
         }
-    }
+
+        /* 🛒 КОШИК */
+        const cartBtn = card.querySelector('.cart-btn');
+        if (cartBtn) {
+            const cartImg = cartBtn.querySelector('img');
+            if (cartIds.includes(id)) {
+                cartBtn.classList.add('active');
+                cartImg.src = cartImg.dataset.active;
+            } else {
+                cartBtn.classList.remove('active');
+                cartImg.src = cartImg.dataset.default;
+            }
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
 
     // 2. Логіка ЖИВОГО ПОШУКУ
     if (searchInput) {
@@ -169,3 +332,18 @@ function stopImageCycle(card) {
         mainImg.src = card.dataset.originalSrc;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ////////////////////////////////////////////////////////////////////////// */
