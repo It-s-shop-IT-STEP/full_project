@@ -104,6 +104,7 @@ class OrderItem(models.Model):
     # Що замовив і в якій кількості
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product_name = models.CharField(max_length=255) # Зберігаємо назву на випадок видалення товару
+    product_image = models.URLField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
     size = models.CharField(max_length=10, blank=True, null=True)

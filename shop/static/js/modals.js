@@ -3,7 +3,7 @@ function renderFavTab() {
     const list = document.getElementById('fav-items-list');
     if (!list) return;
 
-    let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+    favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
 
     if (favorites.length === 0) {
         list.innerHTML = '<p class="empty-msg" style="text-align:center; padding:20px;">Список порожній</p>';
@@ -35,7 +35,7 @@ function renderCart() {
     const totalPriceElement = document.getElementById('cart-total-price');
     if (!container) return;
 
-    let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
 
     if (cart.length === 0) {
         container.innerHTML = '<p style="text-align:center; padding:20px;">Ваш кошик порожній</p>';
@@ -53,9 +53,6 @@ function renderCart() {
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
                     <p>Артикул: ${item.article}</p>
-                    <p>Розмір: ${item.size || 'Не обрано'}</p>
-                    <p>Колір: ${item.color || 'Не обрано'}</p>
-                    <p>Артикул: ${item.id}</p>
                     <p>Розмір: ${item.size || 'S'}</p>
                     <p>Колір: ${item.color || 'Стандарт'}</p>
                     
@@ -64,10 +61,6 @@ function renderCart() {
                     </div>
                     <button class="delete-item" onclick="removeFromCart('${item.id}')">Видалити 🗑️</button>
                 </div>
-<<<<<<< HEAD
-=======
-                
->>>>>>> origin/feature/my-feature
             </div>
         `;
     }).join('');
@@ -78,7 +71,7 @@ function renderCart() {
 // 3. ДОПОМІЖНІ ФУНКЦІЇ ДЛЯ МОДАЛОК
 
 function changeQty(productId, delta) {
-    let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     const item = cart.find(i => i.id === productId);
     if (item) {
         item.quantity = (item.quantity || 1) + delta;
@@ -90,7 +83,7 @@ function changeQty(productId, delta) {
 }
 
 function transferToCartFromFav(id) {
-    let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+    favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
     const item = favorites.find(i => i.id === id);
 
     if (item) {
@@ -114,12 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = '/checkout/';
             }
         });
-    }
-
-
-
-
-    
+    } 
 });
 
 // <div class="quantity-controls">

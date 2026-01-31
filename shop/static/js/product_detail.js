@@ -46,7 +46,7 @@ function addToCart(id, name, price, image) {
     // Створюємо унікальний ключ (id + колір + розмір), щоб в кошику це були різні позиції
     const productKey = `${id}-${selectedColor}-${selectedSize}`;
     
-    let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     
     // Перевіряємо, чи ми редагуємо існуючий товар (параметр edit в URL)
     const urlParams = new URLSearchParams(window.location.search);

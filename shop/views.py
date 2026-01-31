@@ -105,14 +105,13 @@ def product_detail(request, id):
 
 @login_required(login_url='login')
 def profile_view(request):
-    return render(request, 'profile.html', {'user': request.user})
-
-
-@login_required(login_url='login')
-def checkout_view(request):
-    # Сторінка кошика перед фінальним замовленням
-    return render(request, 'checkout.html')
-
+    # Отримуємо всі замовлення поточного користувача, відсортовані від нових до старих
+    user_orders = Order.objects.filter(email=request.user.email).order_by('-created_at')
+    
+    return render(request, 'profile.html', {
+        'user': request.user,
+        'orders': user_orders
+    })
 
 @login_required(login_url='login')
 def order_view(request):
@@ -145,6 +144,7 @@ def checkout_view(request):
                 OrderItem.objects.create(
                     order=order,
                     product_name=item['name'],
+                    product_image=item.get('image'),
                     price=item['price'],
                     quantity=item.get('quantity', 1),
                     size=item.get('size', '—'),

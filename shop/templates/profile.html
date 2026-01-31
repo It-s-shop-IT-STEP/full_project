@@ -2,42 +2,115 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
 {% block content %}
-<head>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
-</head>
+<div class="profile-bg">
+    <div class="profile-card">
+        <aside class="profile-sidebar">
+            <nav class="side-nav">
+                <button class="nav-item active" data-tab="account">
+                    <img src="{% static 'img/icons/user.png' %}" class="nav-icon"> Мій акаунт
+                </button>
+                <button class="nav-item" data-tab="messages">
+                    <img src="{% static 'img/icons/mail.png' %}" class="nav-icon"> Повідомлення
+                </button>
+                <button class="nav-item" data-tab="orders">
+                    <img src="{% static 'img/icons/package.png' %}" class="nav-icon"> Мої замовлення
+                </button>
+                <button class="nav-item" data-tab="contact">
+                    <img src="{% static 'img/icons/phone.png' %}" class="nav-icon"> Зв'язатися з нами
+                </button>
+            </nav>
 
-<div class="auth-wrapper profile-page">
-    <div class="auth-form-container" style="max-width: 600px; margin: 0 auto; padding: 40px;">
-        <div class="auth-form">
-            <h2 style="text-align: left; margin-bottom: 30px;">МІЙ ПРОФІЛЬ</h2>
+            <a href="{% url 'logout' %}" class="logout-btn">
+                <img src="{% static 'img/icons/logout.png' %}" class="nav-icon"> Вийти
+            </a>
+        </aside>
 
-            <div class="profile-info-group" style="margin-bottom: 20px;">
-                <label style="color: #777; font-size: 12px; text-transform: uppercase; font-weight: 700;">Ім'я</label>
-                <p style="font-size: 18px; font-weight: 600; margin-top: 5px;">{{ user.first_name }}</p>
+        <main class="profile-content">
+            <div class="tab-content active" id="account">
+                <div class="info-grid">
+                    <div class="data-block">
+                        <div class="block-header">
+                            <h3>Персональні дані</h3>
+                            <button class="edit-link"><img src="{% static 'img/icons/edit.png' %}"></button>
+                        </div>
+                        <p class="user-val">{{ user.first_name }} {{ user.last_name }}</p>
+                        <p class="user-sub">{{ user.email }}</p>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="block-header">
+                            <h3>Доставка за замовчуванням</h3>
+                            <button class="edit-link"><img src="{% static 'img/icons/edit.png' %}"></button>
+                        </div>
+                        <p class="user-val">вул. ІтСтеповська 67</p>
+                    </div>
+
+                    <div class="data-block">
+                        <div class="block-header">
+                            <h3>Спосіб оплати за замовчуванням</h3>
+                            <button class="edit-link"><img src="{% static 'img/icons/edit.png' %}"></button>
+                        </div>
+                        <p class="user-val">Відсутній</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="profile-info-group" style="margin-bottom: 20px;">
-                <label style="color: #777; font-size: 12px; text-transform: uppercase; font-weight: 700;">Прізвище</label>
-                <p style="font-size: 18px; font-weight: 600; margin-top: 5px;">{{ user.last_name }}</p>
-            </div>
+            <div class="tab-content" id="orders">
+                <h3 class="tab-title">Мої замовлення</h3>
+                <div class="orders-list">
+                    {% for order in orders %}
+                        <div class="order-main-card">
+                            <div class="order-info-top">
+                                <span class="order-id">ЗАМОВЛЕННЯ №{{ order.id }}</span>
+                                <span class="order-date">{{ order.created_at|date:"d.m.Y" }}</span>
+                            </div>
 
-            <div class="profile-info-group" style="margin-bottom: 30px;">
-                <label style="color: #777; font-size: 12px; text-transform: uppercase; font-weight: 700;">Електронна пошта</label>
-                <p style="font-size: 18px; font-weight: 600; margin-top: 5px;">{{ user.email }}</p>
-            </div>
+                            <div class="order-items-list">
+                                {% for item in order.items.all %}
+                                    <div class="order-product-row">
+                                        <div class="product-img-mini">
+                                            {% if item.product_image %}
+                                                <img src="{{ item.product_image }}" alt="{{ item.product_name }}">
+                                            {% else %}
+                                                <img src="{% static 'img/no-image.png' %}" alt="Немає фото">
+                                            {% endif %}
+                                        </div>
 
-            <div style="display: flex; gap: 15px;">
-                <a href="{% url 'main' %}" class="btn-auth-submit" style="text-decoration: none; text-align: center; background: #eee; color: #000;">НА ГОЛОВНУ</a>
-                <a href="/logout/" class="btn-auth-submit" style="text-decoration: none; text-align: center; background: #ff4d4d; color: #fff;">ВИЙТИ</a>
+                                        <div class="product-details-mini">
+                                            <h4>{{ item.product_name }}</h4>
+                                            <div class="product-meta">
+                                                <span>Колір: <strong>{{ item.color }}</strong></span>
+                                                <span>Розмір: <strong>{{ item.size }}</strong></span>
+                                                <span>Кількість: <strong>{{ item.quantity }} шт.</strong></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="product-price-mini">
+                                            <span>{{ item.price }} грн</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="order-footer">
+                                <span class="total-label">РАЗОМ:</span>
+                                <span class="total-sum">{{ order.total_price }} грн</span>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="empty-msg">Ви ще не зробили жодного замовлення.</p>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>
+{% endblock %}
 
-{% include 'info_table.html' %}
-
+{% block extra_js %}
+    <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

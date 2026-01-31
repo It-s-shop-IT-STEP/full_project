@@ -1,0 +1,95 @@
+.profile-bg {
+    background-color: #D5D5D5; /* Колір фону з Figma */
+    min-height: 100vh;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-card {
+    background: #FFFFFF;
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    min-height: 600px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar */
+.profile-sidebar {
+    width: 280px;
+    border-right: 1px solid #E5E5E5;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 12px 10px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.nav-item.active {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.nav-icon { width: 20px; height: 20px; }
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+}
+
+/* Content */
+.profile-content {
+    flex: 1;
+    padding: 50px;
+    background-color: #F9F9F9;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.data-block {
+    background: #FFFFFF;
+    padding: 25px;
+    border: 1px solid #F0F0F0;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.block-header h3 { font-size: 18px; font-weight: 600; color: #000; }
+
+.edit-link { background: none; border: none; cursor: pointer; }
+
+.user-val { font-size: 16px; margin-bottom: 5px; }
+.user-sub { color: #888; font-size: 14px; }
+
+/* Tabs Logic */
+.tab-content { display: none; }
+.tab-content.active { display: block; }

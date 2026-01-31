@@ -13,14 +13,14 @@ function getProductData(el) {
 function addToCart(btn) {
     const data = getProductData(btn);
 
-    let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     const item = cart.find(i => i.id === data.id);
     
     if (item) {
         item.quantity += 1;
         item.price = data.price; // ОНОВЛЕННЯ ЦІНИ, якщо вона змінилась в адмінці
     } else {
-        cart.push({ ...data, quantity: 1, color: "Не обрано", size: "Не обрано" });
+        cart.push({ ...data, quantity: 1, color: "Чорний", size: "S" });
     }
 
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
@@ -33,7 +33,7 @@ function toggleFavorite(btn) {
     const data = getProductData(btn);
     btn.classList.toggle('active');
 
-    let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+    favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
     const index = favorites.findIndex(i => i.id === data.id);
 
     if (index > -1) {
@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // СИНХРОНІЗАЦІЯ ЦІН
     function syncPrices() {
-        let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
-        let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+        cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+        favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
         let changed = false;
 
         document.querySelectorAll('.product-card').forEach(card => {

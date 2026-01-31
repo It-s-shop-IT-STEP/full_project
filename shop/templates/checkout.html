@@ -2,105 +2,39 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="checkout-container">
-    <div class="checkout-content">
-        <div class="checkout-items-section">
-            <h1 id="checkout-count-title">У КОШИКУ 0 ТОВАРИ</h1>
-            <div id="checkout-items-list">
-                </div>
+<div class="checkout-page">
+    <div class="checkout-container">
+        <div class="cart-left-main">
+            <h2 id="cart-plural-title">У кошику 0 товарів</h2>
+            <div id="cart-items-wrapper"></div>
         </div>
 
-        <div class="checkout-summary-card">
-            <div class="summary-details">
+        <aside class="cart-right-summary">
+            <div class="summary-card-fixed">
                 <div class="summary-line">
                     <span>Сума замовлення:</span>
-                    <span id="subtotal-price">0 грн</span>
+                    <span id="subtotal-val">0 грн</span>
                 </div>
                 <div class="summary-line">
                     <span>Знижка:</span>
                     <span>0 грн</span>
                 </div>
-                <hr>
-                <div class="summary-total">
+                <div class="summary-total-big">
                     <span>Разом:</span>
-                    <span id="total-price">0 грн</span>
+                    <span id="final-total-val">0 грн</span>
+                </div>
+                <button class="btn-checkout-primary" onclick="location.href='/order/'">Оформити замовлення</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="{% url 'catalog' %}" class="link-back-shopping">Продовжити покупки</a>
                 </div>
             </div>
-            
-            <a href="{% url 'order_page' %}" class="btn-confirm-order">
-                ОФОРМИТИ ЗАМОВЛЕННЯ
-            </a>
-
-            <a href="{% url 'catalog' %}" class="btn-continue-shopping">
-                Продовжити покупки
-            </a>
-        </div>
+        </aside>
     </div>
 </div>
-<!--
-<script>
-    function getProductWord(n) {
-        n = Math.abs(n) % 100; 
-        const n1 = n % 10;
-        if (n > 10 && n < 20) return 'ТОВАРІВ';
-        if (n1 === 1) return 'ТОВАР';
-        if (n1 > 1 && n1 < 5) return 'ТОВАРИ';
-        return 'ТОВАРІВ';
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const checkoutList = document.getElementById('checkout-items-list');
-        const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
-        const countTitle = document.getElementById('checkout-count-title');
-
-        const totalCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-
-        countTitle.innerText = `У КОШИКУ ${totalCount} ${getProductWord(totalCount)}`;
-
-        if (cart.length === 0) {
-            checkoutList.innerHTML = '<p class="empty-msg">Кошик порожній</p>';
-            return;
-        }
-
-        let total = 0;
-        checkoutList.innerHTML = cart.map(item => {
-            const itemSum = item.price * (item.quantity || 1);
-            total += itemSum;
-            return `
-                <div class="checkout-item-row">
-                    <div class="checkout-item-img">
-                        <img src="${item.image}" alt="${item.name}">
-                    </div>
-                    <div class="checkout-item-info">
-                        <h3>${item.name}</h3>
-                        <p>Колір: <span>${item.color || 'Не обрано'}</span></p>
-                        <p>Розмір: <span>${item.size || 'Не обрано'}</span></p>
-                        <div class="item-price-row">
-                            <span class="price-blue">${item.price}$</span>
-                        </div>
-                    </div>
-                    <div class="checkout-item-qty">
-                        <div class="qty-box">${item.quantity || 1}</div>
-                    </div>
-                    <button class="btn-remove-checkout" onclick="removeFromCart('${item.id}'); location.reload();">
-                        Видалити 🗑️
-                    </button>
-                </div>
-            `;
-        }).join('');
-
-        document.getElementById('subtotal-price').innerText = total + 'грн';
-        document.getElementById('total-price').innerText = total + 'грн';
-    });
-</script>
--->
-
-{% include 'info_table.html' %}
-
 {% endblock %}
 
 {% block extra_js %}
