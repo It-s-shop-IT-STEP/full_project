@@ -1,28 +1,36 @@
+/* Основні налаштування сторінки */
 .profile-bg {
-    background-color: #D5D5D5; /* Колір фону з Figma */
+    background-color: white; /* Фоновий білий колір з макета */
     min-height: 100vh;
     padding: 60px 20px;
     display: flex;
     justify-content: center;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .profile-card {
     background: #FFFFFF;
     width: 100%;
-    max-width: 1100px;
     display: flex;
     min-height: 600px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-/* Sidebar */
+/* Сайдбар (ліва частина) */
 .profile-sidebar {
     width: 280px;
-    border-right: 1px solid #E5E5E5;
     padding: 40px 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #FFFFFF;
+}
+
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .nav-item {
@@ -32,20 +40,29 @@
     width: 100%;
     background: none;
     border: none;
-    padding: 12px 10px;
+    padding: 12px 15px;
     font-size: 16px;
     color: #333;
     cursor: pointer;
     text-align: left;
-    margin-bottom: 5px;
+    transition: 0.2s;
+    border-radius: 4px;
+}
+
+.nav-item:hover {
+    background-color: #F5F5F5;
 }
 
 .nav-item.active {
     font-weight: 700;
-    text-decoration: underline;
+    text-decoration: underline; /* Стиль активного пункту */
 }
 
-.nav-icon { width: 20px; height: 20px; }
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
 
 .logout-btn {
     display: flex;
@@ -53,43 +70,345 @@
     gap: 12px;
     text-decoration: none;
     color: #333;
-    padding: 10px;
+    padding: 12px 15px;
+    font-weight: 500;
+    margin-top: auto;
 }
 
-/* Content */
+/* Контентна область (права частина) */
 .profile-content {
-    flex: 1;
     padding: 50px;
-    background-color: #F9F9F9;
+    width: 75%;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* М'яка тінь */
+    background-color: white; 
 }
 
 .info-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr; /* Дві колонки для блоків даних */
     gap: 30px;
 }
 
 .data-block {
     background: #FFFFFF;
-    padding: 25px;
+    padding: 30px;
     border: 1px solid #F0F0F0;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+    position: relative;
+    min-height: 160px;
 }
 
 .block-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-.block-header h3 { font-size: 18px; font-weight: 600; color: #000; }
+.block-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+}
 
-.edit-link { background: none; border: none; cursor: pointer; }
+.edit-link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: opacity 0.2s;
+}
 
-.user-val { font-size: 16px; margin-bottom: 5px; }
-.user-sub { color: #888; font-size: 14px; }
+.edit-link:hover {
+    opacity: 0.7;
+}
 
-/* Tabs Logic */
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+.edit-link img {
+    width: 18px;
+    height: 18px;
+}
+
+.user-val {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.user-sub {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* --- СТИЛІ РЕДАГУВАННЯ (Edit Mode) --- */
+.edit-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.edit-input:focus {
+    border-color: #0047FF;
+    outline: none;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.save-btn {
+    background-color: #0047FF; /* Фірмовий синій */
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 50px; /* Круглі кнопки як у Figma */
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.save-btn:hover {
+    background-color: #0036CC;
+}
+
+.cancel-btn {
+    background-color: #EEEEEE;
+    color: #333;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* --- НОВА ПОШТА DROPDOWN --- */
+.np-dropdown {
+    position: absolute;
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    width: calc(100% - 60px); /* Враховуємо падінги блоку */
+    max-height: 180px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: -5px;
+    border-radius: 0 0 4px 4px;
+}
+
+.np-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.np-item:hover {
+    background-color: #F0F4FF;
+    color: #0047FF;
+}
+
+/* Таби (Мої замовлення) */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.order-main-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.message-item {
+    background: #f9f9f9;
+    border-left: 4px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+.message-item.unread {
+    border-left-color: #007bff; /* Твій основний синій колір */
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.message-title {
+    font-weight: bold;
+    color: #333;
+}
+.message-date {
+    font-size: 12px;
+    color: #888;
+}
+.message-text {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+}
+
+
+.orders-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.order-item {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s;
+}
+
+.order-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #f5f5f5;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.order-number {
+    font-weight: 700;
+    color: #333;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Приклади кольорів для статусів (залежить від твоїх статусів у моделі) */
+.status-badge.new { background: #e3f2fd; color: #1976d2; }
+.status-badge.completed { background: #e8f5e9; color: #2e7d32; }
+.status-badge.cancelled { background: #ffebee; color: #c62828; }
+
+.shop-now-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+
+
+.order-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.order-items-list {
+    margin: 15px 0;
+}
+
+.ordered-product {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px dotted #eee;
+}
+
+.ordered-product:last-child {
+    border-bottom: none;
+}
+
+.prod-img img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #f9f9f9;
+}
+
+.prod-info {
+    flex: 1;
+}
+
+.prod-name {
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    font-size: 15px;
+}
+
+.prod-meta {
+    font-size: 13px;
+    color: #777;
+    display: flex;
+    gap: 12px;
+}
+
+.prod-details-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.prod-qty {
+    font-size: 13px;
+    color: #888;
+}
+
+.prod-subtotal {
+    font-weight: 700;
+    color: #333;
+}
+
+.order-footer {
+    border-top: 1px solid #f5f5f5;
+    padding-top: 12px;
+    text-align: right;
+}
+
+.order-total {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.order-total span {
+    font-weight: 800;
+    color: #000;
+    font-size: 18px;
+    margin-left: 5px;
+}

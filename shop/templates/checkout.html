@@ -2,14 +2,15 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="checkout-page">
+    <h2 id="cart-plural-title">У кошику 0 товарів</h2>
     <div class="checkout-container">
         <div class="cart-left-main">
-            <h2 id="cart-plural-title">У кошику 0 товарів</h2>
+            
             <div id="cart-items-wrapper"></div>
         </div>
 
@@ -38,5 +39,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/checkout.js' %}"></script>
+    <script src="{% static 'js/checkout.js' %}"></script>
 {% endblock %}

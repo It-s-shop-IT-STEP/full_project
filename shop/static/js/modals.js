@@ -1,35 +1,76 @@
-// 1. РЕНДЕР УЛЮБЛЕНИХ (FAVORITES)
-function renderFavTab() {
-    const list = document.getElementById('fav-items-list');
-    if (!list) return;
+// --- 1. ПЕРЕМІННІ ---
+let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
 
-    favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+// --- 2. ПРИ ЗАВАНТАЖЕННІ ---
+document.addEventListener('DOMContentLoaded', () => {
+    updateHeaderBadges();
+    initGlobalModals();
+    renderCart(); // Малюємо кошик зразу
+    renderFavTab(); // Малюємо улюблене зразу
+});
 
-    if (favorites.length === 0) {
-        list.innerHTML = '<p class="empty-msg" style="text-align:center; padding:20px;">Список порожній</p>';
-        return;
+// --- 3. ЛОГІКА ХЕДЕРА ТА ВІДКРИТТЯ ---
+
+function updateHeaderBadges() {
+    const cartCount = document.getElementById('cart-count');
+    const favCount = document.getElementById('fav-count');
+
+    const currentCart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    const currentFavs = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+
+    if (cartCount) {
+        const totalItems = currentCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+        cartCount.innerText = totalItems;
+        cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
     }
-
-    list.innerHTML = favorites.map(item => {
-        const displayPrice = Math.ceil(item.price);
-        return `
-        <div class="fav-item-row">
-            <img src="${item.image}" alt="${item.name}">
-            <div class="fav-item-details">
-                <h4>${item.name}</h4>
-                <p class="price">${displayPrice} грн</p>
-                <button class="move-btn" onclick="transferToCartFromFav('${item.id}')">
-                    ПЕРЕМІСТИТИ В КОШИК
-                </button>
-            </div>
-            <button class="remove-fav-btn" onclick="removeFromFavorites('${item.id}'); renderFavTab();">
-                &times;
-            </button>
-        </div>
-    `}).join('');
+    if (favCount) {
+        favCount.innerText = currentFavs.length;
+        favCount.style.display = currentFavs.length > 0 ? 'flex' : 'none';
+    }
 }
 
-// 2. РЕНДЕР КОШИКА (CART)
+function initGlobalModals() {
+    const favModal = document.getElementById('fav-modal');
+    const cartModal = document.getElementById('cart-modal');
+    const favBtn = document.getElementById('fav-icon-trigger');
+    const cartBtn = document.getElementById('cart-icon-trigger');
+
+    if (favBtn) {
+        favBtn.onclick = (e) => {
+            e.preventDefault();
+            if (favModal) {
+                favModal.style.display = 'block';
+                renderFavTab();
+            }
+        };
+    }
+
+    if (cartBtn) {
+        cartBtn.onclick = (e) => {
+            e.preventDefault();
+            if (cartModal) {
+                cartModal.style.display = 'block';
+                renderCart();
+            }
+        };
+    }
+
+    document.querySelectorAll('.close-fav, .close-cart, #close-fav-btn').forEach(btn => {
+        btn.onclick = () => {
+            if (favModal) favModal.style.display = 'none';
+            if (cartModal) cartModal.style.display = 'none';
+        };
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === favModal) favModal.style.display = 'none';
+        if (e.target === cartModal) cartModal.style.display = 'none';
+    });
+}
+
+// --- 4. РЕНДЕР ТА КЕРУВАННЯ ---
+
 function renderCart() {
     const container = document.getElementById('cart-items-container');
     const totalPriceElement = document.getElementById('cart-total-price');
@@ -53,22 +94,42 @@ function renderCart() {
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
                     <p>Артикул: ${item.article}</p>
-                    <p>Розмір: ${item.size || 'S'}</p>
-                    <p>Колір: ${item.color || 'Стандарт'}</p>
-                    
+                    <p>Колір: ${item.color}</p>
+                    <p>Розмір: ${item.size}</p>
                     <div class="price-row">
-                        <span class="price-blue">${itemPrice} грн x ${item.quantity || 1}шт.</span>
+                        <span class="price-blue">${itemPrice} грн</span>
                     </div>
                     <button class="delete-item" onclick="removeFromCart('${item.id}')">Видалити 🗑️</button>
                 </div>
-            </div>
-        `;
+            </div>`;
     }).join('');
-
-    if (totalPriceElement) totalPriceElement.innerText = Math.ceil(total);
+    if (totalPriceElement) totalPriceElement.innerText = total;
 }
 
-// 3. ДОПОМІЖНІ ФУНКЦІЇ ДЛЯ МОДАЛОК
+function renderFavTab() {
+    const list = document.getElementById('fav-items-list');
+    if (!list) return;
+
+    favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+
+    if (favorites.length === 0) {
+        list.innerHTML = '<p style="text-align:center; padding:20px;">Список порожній</p>';
+        return;
+    }
+
+    list.innerHTML = favorites.map(item => `
+        <div class="fav-item-row">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="fav-item-details">
+                <h4>${item.name}</h4>
+                <p class="price">${Math.ceil(item.price)} грн</p>
+                <button class="move-btn" onclick="transferToCartFromFav('${item.id}')">ПЕРЕМІСТИТИ В КОШИК</button>
+            </div>
+            <button class="remove-fav-btn" onclick="removeFromFavorites('${item.id}')">&times;</button>
+        </div>`).join('');
+}
+
+// --- 5. ДІЇ (ADD, REMOVE, MOVE) ---
 
 function changeQty(productId, delta) {
     cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
@@ -76,42 +137,71 @@ function changeQty(productId, delta) {
     if (item) {
         item.quantity = (item.quantity || 1) + delta;
         if (item.quantity < 1) return removeFromCart(productId);
+        localStorage.setItem('it_shop_cart', JSON.stringify(cart));
+        renderCart();
+        updateHeaderBadges();
     }
+}
+
+function removeFromCart(productId) {
+    cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    cart = cart.filter(item => item.id !== productId);
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
     renderCart();
-    if (typeof updateHeaderBadges === 'function') updateHeaderBadges();
+    updateHeaderBadges();
+}
+
+function removeFromFavorites(productId) {
+    favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+    favorites = favorites.filter(item => item.id !== productId);
+    localStorage.setItem('it_shop_favorites', JSON.stringify(favorites));
+    renderFavTab();
+    updateHeaderBadges();
 }
 
 function transferToCartFromFav(id) {
     favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
     const item = favorites.find(i => i.id === id);
-
     if (item) {
-        // Використовуємо існуючу логіку addToCart
-        addToCart(item.id, item.name, item.price, item.image);
-        // Видаляємо з улюблених
+        // Оскільки в улюбленому немає вибору кольору, ставимо дефолтні, як у твоїй addToCart
+        const defColor = "Чорний";
+        const defSize = "S";
+        const productKey = `${item.id}-${defColor}-${defSize}`;
+
+        cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+        const existing = cart.find(i => i.id === productKey);
+        
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({
+                id: productKey,
+                originalId: item.id,
+                name: item.name,
+                price: parseFloat(item.price),
+                image: item.image,
+                color: defColor,
+                size: defSize,
+                quantity: 1
+            });
+        }
+        localStorage.setItem('it_shop_cart', JSON.stringify(cart));
         removeFromFavorites(id);
-        renderFavTab();
+        renderCart();
+        updateHeaderBadges();
     }
 }
 
-// Подія для кнопки оформлення
+// Подія для кнопки оформлення (Checkout)
 document.addEventListener('DOMContentLoaded', () => {
     const checkoutBtn = document.getElementById('checkout-redirect-btn');
     if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', () => {
-            const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
-            if (cart.length === 0) {
-                alert("Ваш кошик порожній!");
+        checkoutBtn.onclick = () => {
+            if (JSON.parse(localStorage.getItem('it_shop_cart') || '[]').length === 0) {
+                alert("Кошик порожній!");
             } else {
                 window.location.href = '/checkout/';
             }
-        });
-    } 
+        };
+    }
 });
-
-// <div class="quantity-controls">
-    // <button onclick="changeQty('${item.id}', -1)">-</button>
-    // <span>${item.quantity || 1}</span>
-    // <button onclick="changeQty('${item.id}', 1)">+</button>
-// </div>

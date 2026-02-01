@@ -74,7 +74,7 @@ body {
     --blue: #0000FF;
     --dark: #000000;
     --gray: #F5F5F5;
-    --border: #E0E0E0;
+    --border: #00000054;
 }
 
 * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }

@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDeliveryToggles();
     initCitySearch();
     renderPreview();
+    autoFillFromProfile(); // Автозаповнення при завантаженні
     
     // Закриття випадаючих списків при кліку поза ними
     window.addEventListener('click', (e) => {
@@ -14,7 +15,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// 1. ПЕРЕМИКАННЯ ВАРІАНТІВ ДОСТАВКИ
+// --- 1. ДОПОМІЖНІ ФУНКЦІЇ ---
+
+function getCartData() {
+    // Отримуємо товари за тим самим ключем, що і в рендері прев'ю
+    return JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// --- 2. ПЕРЕМИКАННЯ ТА ПОШУК (НОВА ПОШТА) ---
+
 function initDeliveryToggles() {
     document.querySelectorAll('input[name="delivery_method"]').forEach(radio => {
         radio.addEventListener('change', function() {
@@ -26,7 +50,6 @@ function initDeliveryToggles() {
     });
 }
 
-// 2. ПОШУК МІСТ (API НОВА ПОШТА)
 function initCitySearch() {
     document.querySelectorAll('.city-input, .np-search-input-address').forEach(input => {
         input.addEventListener('input', async function() {
@@ -49,43 +72,33 @@ function initCitySearch() {
                 
                 if (res.success) {
                     const seen = new Set();
-                    if(isAddr) validAddressCities.clear();
-                    
                     const options = res.data.map(c => {
-                        if (isAddr && c.CanBookingAddress === false) return '';
                         const name = c.Description || c.MainDescription;
                         const reg = c.AreaDescription || c.RegionsDescription || "";
                         const full = reg ? `${name} (${reg} обл.)` : name;
-                        
                         if (seen.has(full)) return '';
                         seen.add(full);
-                        if(isAddr) validAddressCities.add(full);
-                        
                         return `<option value="${full}" data-ref="${c.Ref || c.DeliveryCity}">`;
                     }).join('');
-                    
                     this.nextElementSibling.innerHTML = options;
                 }
             } catch (e) { console.error("NP API Error:", e); }
-            
-            if (isAddr) checkCourierError(this);
         });
 
         input.addEventListener('change', function() {
             const datalist = this.nextElementSibling;
             const option = Array.from(datalist.options).find(o => o.value === this.value);
-            if (option && !this.classList.contains('np-search-input-address')) {
+            if (option) {
                 loadPoints(this.closest('.delivery-option-group'), option.getAttribute('data-ref'));
             }
         });
     });
 }
 
-// 3. ЗАВАНТАЖЕННЯ ВІДДІЛЕНЬ/ПОШТОМАТІВ
 async function loadPoints(parent, ref) {
     const input = parent.querySelector('.point-input');
     const list = parent.querySelector('.custom-dropdown-list');
-    const type = parent.querySelector('input[name="delivery_method"]').value;
+    const typeRadio = parent.querySelector('input[name="delivery_method"]');
 
     const resp = await fetch('https://api.novaposhta.ua/v2.0/json/', {
         method: 'POST',
@@ -101,18 +114,16 @@ async function loadPoints(parent, ref) {
     if (res.success) {
         const items = res.data.filter(w => {
             const isP = w.Description.includes('Поштомат') || w.CategoryOfWarehouse === 'Postomat';
-            return type === 'Поштомат' ? isP : !isP;
+            return typeRadio.value === 'Поштомат' ? isP : !isP;
         });
 
         input.disabled = false;
-        input.value = ""; // Очищуємо попереднє значення
-        
+        input.value = ""; 
         input.onclick = (e) => { 
             e.stopPropagation();
             list.style.display = 'block'; 
             updateUIList(items, list, input, ""); 
         };
-        
         input.oninput = (e) => updateUIList(items, list, input, e.target.value);
     }
 }
@@ -128,79 +139,76 @@ function updateUIList(items, listUI, inputUI, filter) {
     };
 }
 
-function checkCourierError(input) {
-    const err = document.getElementById('address-error');
-    if (!err) return;
-    err.style.display = (input.value.length > 2 && !validAddressCities.has(input.value)) ? 'block' : 'none';
-}
-
-// 4. ВІДПРАВКА В ТЕЛЕГРАМ
-
-// Функція для отримання захисного токена Django
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+// --- 3. ВІДПРАВКА ЗАМОВЛЕННЯ ---
 
 async function sendOrderToTelegram() {
-    const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    const cart = getCartData();
     if (cart.length === 0) return alert("Кошик порожній!");
 
+    // Збір персональних даних
+    const firstName = document.getElementById('cust-first-name')?.value.trim();
+    const lastName = document.getElementById('cust-last-name')?.value.trim();
+    const phone = document.getElementById('cust-phone')?.value.trim();
+    const email = document.getElementById('cust-email')?.value.trim();
+
+    // Збір адреси (з активного блоку)
+    const activeGroup = document.querySelector('.np-sub-fields.active');
+    let fullAddress = "Не вказано";
+    if (activeGroup) {
+        const city = activeGroup.querySelector('.city-input')?.value || "";
+        const point = activeGroup.querySelector('.point-input')?.value || "";
+        fullAddress = `${city}, ${point}`;
+    }
+
+    // Збір коментаря (id="order-comment")
+    const comment = document.getElementById('order-comment')?.value.trim() || "Без коментаря";
+
+    // Збір оплати
+    const paymentRadio = document.querySelector('input[name="payment"]:checked');
+    const paymentMethod = paymentRadio && (paymentRadio.value === 'Карткою' || paymentRadio.value === 'card') ? 'card' : 'cash';
+
     const orderData = {
-        first_name: document.getElementById('cust-first-name').value.trim(),
-        last_name: document.getElementById('cust-last-name').value.trim(),
-        phone: document.getElementById('cust-phone').value.trim(),
-        email: document.getElementById('cust-email').value.trim(),
-        address: document.querySelector('.city-input, .np-search-input-address').value + ", " + 
-                 document.querySelector('.point-input').value,
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone,
+        email: email,
+        address: fullAddress,
+        comment: comment,
+        payment_method: paymentMethod,
         total_price: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        cart: cart
+        cart: cart 
     };
 
-    // Отримання CSRF токена для Django
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
-    if (!csrfToken) {
-        console.error("CSRF token not found! Переконайтеся, що {% csrf_token %} додано в HTML.");
-        return;
-    }
     try {
         const res = await fetch('/checkout/', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken 
+                'X-CSRFToken': getCookie('csrftoken') 
             },
             body: JSON.stringify(orderData)
         });
 
         if (res.ok) {
-            alert("Замовлення збережено в базі та відправлено!");
+            alert("Замовлення успішно оформлено!");
             localStorage.removeItem('it_shop_cart');
-            window.location.href = "/";
+            window.location.href = "/profile/"; 
         } else {
-            alert("Помилка при збереженні замовлення.");
+            const err = await res.json();
+            alert("Помилка: " + (err.message || "Спробуйте ще раз"));
         }
     } catch (e) {
         alert("Помилка з'єднання з сервером.");
     }
 }
 
-// 5. ПОПЕРЕДНІЙ ПЕРЕГЛЯД ТОВАРІВ У КОЛОНЦІ
+// --- 4. ІНТЕРФЕЙС ТА АВТОЗАПОВНЕННЯ ---
+
 function renderPreview() {
     const previewContainer = document.getElementById('order-preview-items');
     if (!previewContainer) return;
 
-    const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    const cart = getCartData();
     const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
     
     previewContainer.innerHTML = cart.map(i => `
@@ -212,5 +220,34 @@ function renderPreview() {
             </div>
         </div>`).join('');
 
-    document.getElementById('final-total-val').innerText = total + ' грн';
+    const totalEl = document.getElementById('final-total-val');
+    if (totalEl) totalEl.innerText = total + ' грн';
+}
+
+function autoFillFromProfile() {
+    const saved = JSON.parse(localStorage.getItem('user_delivery_choice'));
+    if (!saved) return;
+
+    const radio = document.querySelector(`input[name="delivery_method"][value="${saved.type}"]`);
+    if (radio) {
+        radio.checked = true;
+        const parent = radio.closest('.delivery-option-group');
+        const fields = parent.querySelector('.np-sub-fields');
+        fields.classList.add('active');
+
+        const cityInput = parent.querySelector('.city-input');
+        const pointInput = parent.querySelector('.point-input');
+        
+        if (cityInput) cityInput.value = saved.city;
+        if (pointInput) {
+            pointInput.value = saved.warehouse;
+            pointInput.disabled = false;
+        }
+    }
+
+    if (saved.payment) {
+        const pVal = saved.payment === 'card' ? 'Карткою' : 'При отриманні';
+        const pRadio = document.querySelector(`input[name="payment"][value="${pVal}"]`);
+        if (pRadio) pRadio.checked = true;
+    }
 }

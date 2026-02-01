@@ -11,7 +11,7 @@
     width: 100px;
     height: 100px;
     object-fit: contain;
-    background: #F5F5F5;
+    background: white;
 }
 
 .fav-item-details {
@@ -60,7 +60,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    /* background-color: rgba(118, 112, 112, 0.5); */
+    background-color: rgba(255, 255, 255, 0.7); 
     overflow-y: auto;
     pointer-events: auto; 
 } 
@@ -110,17 +110,19 @@
 
 
 .cart-content {
-    background-color: #fff;
+    background-color: white;
     padding: 30px;
     width: 500px;
     position: fixed;
     top: 100px;
-    height: calc(75vh - 90px);
-    /* top: 9.5vh; */
-    right: 3%;          /* ← головне */
-       /* на всю висоту */
-    box-shadow: -4px 0 20px rgba(80, 76, 76, 0.3);
-    overflow-y: auto;
+    right: 3%;
+    box-shadow: 0px 10px 20px rgba(80, 76, 76, 0.3);
+
+    /* Додаємо ці властивості: */
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh; /* Обмежуємо висоту модалки */
+    overflow: hidden; /* Забороняємо гортати саму модалку */
 }
 
 
@@ -137,13 +139,18 @@
     font-weight: 700;
     margin-top: 20px;
     cursor: pointer;
+    flex-shrink: 0; /* Забороняє кнопці стискатися */
+    margin-top: 10px;
 }
 
 /* Контейнер для списку товарів у кошику */
-#cart-items-container {
-    max-height: 400px; /* Приблизна висота для 3-х товарів (підберіть під свій дизайн) */
-    overflow-y: auto;  /* Вмикає вертикальну прокрутку */
-    padding-right: 25px; /* Відступ, щоб повзунок не налізав на текст */
+#cart-items-container, 
+#fav-items-list {
+    flex-grow: 1;       /* Займає весь вільний простір між заголовком і кнопкою */
+    overflow-y: auto;    /* Скрол тільки тут */
+    padding-right: 15px;
+    margin-bottom: 10px; /* Відступ від кнопки */
+    max-height: none !important; /* Видаляємо старе обмеження, якщо воно було */
 }
 
 /* Стилізація самого повзунка (scrollabr), щоб він виглядав акуратно */
@@ -178,16 +185,16 @@
     display: flex !important;
     align-items: center !important;
     gap: 15px !important;
-    padding: 15px 0;
+    padding: 15px;
     border-bottom: 1px solid #f0f0f0;
 }
 
 .cart-item img {
-    width: 100px !important;      /* Обмежуємо ширину картинки */
-    height: 100px !important;     /* Обмежуємо висоту */
+    width: 150px !important;      /* Обмежуємо ширину картинки */
+    height: 150px !important;     /* Обмежуємо висоту */
     object-fit: contain !important;
-    background: #f9f9f9;
-    
+    background: white;
+    box-shadow: 0px 0px 20px rgba(84, 84, 84, 0.1); /* М'яка тінь */
     flex-shrink: 0;             /* Забороняємо картинці стискатися */
 }
 

@@ -15,27 +15,45 @@
 
 /* Секція зображення */
 .product-image-container {
-    flex: 1.2;
-    background-color: #F5F5F5;
-    border-radius: 20px;
+    flex: 1;
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1 / 1.2;
     position: relative;
+    box-shadow: 0px 0px 20px rgba(84, 84, 84, 0.2);
 }
 
 .product-image-container img {
-    width: 90%;
-    height: auto;
-    object-fit: contain;
+    max-width: 90%;           /* Фото не буде торкатися країв */
+    max-height: 90%;          /* Залишаємо "повітря" навколо */
+    width: auto;              /* Зберігаємо пропорції */
+    height: auto;             /* Зберігаємо пропорції */
+    object-fit: contain;      /* Вписуємо фото в область */
+    border-radius: 0;
 }
 
-#main-display-image {
+/* Обгортка, яку видно на скріншоті DevTools */
+.main-image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    height: 100%;
+}
+
+/* Саме фото */
+#main-display-image {
+    max-width: 85%;  /* Залишаємо відступи від країв */
+    max-height: 85%; /* Залишаємо відступи від країв */
+    width: auto !important;  /* Скидаємо фіксовану ширину */
+    height: auto !important; /* Скидаємо фіксовану висоту */
+    object-fit: contain;
     transition: opacity 0.2s ease-in-out;
-    border-radius: 8px;
+    display: block;
+    margin: 0 auto;  /* Додаткова страховка для центрування */
 }
 
 .gallery-arrow {

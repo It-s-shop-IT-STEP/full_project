@@ -23,89 +23,193 @@
                     <img src="{% static 'img/icons/phone.png' %}" class="nav-icon"> Зв'язатися з нами
                 </button>
             </nav>
-
             <a href="{% url 'logout' %}" class="logout-btn">
                 <img src="{% static 'img/icons/logout.png' %}" class="nav-icon"> Вийти
             </a>
         </aside>
 
         <main class="profile-content">
+            
             <div class="tab-content active" id="account">
                 <div class="info-grid">
-                    <div class="data-block">
+                    
+                    <div class="data-block" id="block-personal">
                         <div class="block-header">
                             <h3>Персональні дані</h3>
-                            <button class="edit-link"><img src="{% static 'img/icons/edit.png' %}"></button>
+                            <button class="edit-link" onclick="toggleEdit('block-personal')">
+                                <img src="{% static 'img/icons/edit.png' %}" alt="Edit">
+                            </button>
                         </div>
-                        <p class="user-val">{{ user.first_name }} {{ user.last_name }}</p>
-                        <p class="user-sub">{{ user.email }}</p>
+                        <div class="view-mode">
+                            <p class="user-val" id="view-name">{{ user.first_name }} {{ user.last_name }}</p>
+                            <p class="user-sub" id="view-email">{{ user.email }}</p>
+                        </div>
+                        <form class="edit-mode" style="display: none;" onsubmit="saveProfile(event, 'personal')">
+                            {% csrf_token %}
+                            <input type="text" name="first_name" value="{{ user.first_name }}" class="edit-input" placeholder="Ім'я" required>
+                            <input type="text" name="last_name" value="{{ user.last_name }}" class="edit-input" placeholder="Прізвище" required>
+                            <input type="email" name="email" value="{{ user.email }}" class="edit-input" placeholder="Email" required>
+                            <div class="edit-actions">
+                                <button type="submit" class="save-btn">Зберегти</button>
+                                <button type="button" class="cancel-btn" onclick="toggleEdit('block-personal')">Скасувати</button>
+                            </div>
+                        </form>
                     </div>
 
-                    <div class="data-block">
+                    <div class="data-block" id="block-delivery">
                         <div class="block-header">
                             <h3>Доставка за замовчуванням</h3>
-                            <button class="edit-link"><img src="{% static 'img/icons/edit.png' %}"></button>
+                            <button class="edit-link" onclick="toggleEdit('block-delivery')">
+                                <img src="{% static 'img/icons/edit.png' %}" alt="Edit">
+                            </button>
                         </div>
-                        <p class="user-val">вул. ІтСтеповська 67</p>
+                        <div class="view-mode">
+                            <p class="user-val" id="view-city">
+                                {% if user.profile.city %}{{ user.profile.city }}{% else %}Місто не вказано{% endif %}
+                            </p>
+                            <p class="user-sub" id="view-warehouse">
+                                {% if user.profile.warehouse %}{{ user.profile.warehouse }}{% else %}Відділення не вказано{% endif %}
+                            </p>
+                        </div>
+
+                        <form class="edit-mode" style="display: none;" onsubmit="saveProfile(event, 'delivery')">
+                            {% csrf_token %}
+                            <input type="hidden" name="city_ref" id="city-ref" value="{{ user.profile.city_ref|default:'' }}">
+                            
+                            <div class="np-container">
+                                <input type="text" name="city" id="city-input" class="edit-input" 
+                                       value="{{ user.profile.city|default:'' }}" placeholder="Пошук міста..." 
+                                       oninput="handleCityInput(this)" autocomplete="off">
+                                <div id="city-results" class="np-dropdown"></div>
+                            </div>
+        
+                            <div class="np-container">
+                                <input type="text" name="warehouse" id="warehouse-input" class="edit-input" 
+                                       value="{{ user.profile.warehouse|default:'' }}" placeholder="Номер або адреса відділення..." 
+                                       oninput="handleWarehouseInput(this)" autocomplete="off">
+                                <div id="warehouse-results" class="np-dropdown"></div>
+                            </div>
+        
+                            <div class="edit-actions">
+                                <button type="submit" class="save-btn">Зберегти</button>
+                                <button type="button" class="cancel-btn" onclick="toggleEdit('block-delivery')">Скасувати</button>
+                            </div>
+                        </form>
                     </div>
 
-                    <div class="data-block">
+                    <div class="data-block" id="block-payment">
                         <div class="block-header">
-                            <h3>Спосіб оплати за замовчуванням</h3>
-                            <button class="edit-link"><img src="{% static 'img/icons/edit.png' %}"></button>
+                            <h3>Спосіб оплати</h3>
+                            <button class="edit-link" onclick="toggleEdit('block-payment')">
+                                <img src="{% static 'img/icons/edit.png' %}" alt="Edit">
+                            </button>
                         </div>
-                        <p class="user-val">Відсутній</p>
+                        
+                        <div class="view-mode">
+                            <p class="user-val" id="view-payment">
+                                {% if user.profile.payment_method == 'card' %}
+                                    Карткою на сайті
+                                {% else %}
+                                    Оплата при отриманні
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <form class="edit-mode" style="display: none;" onsubmit="saveProfile(event, 'payment')">
+                            {% csrf_token %}
+                            <div class="payment-options-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="payment_method" value="cash" 
+                                           {% if user.profile.payment_method != 'card' %}checked{% endif %}>
+                                    <span>Оплата при отриманні</span>
+                                </label>
+                            </div>
+
+                            <div class="edit-actions">
+                                <button type="submit" class="save-btn">Зберегти</button>
+                                <button type="button" class="cancel-btn" onclick="toggleEdit('block-payment')">Скасувати</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
 
-            <div class="tab-content" id="orders">
-                <h3 class="tab-title">Мої замовлення</h3>
-                <div class="orders-list">
-                    {% for order in orders %}
-                        <div class="order-main-card">
-                            <div class="order-info-top">
-                                <span class="order-id">ЗАМОВЛЕННЯ №{{ order.id }}</span>
-                                <span class="order-date">{{ order.created_at|date:"d.m.Y" }}</span>
+            <div class="tab-content" id="messages" style="display: none;">
+                <h3>Повідомлення</h3>
+                <div id="messages-list" class="messages-container">
+                    {% if user.profile_messages.all %}
+                        {% for msg in user.profile_messages.all %}
+                            <div class="message-item {% if not msg.is_read %}unread{% endif %}">
+                                <div class="message-header">
+                                    <span class="message-title">{{ msg.title }}</span>
+                                    <span class="message-date">{{ msg.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                                <p class="message-text">{{ msg.text }}</p>
                             </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="user-sub">У вас ще немає повідомлень.</p>
+                    {% endif %}
+                </div>
+            </div>
 
-                            <div class="order-items-list">
-                                {% for item in order.items.all %}
-                                    <div class="order-product-row">
-                                        <div class="product-img-mini">
-                                            {% if item.product_image %}
-                                                <img src="{{ item.product_image }}" alt="{{ item.product_name }}">
-                                            {% else %}
-                                                <img src="{% static 'img/no-image.png' %}" alt="Немає фото">
-                                            {% endif %}
-                                        </div>
+            <div class="tab-content" id="orders" style="display: none;">
+                <h3>Мої замовлення</h3>
+                <div id="orders-list" class="orders-container">
+                    {% if orders %}
+                        {% for order in orders %}
+                            <div class="order-card">
+                                <div class="order-header">
+                                    <span class="order-number">Замовлення №{{ order.id }}</span>
+                                    <span class="order-date">{{ order.created_at|date:"d.m.Y" }}</span>
+                                </div>
 
-                                        <div class="product-details-mini">
-                                            <h4>{{ item.product_name }}</h4>
-                                            <div class="product-meta">
-                                                <span>Колір: <strong>{{ item.color }}</strong></span>
-                                                <span>Розмір: <strong>{{ item.size }}</strong></span>
-                                                <span>Кількість: <strong>{{ item.quantity }} шт.</strong></span>
+                                <div class="order-items-list">
+                                    {% for item in order.items.all %}
+                                        <div class="ordered-product">
+                                            <div class="prod-img">
+                                                {% if item.product_image %}
+                                                    <img src="{{ item.product_image }}" alt="{{ item.product_name }}">
+                                                {% else %}
+                                                    <img src="{% static 'img/no-image.png' %}" alt="No image">
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div class="prod-info">
+                                                <p class="prod-name">{{ item.product_name }}</p>
+                                                <div class="prod-meta">
+                                                    {% if item.color %}<span>Колір: {{ item.color }}</span>{% endif %}
+                                                    {% if item.size %}<span>Розмір: {{ item.size }}</span>{% endif %}
+                                                </div>
+                                            </div>
+
+                                            <div class="prod-details-right">
+                                                <span class="prod-qty">{{ item.quantity }} шт.</span>
+                                                <span class="prod-subtotal">{{ item.price }} грн</span>
                                             </div>
                                         </div>
+                                    {% endfor %}
+                                </div>
 
-                                        <div class="product-price-mini">
-                                            <span>{{ item.price }} грн</span>
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                                <div class="order-footer">
+                                    <p class="order-total">Разом: <span>{{ order.total_price }} грн</span></p>
+                                </div>
                             </div>
-
-                            <div class="order-footer">
-                                <span class="total-label">РАЗОМ:</span>
-                                <span class="total-sum">{{ order.total_price }} грн</span>
-                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-orders">
+                            <p class="user-sub">У вас ще немає замовлень.</p>
+                            <a href="{% url 'catalog' %}" class="shop-now-btn">Перейти до покупок</a>
                         </div>
-                    {% empty %}
-                        <p class="empty-msg">Ви ще не зробили жодного замовлення.</p>
-                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
+
+            <div class="tab-content" id="contact" style="display: none;">
+                <h3>Зв'язатися з нами</h3>
+                <p class="user-sub">Ви можете написати нам на email: support@itshop.com</p>
+            </div>
+
         </main>
     </div>
 </div>

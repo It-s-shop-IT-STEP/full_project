@@ -1,6 +1,9 @@
 import openpyxl
 from django.contrib import admin
-from django.http import HttpResponse
+from .models import ProfileMessage
+from django.http import HttpResponse, HttpResponseRedirect
+from django import forms
+from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from .models import Product, ProductColor, ProductImage, Order, OrderItem
@@ -110,3 +113,39 @@ class MyUserAdmin(UserAdmin):
     actions = [export_users_to_excel, block_users, unblock_users] 
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff')
     list_filter = ('is_active', 'is_staff', 'is_superuser')
+
+
+# Спеціальна форма для введення тексту розсилки
+class MassMessageForm(forms.Form):
+    title = forms.CharField(max_length=255, label="Заголовок")
+    text = forms.CharField(widget=forms.Textarea, label="Текст повідомлення")
+
+@admin.register(ProfileMessage)
+class ProfileMessageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'created_at', 'is_read')
+    actions = ['send_to_all'] # Додаємо дію у список
+
+    readonly_fields = ('created_at',)
+
+    def save_model(self, request, obj, form, change):
+        # Перевіряємо, чи ми створюємо нове повідомлення
+        # Якщо в заголовку на початку написати "ВСІМ: ", то розішлемо всім
+        if obj.title.startswith("ВСІМ:"):
+            title_clean = obj.title.replace("ВСІМ:", "").strip()
+            users = User.objects.all()
+            
+            # Створюємо повідомлення для кожного користувача
+            messages = [
+                ProfileMessage(
+                    user=user,
+                    title=title_clean,
+                    text=obj.text
+                ) for user in users
+            ]
+            ProfileMessage.objects.bulk_create(messages)
+            
+            # Виводимо сповіщення в адмінці
+            self.message_user(request, f"Розсилку надіслано {len(messages)} користувачам.")
+        else:
+            # Якщо префікса немає — просто зберігаємо для одного обраного юзера
+            super().save_model(request, obj, form, change)

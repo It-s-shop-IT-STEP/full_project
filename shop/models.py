@@ -3,6 +3,8 @@ import random
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 import math
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
@@ -83,6 +85,12 @@ class ProductImage(models.Model):
         return f"Фото для {self.product_color}"
     
 class Order(models.Model):
+
+    PAYMENT_CHOICES = [
+        ('cash', 'Оплата при отриманні'),
+        ('card', 'Карткою на сайті'),
+    ]
+
     # Хто замовив
     first_name = models.CharField(max_length=50, verbose_name="Ім'я")
     last_name = models.CharField(max_length=50, verbose_name="Прізвище")
@@ -91,7 +99,10 @@ class Order(models.Model):
     address = models.TextField(verbose_name="Адреса доставки")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата замовлення")
     total_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Загальна вартість")
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='cash', verbose_name="Спосіб оплати")
     is_paid = models.BooleanField(default=False, verbose_name="Оплачено")
+
+    
 
     class Meta:
         verbose_name = "Замовлення"
@@ -99,6 +110,15 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Замовлення №{self.id} - {self.first_name}"
+    
+    def items_summary(self):
+        # Отримуємо всі OrderItem, пов'язані з цим замовленням
+        order_items = self.items.all()
+        if not order_items:
+            return "Товари не вказані"
+        
+        # Створюємо список рядків "Назва (Кількість шт.)" і з'єднуємо їх комою
+        return ", ".join([f"{item.product_name} ({item.quantity} шт.)" for item in order_items])
 
 class OrderItem(models.Model):
     # Що замовив і в якій кількості
@@ -112,3 +132,44 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product_name} ({self.quantity} шт.)"
+    
+
+# Додай до імпортів зверху
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    city = models.CharField(max_length=100, blank=True, null=True, verbose_name="Місто")
+    warehouse = models.TextField(blank=True, null=True, verbose_name="Відділення")
+    payment_method = models.CharField(
+        max_length=20, 
+        choices=[('cash', 'Оплата при отриманні'), ('card', 'Карткою на сайті')],
+        default='cash',
+        verbose_name="Спосіб оплати за замовчуванням"
+    )
+
+    def __str__(self):
+        return f"Профіль {self.user.email}"
+
+# Автоматичне створення профілю при реєстрації нового користувача
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
+class ProfileMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile_messages')
+    title = models.CharField(max_length=255, verbose_name="Заголовок")
+    text = models.TextField(verbose_name="Текст повідомлення")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата відправки")
+    is_read = models.BooleanField(default=False, verbose_name="Прочитано")
+
+    class Meta:
+        verbose_name = "Повідомлення користувачу"
+        verbose_name_plural = "Повідомлення користувачам"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.title} для {self.user.username}"
