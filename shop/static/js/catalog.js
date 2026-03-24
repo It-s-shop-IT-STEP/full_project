@@ -1,29 +1,48 @@
 // 1. Додавання в кошик
 function getProductData(el) {
     const card = el.closest('.product-card');
+    const originalId = card.dataset.id;
+    const actualPrice = parseFloat(card.dataset.price);
+    
+    // Оскільки в каталозі ми не вибираємо колір/розмір, 
+    // ставимо дефолтні значення, щоб створити ключ
+    const defaultColor = "Чорний";
+    const defaultSize = "S";
+    const productKey = `${originalId}-${defaultColor}-${defaultSize}`;
+
     return {
-        id: card.dataset.id,
+        id: productKey,        // Унікальний ключ для кошика
+        originalId: originalId, // Обов'язково для валідації на сервері
         article: card.dataset.article,
-        price: parseInt(card.dataset.price),
+        price: actualPrice,
         name: card.querySelector('.product-name').innerText,
-        image: card.querySelector('.image-box img').src
+        image: card.querySelector('.image-box img').src,
+        color: defaultColor,
+        size: defaultSize
     };
 }
 
 function addToCart(btn) {
     const data = getProductData(btn);
+    const card = btn.closest('.product-card');
+    const actualPrice = parseFloat(card.dataset.price); // Беремо discount_price з атрибута
 
     cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    
+    // Шукаємо за унікальним ключем (id-колір-розмір)
     const item = cart.find(i => i.id === data.id);
     
     if (item) {
+        item.price = actualPrice; // ПРИМУСОВО ОНОВЛЮЄМО ЦІНУ
         item.quantity += 1;
-        item.price = data.price; // ОНОВЛЕННЯ ЦІНИ, якщо вона змінилась в адмінці
+        // Ціну не перезаписуємо вручну, сервер сам її перевірить при замовленні
     } else {
-        cart.push({ ...data, quantity: 1, color: "Чорний", size: "S" });
+        cart.push({ ...data, quantity: 1 });
     }
 
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
+    alert("Товар додано в кошик!");
+    
     if (typeof updateHeaderBadges === 'function') updateHeaderBadges();
     if (typeof renderCart === 'function') renderCart();
 }
@@ -107,9 +126,9 @@ document.addEventListener("DOMContentLoaded", function() {
     // 2. Логіка ЖИВОГО ПОШУКУ
     if (searchInput) {
         searchInput.addEventListener('input', function(e) {
-            const query = e.target.value;
+            const query = e.target.value.trim();
 
-            fetch(`?q=${query}`, {
+            fetch(`?q=${encodeURIComponent(query)}`, { // encodeURIComponent захищає кирилицю в URL
                 headers: {
                     'x-requested-with': 'XMLHttpRequest'
                 }
@@ -122,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Скидаємо лічильник при новому пошуку та оновлюємо видимість
                 visibleCount = 12;
                 updateVisibility();
-                restoreActiveStates();
+                if (typeof restoreActiveStates === 'function') restoreActiveStates();
             })
             .catch(err => console.error('Помилка пошуку:', err));
         });

@@ -142,31 +142,46 @@ function updateUIList(items, listUI, inputUI, filter) {
 // --- 3. ВІДПРАВКА ЗАМОВЛЕННЯ ---
 
 async function sendOrderToTelegram() {
-    const cart = getCartData();
+    const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     if (cart.length === 0) return alert("Кошик порожній!");
 
-    // Збір персональних даних
+    // 1. Отримуємо дані
     const firstName = document.getElementById('cust-first-name')?.value.trim();
     const lastName = document.getElementById('cust-last-name')?.value.trim();
     const phone = document.getElementById('cust-phone')?.value.trim();
     const email = document.getElementById('cust-email')?.value.trim();
-
-    // Збір адреси (з активного блоку)
-    const activeGroup = document.querySelector('.np-sub-fields.active');
-    let fullAddress = "Не вказано";
-    if (activeGroup) {
-        const city = activeGroup.querySelector('.city-input')?.value || "";
-        const point = activeGroup.querySelector('.point-input')?.value || "";
-        fullAddress = `${city}, ${point}`;
-    }
-
-    // Збір коментаря (id="order-comment")
     const comment = document.getElementById('order-comment')?.value.trim() || "Без коментаря";
 
-    // Збір оплати
+    // 2. ВАЛІДАЦІЯ (ОБОВ'ЯЗКОВІ ПОЛЯ)
+    if (!firstName || !lastName || !phone) {
+        alert("Будь ласка, заповніть контактні дані: Ім'я, Прізвище та Телефон.");
+        return; // Зупиняємо відправку
+    }
+
+    // 3. ПЕРЕВІРКА АДРЕСИ
+    const deliveryRadio = document.querySelector('input[name="delivery_method"]:checked');
+    const activeGroup = document.querySelector('.np-sub-fields.active');
+    
+    if (!deliveryRadio || !activeGroup) {
+        alert("Будь ласка, оберіть спосіб доставки (Відділення або Поштомат).");
+        return;
+    }
+
+    const city = activeGroup.querySelector('.city-input')?.value.trim();
+    const point = activeGroup.querySelector('.point-input')?.value.trim();
+
+    if (!city || !point) {
+        alert("Будь ласка, вкажіть місто та номер відділення/поштомату.");
+        return;
+    }
+
+    const fullAddress = `${deliveryRadio.value}: ${city}, ${point}`;
+
+    // 4. ОПЛАТА
     const paymentRadio = document.querySelector('input[name="payment"]:checked');
     const paymentMethod = paymentRadio && (paymentRadio.value === 'Карткою' || paymentRadio.value === 'card') ? 'card' : 'cash';
 
+    // 5. ПІДГОТОВКА ДАНИХ (зберігаємо originalId для уникнення помилок в Django)
     const orderData = {
         first_name: firstName,
         last_name: lastName,
@@ -175,8 +190,7 @@ async function sendOrderToTelegram() {
         address: fullAddress,
         comment: comment,
         payment_method: paymentMethod,
-        total_price: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-        cart: cart 
+        cart: cart // Переконайтеся, що об'єкти в cart мають originalId
     };
 
     try {
@@ -189,17 +203,45 @@ async function sendOrderToTelegram() {
             body: JSON.stringify(orderData)
         });
 
-        if (res.ok) {
-            alert("Замовлення успішно оформлено!");
-            localStorage.removeItem('it_shop_cart');
-            window.location.href = "/profile/"; 
+        const result = await res.json();
+
+        if (res.ok && result.status === 'success') {
+            localStorage.removeItem('it_shop_cart'); // Очищення кошика
+            // ПОКАЗУЄМО МОДАЛЬНЕ ВІКНО
+            const modal = document.getElementById('success-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
         } else {
             const err = await res.json();
+            // Виводимо конкретну помилку від Django (наприклад, про id)
             alert("Помилка: " + (err.message || "Спробуйте ще раз"));
         }
     } catch (e) {
-        alert("Помилка з'єднання з сервером.");
+        console.error("Fetch error:", e);
+        alert("Помилка з'єднання з сервером. Перевірте консоль.");
     }
+}
+
+// Функція для закриття вікна та повернення на головну
+function closeSuccessModal() {
+    window.location.href = "/"; // Перенаправлення на головну сторінку
+}
+
+// Допоміжна функція для CSRF (якщо її немає)
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 // --- 4. ІНТЕРФЕЙС ТА АВТОЗАПОВНЕННЯ ---
