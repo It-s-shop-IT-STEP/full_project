@@ -13,46 +13,74 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body>
-    <header class="navbar">
-        <div class="logo-container">
-            <a href="{% url 'main' %}" class="logo">
-                <img src="{% static 'img/logo.png' %}" alt="Logo">
-            </a>
-            <nav class="nav-links">
-                <a href="{% url 'catalog' %}">Каталог</a>
-            </nav>
+<body> 
+
+
+<header class="navbar"> 
+    <div class="logo-container">
+        <a href="{% url 'main' %}" class="logo">
+            <img src="{% static 'img/logo.png' %}" alt="Logo">
+        </a>
+
+        <!-- Десктоп навігація -->
+        <nav class="nav-links desktop-only">
+            <a href="{% url 'catalog' %}">Каталог</a>
+        </nav>
+    </div>
+
+    <div class="user-icons">
+
+        <!-- Обране -->
+        <a href="#" class="icon-link" id="fav-icon-trigger">
+            <img src="{% static 'img/Group1.jpeg' %}" alt="saved" class="icon">
+            <span id="fav-count" class="badge">0</span>
+        </a>
+
+        <!-- Кошик -->
+        <a href="#" class="icon-link" id="cart-icon-trigger">
+            <img src="{% static 'img/Group2.jpeg' %}" alt="cart" class="icon">
+            <span id="cart-count" class="badge">0</span>
+        </a>
+
+        <!-- Десктоп профіль -->
+        <nav class="nav-links desktop-only">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="welcome-link">Профіль</a>
+            {% else %}
+                <a href="{% url 'welcome' %}" class="welcome-link">Увійти</a>
+            {% endif %}
+        </nav>
+
+        <!-- Бургер -->
+        <div class="menu-toggle" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-        <div class="user-icons">
-            <a href="#" class="icon-link" id="fav-icon-trigger">
-                <img src="{% static 'img/Group1.jpeg' %}" alt="saved" class="icon">
-                <span id="fav-count" class="badge">0</span>
-            </a>
 
-            <a href="#" class="icon-link" id="cart-icon-trigger">
-                <img src="{% static 'img/Group2.jpeg' %}" alt="cart" class="icon">
-                <span id="cart-count" class="badge">0</span>
-            </a>
+        <!-- Мобільне меню -->
+        <div class="mobile-nav" id="mobile-nav">
 
-            <nav class="nav-links">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="welcome-link">
-                        <span>Профіль</span>
-                    </a>
-                {% else %}
-                    <a href="{% url 'welcome' %}" class="welcome-link">
-                        <span>Увійти</span>
-                    </a>
-                {% endif %}
-            </nav>
+            <a href="{% url 'catalog' %}">Каталог</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">Профіль</a>
+            {% else %}
+                <a href="{% url 'welcome' %}">Увійти</a>
+            {% endif %}
+
         </div>
-    </header>
 
-    {% block content %}{% endblock %}
+    </div>
+</header>
+
+ {% block content %}{% endblock %}
     
     {% include 'modals.html' %}
     <script src="{% static 'js/modals.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/header.js' %}"></script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

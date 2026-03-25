@@ -1,4 +1,4 @@
-// --- 1. ПЕРЕМІННІ ---
+// --- 1. ПЕРЕМІННІ --- 
 let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
 let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
 
@@ -123,7 +123,7 @@ function renderFavTab() {
             <div class="fav-item-details">
                 <h4>${item.name}</h4>
                 <p class="price">${Math.ceil(item.price)} грн</p>
-                <button class="move-btn" onclick="transferToCartFromFav('${item.id}')">ПЕРЕМІСТИТИ В КОШИК</button>
+                <button class="move-btn" onclick="transferToCartFromFav('${item.id}')">Перемістити в кошик</button>
             </div>
             <button class="remove-fav-btn" onclick="removeFromFavorites('${item.id}')">&times;</button>
         </div>`).join('');
@@ -149,6 +149,10 @@ function removeFromCart(productId) {
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
     renderCart();
     updateHeaderBadges();
+
+    if (typeof restoreActiveStates === 'function') {
+        restoreActiveStates();
+    }
 }
 
 function removeFromFavorites(productId) {
@@ -157,6 +161,10 @@ function removeFromFavorites(productId) {
     localStorage.setItem('it_shop_favorites', JSON.stringify(favorites));
     renderFavTab();
     updateHeaderBadges();
+
+    if (typeof restoreActiveStates === 'function') {
+        restoreActiveStates();
+    }
 }
 
 function transferToCartFromFav(id) {

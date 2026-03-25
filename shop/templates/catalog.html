@@ -16,7 +16,7 @@
                     <button type="submit" class="search-btn">Знайти</button>
                 </form>
             </div>
-        </div>
+        </div> 
     </div>
 </div>
  
@@ -47,10 +47,21 @@
             <div class="image-container">
                 <div class="card-actions">
                     <button class="wishlist-btn" onclick="toggleFavorite(this)">
-                        <img src="{% static 'img/heart_icon.png' %}" alt="Favorite">
+                        <!-- <img src="{% static 'img/heart_icon.png' %}" alt="Favorite"> -->
+                         <img
+src="{% static 'img/addtoswishlist.png' %}"
+data-default="{% static 'img/addtowishlist.png' %}"
+data-active="{% static 'img/blackheart.png' %}"
+alt="Favorite"
+>
                     </button>
                     <button class="cart-btn" onclick="addToCart(this)">
-                        <img src="{% static 'img/bag_icon.png' %}" alt="Add to Cart">
+                        <!-- <img src="{% static 'img/bag_icon.png' %}" alt="Add to Cart"> -->
+                         <img
+src="{% static 'img/addtoshopping-png' %}"
+data-default="{% static 'img/addtoshopping.png' %}" data-active="{% static 'img/blackbag.png' %}"
+alt="Add to Cart"
+>
                     </button>
                 </div>
 

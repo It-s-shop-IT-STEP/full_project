@@ -8,34 +8,37 @@
 {% block content %}
 <div class="checkout-page">
     <h2 id="cart-plural-title">У кошику 0 товарів</h2>
-    <div class="checkout-container">
-        <div class="cart-left-main">
-            
-            <div id="cart-items-wrapper"></div>
-        </div>
-
-        <aside class="cart-right-summary">
-            <div class="summary-card-fixed">
-                <div class="summary-line">
-                    <span>Сума замовлення:</span>
-                    <span id="subtotal-val">0 грн</span>
-                </div>
-                <div class="summary-line">
-                    <span>Знижка:</span>
-                    <span>0 грн</span>
-                </div>
-                <div class="summary-total-big">
-                    <span>Разом:</span>
-                    <span id="final-total-val">0 грн</span>
-                </div>
-                <button class="btn-checkout-primary" onclick="location.href='/order/'">Оформити замовлення</button>
-                <div style="text-align: center; margin-top: 15px;">
-                    <a href="{% url 'catalog' %}" class="link-back-shopping">Продовжити покупки</a>
-                </div>
-            </div>
-        </aside>
+   <div class="checkout-container">
+    <div class="cart-left-main">
+        <div id="cart-items-wrapper"></div>
     </div>
+
+    <aside class="cart-right-summary">
+        <div class="summary-card-fixed">
+            <div class="summary-line">
+                <span>Сума замовлення:</span>
+                <span id="subtotal-val">200$</span>
+            </div>
+            <div class="summary-line">
+                <span>Знижка:</span>
+                <span>0$</span>
+            </div>
+            <div class="summary-total-big">
+                <span>Разом:</span>
+                <span id="final-total-val">200$</span>
+            </div>
+            <button class="btn-checkout-primary" onclick="location.href='/order/'">Оформити замовлення</button>
+            <div style="text-align: center;">
+                <a href="{%url 'catalog' %}" class="link-back-shopping">Продовжити покупки</a>
+            </div>
+        </div>
+    </aside>
 </div>
+</div>
+
+{% include 'info_table.html' %} 
+
+
 {% endblock %}
 
 {% block extra_js %}

@@ -21,8 +21,9 @@ function renderCartItems() {
     // Рахуємо ЗАГАЛЬНУ кількість усіх одиниць товару
     let totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     headerTitle.innerText = getGrammarLabel(totalItemsCount);
-
+ 
     let totalPrice = 0;
+    let totalQty = 0;
 
     if (cart.length === 0) {
         container.innerHTML = '<div style="padding: 60px 0; text-align: center; color: #888;">Ваш кошик порожній</div>';
@@ -30,47 +31,46 @@ function renderCartItems() {
         return;
     }
 
-    container.innerHTML = cart.map((item, index) => {
-        totalPrice += (item.price * item.quantity);
+   container.innerHTML = cart.map((item, index) => {
+    totalPrice += (item.price * item.quantity);
 
-        const sizeButtons = ALL_SIZES.map(s => `
-            <button id="btn-${index}-${s}" class="size-square-btn ${item.size === s ? 'selected' : ''}" 
-                    onclick="updateItemSize(${index}, '${s}')">${s}</button>
-        `).join('');
+    const sizeButtons = ALL_SIZES.map(s => `
+        <button id="btn-${index}-${s}" class="size-square-btn ${item.size === s ? 'selected' : ''}" 
+                onclick="updateItemSize(${index}, '${s}')">${s}</button>
+    `).join('');
 
-        return `
-            <div class="cart-item-row">
-                <img src="${item.image}" alt="">
-                <div class="item-main-info">
-                    <div class="item-header-row">
-                        <h4>${item.name}</h4>
-                        <button class="btn-remove-cart" onclick="removeProduct(${index})">Видалити</button>
+    return `
+        <div class="cart-item-row">
+            <img src="${item.image}" alt="">
+            <div class="item-main-info">
+                <div class="item-header-row">
+                    <h4>${item.name}</h4>
+                    <button class="btn-remove-cart" onclick="removeProduct(${index})">Видалити 🗑️</button>
+                </div>
+                
+                <p class="item-color-text">Колір: ${item.color}</p>
+                <div class="item-price-blue">${item.price}$</div>
+
+                <div class="size-management">
+                    <div class="size-current-display" onclick="toggleSizeDropdown(${index})">
+                        Розмір: <strong id="current-size-text-${index}">${item.size}</strong> 
+                        <span class="arrow-indicator" id="arrow-${index}">∨</span>
                     </div>
-                    <p class="item-color-text">Колір: ${item.color}</p>
-                    <div class="item-price-blue">${item.price} грн</div>
-
-                    
-                    <div class="size-management">
-                        <div class="size-current-display" onclick="toggleSizeDropdown(${index})">
-                            Розмір: <strong id="current-size-text-${index}">${item.size}</strong> 
-                            <span class="arrow-indicator" id="arrow-${index}">∨</span>
-                        </div>
-                        <div class="size-expandable-menu" id="size-dropdown-${index}">
-                            <p style="font-size: 14px; margin-bottom: 10px;">Оберіть інший розмір</p>
-                            <div class="size-grid-layout">${sizeButtons}</div>
-                        </div>
-                    </div>
-
-                    
-                    <div class="qty-control-group">
-                        <button class="qty-btn-action" onclick="changeQuantity(${index}, -1)">-</button>
-                        <span class="qty-display-val">${item.quantity}</span>
-                        <button class="qty-btn-action" onclick="changeQuantity(${index}, 1)">+</button>
+                    <div class="size-expandable-menu" id="size-dropdown-${index}">
+                        <p style="font-size: 12px; color: #555; margin-bottom: 8px;">Оберіть інший розмір</p>
+                        <div class="size-grid-layout">${sizeButtons}</div>
                     </div>
                 </div>
+
+                <div class="qty-control-group">
+                    <button class="qty-btn-action" onclick="changeQuantity(${index}, -1)">-</button>
+                    <span class="qty-display-val">${item.quantity}</span>
+                    <button class="qty-btn-action" onclick="changeQuantity(${index}, 1)">+</button>
+                </div>
             </div>
-        `;
-    }).join('');
+        </div>
+    `;
+}).join('');
 
     updatePriceSummary(totalPrice);
 }

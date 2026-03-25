@@ -1,35 +1,74 @@
 .site-footer {
     border-top: none;
+    padding: 20px 0;
 }
 
-table {
-    width: 70%;
+.footer-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Вирівнювання по верхньому краю */
+    flex-wrap: nowrap;       /* По замовчуванню та на планшетах — все в один ряд */
+    gap: 20px;
+    width: 90%;              /* Трохи ширше для планшетів */
     margin: 0 auto;
-    align-items: center;
+}
+
+.footer-column {
+    flex: 1;
     text-align: center;
-    border-collapse: collapse;
 }
 
-td {
-    vertical-align: top;
+.footer-column img {
+    max-width: 100%;
+    height: auto;
 }
 
-td>:first-child {
-    color: #0000FF;
-}
-
-td h2 {
-    font-size: 1rem; 
+.footer-column h2 {
+    font-size: 1rem;
     margin: 0;
     font-weight: 100;
 }
 
+.footer-column h2:first-of-type {
+    color: #0000FF;
+}
+
 hr {
     height: 2px;
-    background-color:#0000FF;
+    background-color: #0000FF;
     width: 65%;
     border: none;
-    margin:50px auto 50px auto;
+    margin: 50px auto;
+}
+
+/* --- Адаптація ТІЛЬКИ під Телефони (менше 600px) --- */
+@media (max-width: 600px) {
+    .footer-container {
+        flex-wrap: wrap;     /* Дозволяємо перенос тільки на малих екранах */
+        justify-content: space-around;
+        gap: 30px 10px;      /* Відступи: 30px між рядами, 10px між колонками */
+    }
+
+    .footer-column {
+        /* Робимо 2 колонки: 50% мінус невеликий запас на gap */
+        flex: 0 0 calc(50% - 10px); 
+    }
+
+    /* Якщо хочете, щоб логотип на телефоні був зверху один на всю ширину: */
+    .footer-column:first-child {
+        flex: 0 0 100%;
+        margin-bottom: 10px;
+    }
+
+    hr {
+        width: 80%;
+        margin: 30px auto;
+    }
 }
 
 
+@media (max-width: 600px) {
+    .footer-column h2 {
+        font-size: 0.85rem;
+    }
+}

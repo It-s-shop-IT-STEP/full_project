@@ -9,24 +9,47 @@ body {
     align-items: center;
     padding: 20px 5%;
     border-bottom: 1px solid var(--border);
-    position: sticky;
+
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 100%;
+
     background: #fff;
-    z-index: 1000;
-
-
-     height: 100px;
+    z-index: 9999;
+    height: 100px;
 }
-.logo { cursor: pointer;}
-.logo-container { display: flex; justify-content: space-between; align-items: center; gap: 50px;}
-.user-icons { display: flex; gap: 35px; align-items: center; cursor: pointer;}
-.nav-links a { text-decoration: none; color: #000; margin: 0 15px; font-weight: 500; }
+
+.logo { cursor: pointer;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+}
+.logo-container { 
+    display: flex; 
+    align-items: center; 
+    gap: 70px; /* Відступ між лого та текстом "Каталог" */
+}
+.user-icons { 
+    display: flex; 
+    gap: 35px; 
+    align-items: center; 
+}
+.nav-links a { 
+    text-decoration: none; 
+    color: #000; 
+    font-weight: 500; 
+    margin: 0; /* Скидаємо марджини, керуємо через gap у батька */
+}
 .badge {
     position: absolute;
-    top: -5px;
-    right: -10px;
-    color: rgb(0, 0, 0);
-    font-size: 13px;
+    top: -10px;
+    right: -15px;
+    color: black;
+    font-size: 12px;
+    padding: 2px 6px;
     font-weight: bold;
 }
 
@@ -74,7 +97,7 @@ body {
     --blue: #0000FF;
     --dark: #000000;
     --gray: #F5F5F5;
-    --border: #00000054;
+    --border: #E0E0E0;
 }
 
 * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
@@ -89,7 +112,11 @@ body { background: #fff; line-height: 1.6; }
 }
 .btn-blue { background: var(--blue); color: #fff; }
 .btn-outline { background: #fff; color: #000; border: 1px solid #000; }
-.btn-blue:hover { opacity: 0.8; }
+.btn-blue:hover { background-color: #1803a5; }
+.btn-outline:hover{
+
+    background-color: #e4e5f2;
+}
 
 /* Контейнери сторінок */
 .container { padding: 40px 5%; }
@@ -118,5 +145,122 @@ footer { padding: 40px 5%; border-top: 1px solid var(--border); margin-top: 60px
     .checkout-layout { grid-template-columns: 1fr; }
     .form-group { grid-template-columns: 1fr; }
     .navbar { flex-direction: column; gap: 15px; }
+
+     .logo img {
+    height: 8vw;
+    width: auto;
+} 
+
+
 }
 
+
+
+
+/* Приховуємо мобільні елементи за замовчуванням */
+.menu-toggle, .mobile-nav {
+    display: none;
+}
+
+/* Стилі для іконки бургера */
+.menu-toggle {
+    width: 30px;
+    height: 20px; 
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.menu-toggle span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: #000;
+    transition: 0.3s;
+}
+
+
+
+.mobile-nav {
+    display: none; 
+    position: absolute;
+    
+    /* Відступ зверху: 100% висоти хедеру або фіксоване значення */
+    top: 100%; 
+    
+    /* Притискаємо до самого правого краю хедеру */
+    right: 0; 
+    
+    /* Колір та тінь як на фото */
+    background: #ffffff;
+    box-shadow: -10px 10px 20px rgba(0, 0, 0, 0.1); 
+    
+    /* Внутрішні відступи */
+    padding: 25px 40px 25px 60px; /* Більше відступу зліва для простору */
+    min-width: 200px;
+    z-index: 2000;
+    
+    flex-direction: column;
+    gap: 20px;
+    text-align: right;
+    
+  
+}
+
+/* Активний стан (коли натиснули на бургер) */
+.mobile-nav.active {
+    display: flex;
+}
+
+/* Стиль посилань всередині меню */
+.mobile-nav a {
+    text-decoration: none;
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+
+
+/* Важливо: батьківський елемент має бути relative */
+.user-icons {
+    position: relative; 
+}
+/* Медіа-запит для мобільних (до 768px) */
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none !important; /* Ховаємо текст "Каталог" і "Профіль" в рядку */
+    }
+
+    .menu-toggle {
+        display: flex; /* Показуємо бургер */
+    }
+
+    .navbar {
+        flex-direction: row !important; /* Тримаємо лого і іконки в один рядок */
+        justify-content: space-between;
+        padding: 15px 5%;
+    }
+
+    .logo-container { gap: 0; }
+    
+    .user-icons { gap: 20px; }
+
+    /* Клас для відкриття меню через JS */
+    .mobile-nav.active {
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    .user-icons {
+        position: static; /* Дозволяємо меню рівнятися по .navbar, а не по іконках */
+    }
+    
+    .mobile-nav.active {
+        display: flex;
+    }
+}

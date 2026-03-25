@@ -10,10 +10,12 @@
 
 <div class="order-wrapper">
     <div class="order-header">
-        <a href="{% url 'checkout' %}" class="back-link">← ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</a>
+        <a href="{% url 'checkout' %}" class="back-link">← </a>
+        <center> <div class="back-linkk">ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</div></center>
     </div>
 
     <div class="order-content-grid">
+        
         <div class="order-inputs-column">
             
             <section class="order-card">
@@ -28,13 +30,13 @@
                 </div>
             </section>
 
-            <section class="order-card">
+            <section class="order-cardd">
                 <h3>ОБЕРІТЬ СПОСІБ ДОСТАВКИ</h3>
                 <div class="delivery-list">
                     
                     <div class="delivery-option-group">
                         <label class="radio-label">
-                            <input type="radio" name="delivery_method" value="Відділення">
+                            <input type="checkbox" name="delivery_method" value="Відділення">
                             <span class="radio-custom"></span>
                             Нова Пошта - Відділення
                         </label>
@@ -50,7 +52,7 @@
 
                     <div class="delivery-option-group">
                         <label class="radio-label">
-                            <input type="radio" name="delivery_method" value="Поштомат">
+                            <input type="checkbox" name="delivery_method" value="Поштомат">
                             <span class="radio-custom"></span>
                             Нова Пошта - Поштомат
                         </label>
@@ -63,34 +65,50 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="delivery-option-group">
+                        <label class="radio-label">
+                            <input type="checkbox" name="delivery_method" value="Кур'єр">
+                            <span class="radio-custom"></span>
+                            Нова Пошта - Адресна доставка
+                        </label>
+                        <div class="np-sub-fields address-box">
+                            <input type="text" class="np-search-input-address" list="cities-list-addr" placeholder="Введіть місто...">
+                            <datalist id="cities-list-addr"></datalist>
+                            <div id="address-error" class="error-msg" style="display: none; color: red; font-size: 12px; font-weight: bold; margin-top: 5px;">
+                                ⚠️ У цьому місті немає кур'єрської доставки!
+                            </div>
+                            <input type="text" id="address-details" placeholder="Вулиця, будинок, квартира">
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <section class="order-card">
+            <section class="order-cardd">
                 <h3>СПОСІБ ОПЛАТИ</h3>
-                <div class="payment-list">
-                    <label class="check-label"><input type="radio" name="payment" value="При отриманні" checked> <span>Оплата при отриманні</span></label>
-                    <!--<label class="check-label"><input type="radio" name="payment" value="Карткою"> <span>Карткою на сайті</span></label>-->
+                <div class="payment-list"> 
+                    <span>Оплата при отриманні</span>
                 </div>
                 <textarea id="order-comment" class="order-comment" placeholder="Коментар до замовлення" style="width:100%; margin-top:15px; border-radius:8px; padding:10px; border:1px solid #ddd;"></textarea>
             </section>
-        </div>
-
-        <div class="order-summary-column">
-            <div class="summary-sticky-card">
+        </div> <div class="summary-items-box">
+            <div class="summary-header">
                 <h3>Ваші товари</h3>
-                <div id="order-preview-items"></div>
-                <div class="summary-total-line">
-                    <span>Разом:</span>
-                    <span id="final-total-val">0 грн</span>
-                </div>
-                <button class="btn-final-order" id="submit-btn" onclick="sendOrderToTelegram()" style="background: #2E31FF; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold;">
-                    ОФОРМИТИ ЗАМОВЛЕННЯ
-                </button>
+                <a href="{% url 'checkout' %}">Змінити</a>
             </div>
-        </div>
-    </div>
-</div>
+            <div id="order-preview-items" class="summary-items"></div>
+        </div> <div class="summary-actions-box">
+            <div class="summary-total-line">
+                <span>Разом:</span>
+                <span id="final-total-val">0 грн</span>
+            </div>
+
+            <button class="btn-final-order" id="submit-btn" onclick="sendOrderToTelegram()">
+                Оформити замовлення
+            </button>
+
+            <a href="{% url 'catalog' %}" class="continue-shopping">Продовжити покупки</a>
+        </div> </div> </div>
 
 <style>
 .custom-select-wrapper { position: relative; }
@@ -102,193 +120,9 @@
 }
 .custom-dropdown-list div { padding: 10px; cursor: pointer; font-size: 13px; border-bottom: 1px solid #eee; }
 .custom-dropdown-list div:hover { background: #f0f0ff; }
-.np-sub-fields { display: none; flex-direction: column; gap: 10px; margin-top: 10px; }
+.np-sub-fields { display: none;  gap: 10px; margin-top: 10px; }
 .np-sub-fields.active { display: flex; }
 </style>
-
-<!--
-<script>
-    const API_KEY = '49f64034109f180560a35b4829c1ee5a';
-    let validAddressCities = new Set(); 
-
-    document.addEventListener('DOMContentLoaded', () => {
-        // Перемикання полів доставки
-        document.querySelectorAll('input[name="delivery_method"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                document.querySelectorAll('.np-sub-fields').forEach(f => f.classList.remove('active'));
-                const parent = this.closest('.delivery-option-group');
-                parent.querySelector('.np-sub-fields').classList.add('active');
-            });
-        });
-
-        // Пошук міст
-        document.querySelectorAll('.city-input, .np-search-input-address').forEach(input => {
-            input.addEventListener('input', async function() {
-                const val = this.value.trim();
-                if (val.length < 2) return;
-                const isAddr = this.classList.contains('np-search-input-address');
-                
-                const resp = await fetch('https://api.novaposhta.ua/v2.0/json/', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        apiKey: API_KEY,
-                        modelName: "Address",
-                        calledMethod: isAddr ? "getSettlements" : "getCities",
-                        methodProperties: { FindByString: val, Limit: "30" }
-                    })
-                });
-                const res = await resp.json();
-                if (res.success) {
-                    const seen = new Set();
-                    if(isAddr) validAddressCities.clear();
-                    const options = res.data.map(c => {
-                        if (isAddr && c.CanBookingAddress === false) return '';
-                        const name = c.Description || c.MainDescription;
-                        const reg = c.AreaDescription || c.RegionsDescription || "";
-                        const full = reg ? `${name} (${reg} обл.)` : name;
-                        if (seen.has(full)) return '';
-                        seen.add(full);
-                        if(isAddr) validAddressCities.add(full);
-                        return `<option value="${full}" data-ref="${c.Ref || c.DeliveryCity}">`;
-                    }).join('');
-                    this.nextElementSibling.innerHTML = options;
-                }
-                if (isAddr) checkCourierError(this);
-            });
-
-            input.addEventListener('change', function() {
-                const option = Array.from(this.nextElementSibling.options).find(o => o.value === this.value);
-                if (option && !this.classList.contains('np-search-input-address')) {
-                    loadPoints(this.closest('.delivery-option-group'), option.getAttribute('data-ref'));
-                }
-            });
-        });
-
-        renderPreview();
-    });
-
-    function checkCourierError(input) {
-        const err = document.getElementById('address-error');
-        if (input.value.length > 2 && !validAddressCities.has(input.value)) {
-            err.style.display = 'block';
-        } else {
-            err.style.display = 'none';
-        }
-    }
-
-    async function loadPoints(parent, ref) {
-        const input = parent.querySelector('.point-input');
-        const list = parent.querySelector('.custom-dropdown-list');
-        const type = parent.querySelector('input[name="delivery_method"]').value;
-
-        const resp = await fetch('https://api.novaposhta.ua/v2.0/json/', {
-            method: 'POST',
-            body: JSON.stringify({
-                apiKey: API_KEY, modelName: "Address", calledMethod: "getWarehouses",
-                methodProperties: { CityRef: ref }
-            })
-        });
-        const res = await resp.json();
-        if (res.success) {
-            const items = res.data.filter(w => {
-                const isP = w.Description.includes('Поштомат') || w.CategoryOfWarehouse === 'Postomat';
-                return type === 'Поштомат' ? isP : !isP;
-            });
-            input.disabled = false;
-            input.onclick = () => { list.style.display = 'block'; updateList(''); };
-            const updateList = (f) => {
-                const filt = items.filter(i => i.Description.toLowerCase().includes(f.toLowerCase()));
-                list.innerHTML = filt.map(i => `<div>${i.Description}</div>`).join('');
-            };
-            input.oninput = (e) => updateList(e.target.value);
-            list.onclick = (e) => {
-                if(e.target.tagName === 'DIV') { input.value = e.target.innerText; list.style.display = 'none'; }
-            };
-        }
-    }
-
-    async function sendOrderToTelegram() {
-        const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
-        if (cart.length === 0) return alert("Кошик порожній!");
-
-        const btn = document.getElementById('submit-btn');
-        btn.innerText = "ВІДПРАВЛЯЄМО...";
-        btn.disabled = true;
-
-        // Збір даних
-        const fName = document.getElementById('cust-first-name').value;
-        const lName = document.getElementById('cust-last-name').value;
-        const phone = document.getElementById('cust-phone').value;
-        const email = document.getElementById('cust-email').value;
-
-        const method = document.querySelector('input[name="delivery_method"]:checked');
-        if(!method) { alert("Оберіть доставку!"); btn.disabled = false; btn.innerText="ОФОРМИТИ ЗАМОВЛЕННЯ"; return; }
-
-        const parent = method.closest('.delivery-option-group');
-        const city = parent.querySelector('.city-input, .np-search-input-address').value;
-        const point = (method.value === "Кур'єр") ? document.getElementById('address-details').value : parent.querySelector('.point-input').value;
-
-        if(!city || !point || !fName || !phone) { 
-            alert("Заповніть всі обов'язкові поля (Ім'я, Телефон, Місто, Адреса/Відділення)"); 
-            btn.disabled = false; btn.innerText="ОФОРМИТИ ЗАМОВЛЕННЯ";
-            return; 
-        }
-
-        const payment = document.querySelector('input[name="payment"]:checked').value;
-        const comment = document.getElementById('order-comment').value;
-
-        // Телеграм
-        const TOKEN = '8312173871:AAEjQGFJlQ6D3SJMPpTJsDHhbKqDle2dOhY';
-        const CHAT_ID = '628064779';
-
-        let msg = `🚀 **НОВЕ ЗАМОВЛЕННЯ**\n\n`;
-        msg += `👤 **Клієнт:** ${fName} ${lName}\n`;
-        msg += `📞 **Тел:** ${phone}\n`;
-        msg += `📧 **Email:** ${email}\n\n`;
-        msg += `📦 **Доставка:** ${method.value}\n`;
-        msg += `📍 **Місто:** ${city}\n`;
-        msg += `🏠 **Адреса/№:** ${point}\n\n`;
-        msg += `💳 **Оплата:** ${payment}\n`;
-        if(comment) msg += `💬 **Коментар:** ${comment}\n\n`;
-        msg += `🛒 **ТОВАРИ:**\n`;
-
-        let total = 0;
-        cart.forEach((item, i) => {
-            const sum = item.price * item.quantity;
-            total += sum;
-            msg += `${i+1}. ${item.name.replace(/[*_`]/g, '')}\n`;
-            msg += `   [${item.color}, ${item.size}] - ${item.quantity}шт. - ${sum}$\n`;
-        });
-        msg += `\n💰 **РАЗОМ: ${total}$**`;
-
-        try {
-            const res = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: 'Markdown' })
-            });
-            if (res.ok) {
-                alert("Замовлення прийнято!");
-                localStorage.removeItem('it_shop_cart');
-                window.location.href = "/";
-            } else { alert("Помилка ТГ. Спробуйте ще раз."); }
-        } catch (e) { alert("Помилка мережі."); }
-        
-        btn.disabled = false; btn.innerText="ОФОРМИТИ ЗАМОВЛЕННЯ";
-    }
-
-    function renderPreview() {
-        const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
-        const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
-        document.getElementById('order-preview-items').innerHTML = cart.map(i => `
-            <div style="display:flex; gap:10px; margin-bottom:10px; font-size:13px;">
-                <img src="${i.image}" style="width:40px; height:40px; object-fit:cover; border-radius:5px;">
-                <div><b>${i.name}</b><br>${i.quantity} x ${i.price}$</div>
-            </div>`).join('');
-        document.getElementById('final-total-val').innerText = total + '$';
-    }
-</script>
--->
 
 {% include 'info_table.html' %}
 
