@@ -14,5 +14,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('update-profile/', views.update_profile, name='update_profile'),
     path('mark-messages-read/', views.mark_messages_as_read, name='mark_messages_read'),
-
+    path('get_cart_prices/', views.get_cart_prices, name='get_cart_prices')
 ]

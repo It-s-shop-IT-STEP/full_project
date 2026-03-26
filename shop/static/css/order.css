@@ -1,76 +1,62 @@
+.custom-select-wrapper { position: relative; }
+.custom-dropdown-list {
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: white; border: 1px solid #ddd; border-radius: 8px;
+    max-height: 200px; overflow-y: auto; z-index: 1000; display: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.custom-dropdown-list div { padding: 10px; cursor: pointer; font-size: 13px; border-bottom: 1px solid #eee; }
+.custom-dropdown-list div:hover { background: #f0f0ff; }
+.np-sub-fields { display: none; flex-direction: column; gap: 10px; margin-top: 10px; }
+.np-sub-fields.active { display: flex; }
+
 .order-wrapper {
     max-width: 1200px;
     margin: 40px auto;
-    padding: 0 ;
+    padding: 0 20px;
     font-family: 'Montserrat', sans-serif;
-}
-.order-cardd{
-    margin-top: 50px;
-}
-.order-inputs-column {
-    grid-column: 1;
-    grid-row: 1 / span 2; 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.10);
-    padding: 15px;
-}
-.order-header {
-    margin-top: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Центруємо текст */
-    position: relative; /* Щоб абсолютно позиціонувати стрілку назад */
-    margin-bottom: 30px;
 }
 
 .back-link {
-    position: absolute;
-    left: 0;
     text-decoration: none;
     color: #000;
-    font-weight: 800; 
+    font-weight: 800;
     font-size: 24px;
+    margin-bottom: 30px;
+    display: inline-block;
 }
-.back-linkk{
-    font-size: 24px;
-    font-weight: bold;
 
-}
 .order-content-grid {
     display: grid;
-    /* Ліва колонка 3 частини, права 1 частина */
-    grid-template-columns: 3fr 1fr; 
-    column-gap: 100px;
-    row-gap: 20px; /* Відступ між товарами та кнопкою */
-    align-items: start;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
 }
 
 .order-card {
     background: #fff;
+    border-radius: 20px;
     padding: 30px;
     margin-bottom: 25px;
-    width: 100%; /* Змінено з 900px */
-    box-sizing: border-box;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
 }
 
 .order-card h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 25px;
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .inputs-row {
     display: flex;
     gap: 15px;
     margin-bottom: 15px;
-
 }
- 
+
 input, select, textarea {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #2E31FF;
+    border: 1px solid #EAEAEA;
     border-radius: 10px;
     background: #F9F9F9;
     font-family: inherit;
@@ -78,111 +64,40 @@ input, select, textarea {
     outline: none;
 }
 
-.order-comment{
-    border: 1px solid #2E31FF !important;
-
-}
 .delivery-option-group {
-    margin-bottom: 0; /* Скидаємо старий марджин, працюємо через gap */
+    margin-bottom: 20px;
 }
-.delivery-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-.np-sub-fields {
-    display: flex;
-    margin-top: 15px;
-    margin-left: 0; /* Прибираємо старий відступ зліва */
 
-    gap: 20px;
-    width: 100%;
+.np-sub-fields {
+    display: none;
+    margin-left: 35px;
+    margin-top: 15px;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .np-sub-fields.active {
     display: flex;
 }
 
-
-/* Щоб поля Місто та Відділення займали рівно по 50% ширини */
-.np-sub-fields > input,
-.np-sub-fields > .custom-select-wrapper {
-    
-    width: 100%;
-}
-
-/* Дизайн самих полів (перебиваємо глобальні стилі) */
-.np-search-input,
-.np-search-input-address,
-#address-details {
-    width: 100%;
-    background-color: #F5F5F5 !important; /* Світло-сірий фон без рамок */
-    border: none !important;
-    border-radius: 4px !important;
-    padding: 14px 20px !important;
-    font-size: 15px !important;
-    color: #333;
-    outline: none;
-    box-sizing: border-box;
-    cursor: pointer;
-}
-
-/* Додаємо іконку стрілочки "вниз" щоб інпут виглядав як селект */
-.np-search-input.city-input,
-.np-search-input.point-input {
-    background-image: url("data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%23333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 20px center;
-    padding-right: 45px !important; /* Відступ для тексту, щоб не налізав на стрілку */
-    appearance: none; /* Прибираємо стандартні стрілочки браузера, якщо є */
-}
-.order-summary-column {
-    position: relative;
-}
-
-/* СТІКІ КАРТКА */
-.summary-sticky-card {
-    position: sticky;
-    top: 120px;
-    width: 100%; /* Змінено з 400px */
-    box-sizing: border-box;
-    background: #fff;
-    border-radius: 20px;
-    padding: 25px;
-margin-left: 120px;
-}
-.remove-item {
-    display: inline-block;
-    margin-top: 6px;
-
-    font-size: 13px;
-    color: #999;
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-
-.summary-items {
+.radio-label {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-.summary-header a {
-    font-size: 14px;
-    color: #2E31FF;
-    text-decoration: underline;
-}
-.summary-header {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    gap: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
 }
-.summary-header h3 {
-    font-size: 18px;
-    font-weight: 800;
+
+.summary-sticky-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 20px;
 }
+
 .summary-top {
     display: flex;
     justify-content: space-between;
@@ -195,52 +110,55 @@ margin-left: 120px;
     font-weight: 600;
 }
 
-
+.mini-card {
+    display: flex;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #F0F0F0;
+}
 
 .mini-card img {
-    width: 150px;
-    height: 170px;
-    border-radius: 10px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
-    background: #f5f5f5;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-
+    border-radius: 10px;
+    background: #f4f4f4;
 }
+
 .mini-info h4 {
-    font-size: 16px;
-    font-weight: 800;
-    margin-bottom: 5px;
+    font-size: 14px;
+    margin: 0;
+    text-transform: uppercase;
 }
 
 .mini-info p {
-    font-size: 14px;
-    color: #555;
-    margin: 2px 0;
+    font-size: 12px;
+    color: #777;
+    margin: 4px 0;
 }
 
-
+.mini-price {
+    color: #2E31FF;
+    font-weight: 700;
+}
 
 .summary-total-line {
     display: flex;
     justify-content: space-between;
-    margin: 25px 0;
-
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 900;
+    margin: 25px 0;
 }
 
 .btn-final-order {
     width: 100%;
     background: #2E31FF;
     color: #fff;
-
     border: none;
-    padding: 18px;
+    padding: 20px;
     border-radius: 40px;
-
-    font-size: 16px;
     font-weight: 800;
-
+    font-size: 16px;
     cursor: pointer;
     transition: 0.3s;
 }
@@ -257,399 +175,29 @@ margin-left: 120px;
     font-size: 14px;
     text-decoration: underline;
 }
-/* RIGHT SUMMARY — як на фото */
-.continue-shopping {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
 
-    font-size: 14px;
-    color: #000;
-    text-decoration: underline;
-}
-/* верхній рядок */
-.summary-top h3 {
-    font-size: 16px;
-    font-weight: 800;
-}
 
-.summary-top a {
-    font-size: 14px;
-    text-decoration: underline;
+.success-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); display: flex; align-items: center;
+    justify-content: center; z-index: 2000;
 }
-
-.mini-card {
-    display: flex;
-    gap: 35px;
-    align-items: flex-start; /* важливо */
+.success-content {
+    background: white; padding: 40px; border-radius: 20px;
+    text-align: center; max-width: 400px; width: 90%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+.success-icon {
+    font-size: 50px; color: #2E31FF; margin-bottom: 20px;
+}
+.success-content h2 { margin-bottom: 10px; color: #333; }
+.success-content p { margin-bottom: 25px; color: #666; }
+.btn-close-success {
+    background: #2E31FF; color: white; border: none;
+    padding: 12px 30px; border-radius: 10px; cursor: pointer;
+    font-weight: bold; width: 100%;
 }
 
-/* інфо */
-.mini-info {
-    display: flex;
-    flex-direction: column;
-}
-
-
-
-
-
-/* ціна — як на скріні */
-.mini-price {
-    margin-top: 6px;
-    font-size: 18px;
-    font-weight: 900;
-    color: #2E31FF;
-}
-
-/* разом */
-
-
-/* кнопка */
-
-
-/* посилання під кнопкою */
-.link-back-shop {
-    font-size: 13px;
-    color: #000;
-}
-
-/* --- Кастомні Чекбокси --- */
-.radio-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    gap: 12px;
-}
-
-/* Ховаємо стандартний системний чекбокс */
-.radio-label input[type="checkbox"] {
-    display: none; 
-}
-
-/* Малюємо свій квадратик */
-.radio-custom {
-    width: 18px;
-    height: 18px;
-    border: 1px solid #000;
-    border-radius: 2px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s, border-color 0.2s;
-    background-color: transparent;
-}
-
-/* Стан: коли чекбокс обрано */
-.radio-label input[type="checkbox"]:checked + .radio-custom {
-    background-color: #0000FF; /* Синій як на фото */
-    border-color: #0000FF;
-}
-
-/* Малюємо білу галочку всередині синього квадрата */
-.radio-label input[type="checkbox"]:checked + .radio-custom::after {
-    content: '';
-    width: 4px;
-    height: 9px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-    margin-bottom: 2px;
-}
-.custom-select-wrapper { 
-    position: relative; 
-}
-
-.custom-dropdown-list {
-    position: absolute; 
-    top: 100%; 
-    left: 0; 
-    right: 0;
-    background: white; 
-    border: 1px solid #EAEAEA; 
-    border-radius: 4px;
-    max-height: 250px; 
-    overflow-y: auto; 
-    z-index: 1000; 
-    display: none;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    margin-top: 5px;
-}
-
-.custom-dropdown-list div { 
-    padding: 12px 20px; 
-    cursor: pointer; 
-    font-size: 14px; 
-    border-bottom: 1px solid #F9F9F9; 
-    transition: background 0.2s;
-}
-
-.custom-dropdown-list div:last-child {
-    border-bottom: none;
-}
-
-.custom-dropdown-list div:hover { 
-    background: #F5F5F5; 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================================
-   АДАПТАЦІЯ ДЛЯ ПЛАНШЕТІВ (iPad та схожі)
-   ========================================= */
-@media (max-width: 1024px) {
-    .order-wrapper {
-        padding: 0 30px;
-        margin: 20px auto;
-    }
-    
-    .order-header {
-        margin-top: 100px;
-    }
-
-    .order-content-grid {
-        /* Робимо колонки майже рівними або 1.1 до 1 */
-        grid-template-columns: 1.3fr 0.9fr; 
-        gap: 40px; /* Зменшуємо розрив між колонками */
-    }
-
-    .order-card {
-        padding: 20px;
-        width: 100% !important; /* Гарантуємо, що картка не вилізе */
-    }
-
-    .summary-sticky-card {
-        margin-left: 0 !important; /* Скидаємо відступ */
-        padding: 20px;
-    }
-
-    /* Щоб товари не виглядали занадто дрібними */
-    .mini-card {
-        gap: 15px;
-    }
-    
-    .mini-card img {
-        width: 120px;
-        height: 140px;
-    }
-
-    .mini-info h4 {
-        font-size: 20px;
-    }
-
-
-
-   .order-content-grid {
-        grid-template-columns: 1.3fr 1fr;
-        grid-template-areas:
-            "inputs items"
-            "inputs actions";
-        gap: 20px 40px; /* Зменшуємо розрив між колонками для планшета */
-    }
-
-    .order-inputs-column {
-        grid-area: inputs;
-    }
-
-    .summary-items-box
-
-    .summary-actions-box {
-        grid-area: actions;
-       
-    }
-
-    .summary-actions-box {
-    grid-column: 2;
-    grid-row: 2;
-    margin-top: 0; /* Прибираємо зайві відступи */
-}
-
-    .summary-total-line {
-        font-size: 20px;
-    }
-
-    .btn-final-order {
-        padding: 12px;
-        font-size: 13px;
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================================
-   АДАПТАЦІЯ ДЛЯ ТЕЛЕФОНІВ (iPhone 14 Plus та інші)
-   ========================================= */
-@media (max-width: 768px) {
-   .order-wrapper {
-        padding: 0 15px; /* Невеликий відступ для тексту, але не для карток */
-        margin: 10px auto;
-    }
-
-    .order-header {
-        margin-top: 110px;
-        margin-bottom: 20px;
-    }
-
-    .back-linkk {
-        font-size: 18px;
-       
-        width: 100%;
-        
-    }
-
-  .order-content-grid {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: 0; /* Контролюємо відступи через margin самих блоків */
-    }
-   .summary-items-box {
-        order: 1;
-        width: 100%;
-        margin-bottom: 30px;
-    }
-    
-    /* МАГІЯ: Переносимо блок "Ваші товари" на самий верх */
-    .summary-sticky-card {
-        order: -1; 
-        position: static;
-        margin-left: 0;
-        width: 100%;
-        padding: 10px 0;
-        box-shadow: none; /* Прибираємо тінь для чистішого вигляду як на фото */
-    }
-
-    .summary-header h3 {
-        font-size: 16px;
-    }
-   .order-inputs-column {
-        order: 2;
-        width: 100vw; /* Займає всю ширину вікна */
-        margin-left: -15px; /* Компенсуємо падінг .order-wrapper, щоб прилягало до країв */
-        box-shadow: none;
-        padding: 25px 15px; /* Додаємо внутрішні відступи для контенту всередині */
-        box-sizing: border-box;
-    }
-
-    /* Картка товару: Фото зліва, деталі справа */
-  .mini-card {
-        gap: 45px;
-        justify-content: flex-start;
-    }
-  .summary-actions-box {
-        order: 3;
-        width: 100%;
-        margin: 30px 0; /* Прибираємо 15vw, щоб кнопка була по центру/ширині */
-        padding: 0;
-       
-    }
-
-   .mini-card img {
-        width: 120px; /* Трохи оптимізуємо під вузькі екрани */
-        height: 150px;
-        margin-left: 5vw;
-    }
-   
-
-    .mini-info h4 {
-        font-size: 17px;
-        margin-bottom: 5px;
-    }
-
-    .mini-info p {
-        font-size: 15px;
-        color: #666;
-        margin: 2px 0;
-    }
-
-    .mini-price {
-        font-size: 19px;
-        font-weight: 900;
-        color: #2E31FF;
-        margin-top: 8px;
-    }
-
-    /* Поля вводу: Кожне з нового рядка */
-    .inputs-row {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-   .order-card, .order-cardd {
-        width: 100% !important;
-        padding: 0;
-        margin-left: 0;
-        margin-top: 40px;
-    }
-
-    .order-card h3 {
-        font-size: 14px;
-        margin-bottom: 15px;
-    }
-
-    /* Нижня частина з кнопкою */
-    .summary-total-line {
-        display: flex;
-        justify-content: space-between;
-        font-size: 24px;
-        font-weight: 900;
-        margin-bottom: 20px;
-    }
-
-   .btn-final-order {
-        width: 100%;
-        padding: 18px;
-        font-size: 16px;
-    }
-    
-    /* Доставка: виправляємо випадаючі списки на мобілці */
-    .np-sub-fields {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .continue-shopping {
-        order: 2; /* Посилання під кнопкою */
-        margin-top: 15px;
-        text-align: center;
-        text-decoration: underline;
-        color: #000;
-    }
-    .inputs-row {
-        flex-direction: column;
-    }
+.btn-close-success:hover {
+    background: #1a1dbb;
 }

@@ -10,12 +10,10 @@
 
 <div class="order-wrapper">
     <div class="order-header">
-        <a href="{% url 'checkout' %}" class="back-link">← </a>
-        <center> <div class="back-linkk">ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</div></center>
+        <a href="{% url 'checkout' %}" class="back-link">← ОФОРМЛЕННЯ ЗАМОВЛЕННЯ</a>
     </div>
 
     <div class="order-content-grid">
-        
         <div class="order-inputs-column">
             
             <section class="order-card">
@@ -30,13 +28,13 @@
                 </div>
             </section>
 
-            <section class="order-cardd">
+            <section class="order-card">
                 <h3>ОБЕРІТЬ СПОСІБ ДОСТАВКИ</h3>
                 <div class="delivery-list">
                     
                     <div class="delivery-option-group">
                         <label class="radio-label">
-                            <input type="checkbox" name="delivery_method" value="Відділення">
+                            <input type="radio" name="delivery_method" value="Відділення">
                             <span class="radio-custom"></span>
                             Нова Пошта - Відділення
                         </label>
@@ -52,7 +50,7 @@
 
                     <div class="delivery-option-group">
                         <label class="radio-label">
-                            <input type="checkbox" name="delivery_method" value="Поштомат">
+                            <input type="radio" name="delivery_method" value="Поштомат">
                             <span class="radio-custom"></span>
                             Нова Пошта - Поштомат
                         </label>
@@ -65,64 +63,43 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="delivery-option-group">
-                        <label class="radio-label">
-                            <input type="checkbox" name="delivery_method" value="Кур'єр">
-                            <span class="radio-custom"></span>
-                            Нова Пошта - Адресна доставка
-                        </label>
-                        <div class="np-sub-fields address-box">
-                            <input type="text" class="np-search-input-address" list="cities-list-addr" placeholder="Введіть місто...">
-                            <datalist id="cities-list-addr"></datalist>
-                            <div id="address-error" class="error-msg" style="display: none; color: red; font-size: 12px; font-weight: bold; margin-top: 5px;">
-                                ⚠️ У цьому місті немає кур'єрської доставки!
-                            </div>
-                            <input type="text" id="address-details" placeholder="Вулиця, будинок, квартира">
-                        </div>
-                    </div>
                 </div>
             </section>
 
-            <section class="order-cardd">
+            <section class="order-card">
                 <h3>СПОСІБ ОПЛАТИ</h3>
-                <div class="payment-list"> 
-                    <span>Оплата при отриманні</span>
+                <div class="payment-list">
+                    <label class="check-label"><input type="radio" name="payment" value="При отриманні" checked> <span>Оплата при отриманні</span></label>
+                    <!--<label class="check-label"><input type="radio" name="payment" value="Карткою"> <span>Карткою на сайті</span></label>-->
                 </div>
                 <textarea id="order-comment" class="order-comment" placeholder="Коментар до замовлення" style="width:100%; margin-top:15px; border-radius:8px; padding:10px; border:1px solid #ddd;"></textarea>
             </section>
-        </div> <div class="summary-items-box">
-            <div class="summary-header">
+        </div>
+
+        <div class="order-summary-column">
+            <div class="summary-sticky-card">
                 <h3>Ваші товари</h3>
-                <a href="{% url 'checkout' %}">Змінити</a>
+                <div id="order-preview-items"></div>
+                <div class="summary-total-line">
+                    <span>Разом:</span>
+                    <span id="final-total-val">0 грн</span>
+                </div>
+                <button class="btn-final-order" id="submit-btn" onclick="sendOrderToTelegram()" style="background: #2E31FF; color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold;">
+                    ОФОРМИТИ ЗАМОВЛЕННЯ
+                </button>
             </div>
-            <div id="order-preview-items" class="summary-items"></div>
-        </div> <div class="summary-actions-box">
-            <div class="summary-total-line">
-                <span>Разом:</span>
-                <span id="final-total-val">0 грн</span>
-            </div>
+        </div>
+    </div>
+</div>
 
-            <button class="btn-final-order" id="submit-btn" onclick="sendOrderToTelegram()">
-                Оформити замовлення
-            </button>
-
-            <a href="{% url 'catalog' %}" class="continue-shopping">Продовжити покупки</a>
-        </div> </div> </div>
-
-<style>
-.custom-select-wrapper { position: relative; }
-.custom-dropdown-list {
-    position: absolute; top: 100%; left: 0; right: 0;
-    background: white; border: 1px solid #ddd; border-radius: 8px;
-    max-height: 200px; overflow-y: auto; z-index: 1000; display: none;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-.custom-dropdown-list div { padding: 10px; cursor: pointer; font-size: 13px; border-bottom: 1px solid #eee; }
-.custom-dropdown-list div:hover { background: #f0f0ff; }
-.np-sub-fields { display: none;  gap: 10px; margin-top: 10px; }
-.np-sub-fields.active { display: flex; }
-</style>
+<div id="success-modal" class="success-overlay" style="display: none;">
+    <div class="success-content">
+        <div class="success-icon">✓</div>
+        <h2>Дякуємо!</h2>
+        <p>Ваше замовлення успішно оформлене</p>
+        <button onclick="closeSuccessModal()" class="btn-close-success">Закрити</button>
+    </div>
+</div>
 
 {% include 'info_table.html' %}
 

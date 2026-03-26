@@ -1,4 +1,19 @@
-// --- 1. ПЕРЕМІННІ --- 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// --- 1. ПЕРЕМІННІ ---
 let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
 let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
 
@@ -71,7 +86,7 @@ function initGlobalModals() {
 
 // --- 4. РЕНДЕР ТА КЕРУВАННЯ ---
 
-function renderCart() {
+async function renderCart() {
     const container = document.getElementById('cart-items-container');
     const totalPriceElement = document.getElementById('cart-total-price');
     if (!container) return;
@@ -84,20 +99,42 @@ function renderCart() {
         return;
     }
 
+    // --- НОВА ЛОГІКА: Оновлення цін з сервера ---
+    const ids = [...new Set(cart.map(item => item.originalId))];
+    try {
+        const response = await fetch('/get_cart_prices/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ ids: ids })
+            
+        });
+        const data = await response.json();
+        
+        // Оновлюємо ціни в нашому масиві cart
+        cart.forEach(item => {
+            if (data.prices[item.originalId]) {
+                item.price = data.prices[item.originalId];
+            }
+        });
+        localStorage.setItem('it_shop_cart', JSON.stringify(cart));
+    } catch (e) {}
+    // --- КІНЕЦЬ НОВОЇ ЛОГІКИ ---
+
     let total = 0;
     container.innerHTML = cart.map(item => {
-        const itemPrice = Math.ceil(item.price);
-        total += itemPrice * (item.quantity || 1);
+        const currentPrice = parseFloat(item.price); 
+        total += currentPrice * item.quantity;
         return `
             <div class="cart-item">
                 <img src="${item.image}" alt="${item.name}">
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
                     <p>Артикул: ${item.article}</p>
-                    <p>Колір: ${item.color}</p>
-                    <p>Розмір: ${item.size}</p>
                     <div class="price-row">
-                        <span class="price-blue">${itemPrice} грн</span>
+                        <span class="price-blue">${currentPrice} грн</span>
                     </div>
                     <button class="delete-item" onclick="removeFromCart('${item.id}')">Видалити 🗑️</button>
                 </div>
@@ -123,7 +160,7 @@ function renderFavTab() {
             <div class="fav-item-details">
                 <h4>${item.name}</h4>
                 <p class="price">${Math.ceil(item.price)} грн</p>
-                <button class="move-btn" onclick="transferToCartFromFav('${item.id}')">Перемістити в кошик</button>
+                <button class="move-btn" onclick="transferToCartFromFav('${item.id}')">ПЕРЕМІСТИТИ В КОШИК</button>
             </div>
             <button class="remove-fav-btn" onclick="removeFromFavorites('${item.id}')">&times;</button>
         </div>`).join('');
@@ -149,10 +186,6 @@ function removeFromCart(productId) {
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
     renderCart();
     updateHeaderBadges();
-
-    if (typeof restoreActiveStates === 'function') {
-        restoreActiveStates();
-    }
 }
 
 function removeFromFavorites(productId) {
@@ -161,10 +194,6 @@ function removeFromFavorites(productId) {
     localStorage.setItem('it_shop_favorites', JSON.stringify(favorites));
     renderFavTab();
     updateHeaderBadges();
-
-    if (typeof restoreActiveStates === 'function') {
-        restoreActiveStates();
-    }
 }
 
 function transferToCartFromFav(id) {

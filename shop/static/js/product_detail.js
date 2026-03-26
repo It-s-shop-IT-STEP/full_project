@@ -39,55 +39,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 2. ФУНКЦІЯ ДОДАВАННЯ В КОШИК З ПАРАМЕТРАМИ
 function addToCart(id, name, price, image) {
+    const finalPrice = parseFloat(price);
+
     // Зчитуємо обрані значення з radio-buttons
-    const selectedColor = document.querySelector('input[name="color"]:checked')?.value || "Білий";
+    const selectedColor = document.querySelector('input[name="color"]:checked')?.value || "Чорний";
     const selectedSize = document.querySelector('input[name="size"]:checked')?.value || "S";
 
     // Створюємо унікальний ключ (id + колір + розмір), щоб в кошику це були різні позиції
     const productKey = `${id}-${selectedColor}-${selectedSize}`;
     
     cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
-    
-    // Перевіряємо, чи ми редагуємо існуючий товар (параметр edit в URL)
-    const urlParams = new URLSearchParams(window.location.search);
-    const editId = urlParams.get('edit');
 
-    if (editId) {
-        // Режим редагування: видаляємо старий варіант і додаємо новий
-        cart = cart.filter(item => item.id !== editId);
+    const existingIndex = cart.findIndex(item => item.id === productKey);
+    
+    if (existingIndex > -1) {
+        cart[existingIndex].quantity += 1;
+        // Оновлюємо ціну на випадок, якщо вона змінилася в базі, поки юзер думав
+        cart[existingIndex].price = finalPrice; 
+    } else {
         cart.push({
             id: productKey,
             originalId: id,
             name: name,
-            price: parseFloat(price),
+            article: article,
+            price: finalPrice, // Зберігаємо вже ціну зі знижкою
             image: image,
             color: selectedColor,
             size: selectedSize,
             quantity: 1
         });
-        alert("Зміни збережено!");
-        window.location.href = '/checkout/'; // Повертаємо в кошик після редагування
-    } else {
-        // Звичайний режим: додаємо або збільшуємо кількість
-        const existingIndex = cart.findIndex(item => item.id === productKey);
-        if (existingIndex > -1) {
-            cart[existingIndex].quantity += 1;
-        } else {
-            cart.push({
-                id: productKey,
-                originalId: id,
-                name: name,
-                price: parseFloat(price),
-                image: image,
-                color: selectedColor,
-                size: selectedSize,
-                quantity: 1
-            });
-        }
-        alert("Товар додано в кошик!");
     }
 
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
+    alert("Товар додано в кошик!");
     
     // Оновлюємо лічильник в хедері (якщо функція доступна)
     if (typeof updateHeaderBadges === 'function') {
