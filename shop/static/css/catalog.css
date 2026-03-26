@@ -112,40 +112,6 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* СІТКА ТОВАРІВ: рівно 3 в ряд */
 .product-grid {
     display: grid;
@@ -270,4 +236,135 @@ body {
     font-weight: 400;
     color: #888;
     text-decoration: line-through;
+}
+
+
+
+.cart-btn.active img {
+    width: 24px;
+    height: 24px;
+}
+
+
+
+/* --- АДАПТАЦІЯ ДЛЯ ПЛАНШЕТІВ (iPad) --- */
+@media (max-width: 1024px) {
+    /* Герой-секція */
+    .hero-section {
+        height: 90vw; /* Зменшуємо висоту банера */
+    }
+
+    .hero-content h1 {
+        font-size: 6vw; /* Зменшуємо заголовок */
+        margin-bottom: 30px;
+        margin-top: 55px;
+    }
+
+    .search-container {
+        max-width: 90%; /* Пошук займає більше ширини */
+    }
+
+    /* Фільтри категорій */
+    .category-filters {
+        gap: 13vw; /* Зменшуємо величезні відступи між посиланнями */
+        flex-wrap: wrap; /* Дозволяємо перенос, якщо не влазить */
+    }
+
+    .cat-link {
+        font-size: 22px;
+    }
+
+    /* СІТКА ТОВАРІВ: 2 в ряд */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 30px 20px;
+        padding: 0 40px; /* Більші відступи з боків екрана */
+    }
+
+    .product-card {
+        padding: 15px; /* Компактніші картки */
+    }
+}
+
+@media (max-width: 480px) {
+
+       /* Герой-секція */
+    .hero-section {
+        height: 110vw; /* Зменшуємо висоту банера для телефону */
+        background-position: center;
+    }
+
+    .hero-content h1 {
+        font-size: 7vw; /* Великий шрифт, але в межах екрана */
+        line-height: 1.1;
+        margin-bottom: 25px;
+        padding: 0 10px;
+    }
+
+    /* Пошук */
+    .search-container {
+        padding: 0 20px;
+    }
+    
+   .search-form {
+        flex-direction: column; /* Кнопка під інпутом */
+        gap: 10px;
+        align-items: center;
+    }
+
+    .search-container input {
+        width: 100%;
+        border-radius: 20px;
+    }
+
+    .search-btn {
+        width: 100%;
+        margin-left: 0;
+        border-radius: 20px;
+    }
+
+    /* Категорії (горизонтальний скрол) */
+  /* Фільтри категорій */
+    .category-filters {
+        gap: 8vw; /* Зменшуємо величезні відступи між посиланнями */
+        flex-wrap: wrap; /* Дозволяємо перенос, якщо не влазить */
+    }
+    .category-filters::-webkit-scrollbar { display: none; }
+
+    .cat-link {
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    /* Сітка товарів: 2 в ряд */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 0 12px;
+    }
+
+    .product-card {
+        padding: 10px;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .product-info {
+        padding: 8px 0;
+    }
+
+    .product-name {
+        font-size: 10px;
+        letter-spacing: 0;
+    }
+
+    .product-price {
+        font-size: 11px;
+    }
+
+    /* Кнопка завантаження */
+    .load-more-btn {
+        width: 50%;
+        font-size: 16px;
+        padding: 12px;
+    }
 }

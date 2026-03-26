@@ -3,15 +3,17 @@
     display: flex;
     gap: 20px;
     padding: 15px 0;
-    border-bottom: 1px solid #f0f0f0;
     align-items: center;
+    
 }
 
 .fav-item-row img {
     width: 100px;
     height: 100px;
     object-fit: contain;
-    background: white;
+   
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+
 }
 
 .fav-item-details {
@@ -40,6 +42,7 @@
     cursor: pointer;
     padding: 0;
     font-size: 13px;
+    color: #777;
     /* text-decoration: underline; */
 }
 
@@ -103,6 +106,7 @@
 /* Коли модалка відкрита (стиль, який ми будемо додавати через JS) */
 .cart-modal.active {
     display: block !important;
+    
 }
 
 
@@ -136,11 +140,14 @@
     border: none;
     padding: 15px;
     border-radius: 50px;
-    font-weight: 700;
+    font-weight: 700; 
     margin-top: 20px;
     cursor: pointer;
     flex-shrink: 0; /* Забороняє кнопці стискатися */
     margin-top: 10px;
+}
+.order-btn:hover{
+    background-color: #1803a5;
 }
 
 /* Контейнер для списку товарів у кошику */
@@ -186,7 +193,6 @@
     align-items: center !important;
     gap: 15px !important;
     padding: 15px;
-    border-bottom: 1px solid #f0f0f0;
 }
 
 .cart-item img {
@@ -273,4 +279,53 @@
 
 .delete-item:hover {
     opacity: 1;
+}
+
+
+
+
+/* 📱 Планшети (768px – 1024px) */
+@media (max-width: 1024px) {
+
+    .cart-content {
+        width: 400px;       /* було 500px */
+        padding: 20px;      /* трохи компактніше */
+        top: 70px;
+    }
+
+    .cart-item img {
+        width: 110px !important;
+        height: 110px !important;
+    }
+
+    .cart-item-info h4 {
+        font-size: 15px;
+    }
+
+    .cart-item-info p {
+        font-size: 13px;
+    }
+
+    .price-blue {
+        font-size: 15px;
+    }
+
+    .order-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* Улюблене */
+    .fav-item-row img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .fav-item-details h4 {
+        font-size: 14px;
+    }
+
+    .fav-item-details .price {
+        font-size: 14px;
+    }
 }
