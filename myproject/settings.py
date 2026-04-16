@@ -124,3 +124,17 @@ STATIC_URL = 'static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# --- НАЛАШТУВАННЯ SMTP GMAIL ---
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'studgov@itstep.org' 
+
+# 16-значний App Password від Google (без пробілів)
+EMAIL_HOST_PASSWORD = 'qzjvlqnnniojddpw' 
+
+# Адреса, яка буде відображатися у полі "Від кого"
+DEFAULT_FROM_EMAIL = 'IT SHOP <studgov@itstep.org>'

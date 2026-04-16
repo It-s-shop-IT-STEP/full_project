@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 2. ФУНКЦІЯ ДОДАВАННЯ В КОШИК З ПАРАМЕТРАМИ
-function addToCart(id, name, price, image) {
+function addToCart(id, name, article, price, image) {
     const finalPrice = parseFloat(price);
 
     // Зчитуємо обрані значення з radio-buttons
@@ -48,10 +48,10 @@ function addToCart(id, name, price, image) {
     // Створюємо унікальний ключ (id + колір + розмір), щоб в кошику це були різні позиції
     const productKey = `${id}-${selectedColor}-${selectedSize}`;
     
-    cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    Cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
 
-    const existingIndex = cart.findIndex(item => item.id === productKey);
-    
+    existingIndex = cart.findIndex(item => item.id === productKey);
+
     if (existingIndex > -1) {
         cart[existingIndex].quantity += 1;
         // Оновлюємо ціну на випадок, якщо вона змінилася в базі, поки юзер думав

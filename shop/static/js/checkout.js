@@ -14,12 +14,12 @@ window.toggleSizeDropdown = function(index) {
 };
 
 function renderCartItems() {
-    const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     const container = document.getElementById('cart-items-wrapper');
     const headerTitle = document.getElementById('cart-plural-title');
     
     // Рахуємо ЗАГАЛЬНУ кількість усіх одиниць товару
-    let totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     headerTitle.innerText = getGrammarLabel(totalItemsCount);
 
     let totalPrice = 0;
@@ -77,7 +77,7 @@ function renderCartItems() {
 
 // Оновлення розміру без повного перерендеру списку (щоб меню не закривалось)
 window.updateItemSize = function(index, newSize) {
-    let cart = JSON.parse(localStorage.getItem('it_shop_cart'));
+    cart = JSON.parse(localStorage.getItem('it_shop_cart'));
     cart[index].size = newSize;
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
 
@@ -91,14 +91,14 @@ window.updateItemSize = function(index, newSize) {
 };
 
 window.changeQuantity = function(index, delta) {
-    let cart = JSON.parse(localStorage.getItem('it_shop_cart'));
+    cart = JSON.parse(localStorage.getItem('it_shop_cart'));
     cart[index].quantity = Math.max(1, cart[index].quantity + delta);
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
     renderCartItems();
 };
 
 window.removeProduct = function(index) {
-    let cart = JSON.parse(localStorage.getItem('it_shop_cart'));
+    cart = JSON.parse(localStorage.getItem('it_shop_cart'));
     cart.splice(index, 1);
     localStorage.setItem('it_shop_cart', JSON.stringify(cart));
     renderCartItems();

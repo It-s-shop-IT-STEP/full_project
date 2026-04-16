@@ -1,3 +1,4 @@
+from django.conf import settings
 import json, requests
 from django.http import JsonResponse
 from .models import ProfileMessage
@@ -12,6 +13,7 @@ from .forms import RegistrationForm
 from django.db.models import Q
 from .models import UserProfile
 from django.db.models.functions import Lower
+from django.core.mail import send_mail
 
 products = Product.objects.prefetch_related('colors__images').all()
 
@@ -115,7 +117,7 @@ def order_view(request):
     return render(request, 'order.html', {'user': request.user})
 
 TELEGRAM_BOT_TOKEN = '8312173871:AAEjQGFJlQ6D3SJMPpTJsDHhbKqDle2dOhY'
-TELEGRAM_CHAT_ID = '628064779'
+TELEGRAM_CHAT_ID = '-1003508398264'
 
 @login_required(login_url='login')
 def checkout_view(request):
@@ -177,6 +179,38 @@ def checkout_view(request):
             # 3. Оновлюємо фінальну ціну в замовленні
             order.total_price = total_verified_price
             order.save()
+
+            # 4. ВІДПРАВКА ЕМЕЙЛУ КОРИСТУВАЧУ (SMTP)
+            subject = f'Замовлення №{order.id} підтверджено | IT SHOP'
+            
+            # Текст листа
+            message_body = f"""
+Вітаємо, {order.first_name}!
+            
+Ваше замовлення в магазині IT SHOP успішно оформлене.
+            
+Деталі замовлення:
+{items_msg}
+Загальна вартість: {order.total_price} грн.
+Спосіб оплати: {payment_text}
+Адреса доставки: {order.address}
+            
+    Ми зв'яжемося з вами найближчим часом.
+            Дякуємо, що обрали нас!
+            """
+
+            print(f"DEBUG: Спроба відправити лист на {order.email} від {settings.EMAIL_HOST_USER}")
+            try:
+                send_mail(
+                    subject,
+                    message_body,
+                    settings.EMAIL_HOST_USER, # Від кого (з settings.py)
+                    [order.email],            # Кому (email клієнта з форми)
+                    fail_silently=False,
+                )
+                print(f"Лист успішно надіслано на {order.email}")
+            except Exception as e:
+                print(f"Помилка відправки листа: {e}")
 
             # 4. Формуємо повідомлення для Telegram
             full_msg = (
@@ -251,12 +285,26 @@ def product_detail(request, id):
 
 def get_cart_prices(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        product_ids = data.get('ids', [])
-        
-        # Отримуємо актуальні ціни для списку ID
-        products = Product.objects.filter(id__in=product_ids)
-        prices_map = {p.id: p.discount_price for p in products}
-        
-        return JsonResponse({'prices': prices_map})
-    return JsonResponse({'status': 'error'}, status=400)
+        try: 
+            data = json.loads(request.body)
+            raw_ids = data.get('ids', [])
+            
+            clean_ids = []
+            for rid in raw_ids:
+                try:
+                    # Розбиваємо '4-Чорний-S' -> ['4', 'Чорний', 'S'] і беремо '4'
+                    clean_id = int(str(rid).split('-')[0])
+                    clean_ids.append(clean_id)
+                except (ValueError, IndexError):
+                    continue
+
+            # Отримуємо продукти
+            products = Product.objects.filter(id__in=clean_ids)
+            prices_map = {p.id: p.discount_price for p in products}
+            
+            return JsonResponse({'prices': prices_map})
+
+        except Exception as e: 
+            return JsonResponse({'error': str(e)}, status=400)
+            
+    return JsonResponse({'error': 'Invalid request'}, status=400)

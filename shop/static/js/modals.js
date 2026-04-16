@@ -14,8 +14,8 @@ function getCookie(name) {
 }
 
 // --- 1. ПЕРЕМІННІ ---
-let cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
-let favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
+cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
 
 // --- 2. ПРИ ЗАВАНТАЖЕННІ ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,14 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- 3. ЛОГІКА ХЕДЕРА ТА ВІДКРИТТЯ ---
 
 function updateHeaderBadges() {
-    const cartCount = document.getElementById('cart-count');
+    cartCount = document.getElementById('cart-count');
     const favCount = document.getElementById('fav-count');
 
-    const currentCart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    currentCart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     const currentFavs = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
 
     if (cartCount) {
-        const totalItems = currentCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+        totalItems = currentCart.reduce((sum, item) => sum + (item.quantity || 1), 0);
         cartCount.innerText = totalItems;
         cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
     }
@@ -47,9 +47,9 @@ function updateHeaderBadges() {
 
 function initGlobalModals() {
     const favModal = document.getElementById('fav-modal');
-    const cartModal = document.getElementById('cart-modal');
+    cartModal = document.getElementById('cart-modal');
     const favBtn = document.getElementById('fav-icon-trigger');
-    const cartBtn = document.getElementById('cart-icon-trigger');
+    cartBtn = document.getElementById('cart-icon-trigger');
 
     if (favBtn) {
         favBtn.onclick = (e) => {
@@ -134,7 +134,7 @@ async function renderCart() {
                     <h4>${item.name}</h4>
                     <p>Артикул: ${item.article}</p>
                     <div class="price-row">
-                        <span class="price-blue">${currentPrice} грн</span>
+                        <span class="price-blue">${currentPrice} грн х ${item.quantity} шт</span>
                     </div>
                     <button class="delete-item" onclick="removeFromCart('${item.id}')">Видалити 🗑️</button>
                 </div>
@@ -198,12 +198,12 @@ function removeFromFavorites(productId) {
 
 function transferToCartFromFav(id) {
     favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
-    const item = favorites.find(i => i.id === id);
+    item = favorites.find(i => i.id === id);
     if (item) {
         // Оскільки в улюбленому немає вибору кольору, ставимо дефолтні, як у твоїй addToCart
-        const defColor = "Чорний";
-        const defSize = "S";
-        const productKey = `${item.id}-${defColor}-${defSize}`;
+        defColor = "Чорний";
+        defSize = "S";
+        productKey = `${item.id}-${defColor}-${defSize}`;
 
         cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
         const existing = cart.find(i => i.id === productKey);

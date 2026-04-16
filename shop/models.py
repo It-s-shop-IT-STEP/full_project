@@ -69,6 +69,9 @@ class ProductColor(models.Model):
         ('black', 'Чорний'),
         ('white', 'Білий'),
         ('grey', 'Сірий'),
+        ('blue', 'Синій'),
+        ('red', 'Червоний')
+        
     ]
     product = models.ForeignKey(Product, related_name='colors', on_delete=models.CASCADE)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES)

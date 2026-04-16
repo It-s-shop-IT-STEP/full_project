@@ -412,3 +412,21 @@
     font-size: 18px;
     margin-left: 5px;
 }
+
+.btn-to-telegram {
+    display: inline-block;
+    padding: 10px 30px;
+    background-color: #0000FF; 
+    color: #FFFFFF;
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: 500;
+    font-size: 15px;
+    transition: 0.3s;
+    margin-top: 15px;
+    position: absolute;
+} 
+
+.btn-to-telegram:hover {
+    background-color: #0000CC;
+}
