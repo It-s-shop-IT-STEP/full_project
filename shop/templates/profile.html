@@ -9,7 +9,7 @@
 <div class="profile-bg">
     <div class="profile-card">
         <aside class="profile-sidebar">
-            <nav class="side-nav">
+            <nav class="side-nav"> 
                 <button class="nav-item active" data-tab="account">
                     <img src="{% static 'img/icons/user.png' %}" class="nav-icon"> Мій акаунт
                 </button>
@@ -27,7 +27,7 @@
                 <img src="{% static 'img/icons/logout.png' %}" class="nav-icon"> Вийти
             </a>
         </aside>
-
+<div class="profile-content-wrap">
         <main class="profile-content">
             
             <div class="tab-content active" id="account">
@@ -99,9 +99,9 @@
 
                     <div class="data-block" id="block-payment">
                         <div class="block-header">
-                            <h3>Спосіб оплати</h3>
-                            <button class="edit-link" onclick="toggleEdit('block-payment')">
-                                <img src="{% static 'img/icons/edit.png' %}" alt="Edit">
+                            <h3>Спосіб оплати за замовчуванням</h3>
+                            <!-- <button class="edit-link" onclick="toggleEdit('block-payment')"> -->
+                                <!-- <img src="{% static 'img/icons/edit.png' %}" alt="Edit"> -->
                             </button>
                         </div>
                         
@@ -214,8 +214,12 @@
             </div>
 
         </main>
+        </div>
     </div>
 </div>
+<div class="mm">{% include 'info_table.html' %}</div>
+
+
 {% endblock %}
 
 {% block extra_js %}

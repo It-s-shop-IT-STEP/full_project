@@ -3,6 +3,7 @@
     background-color: white; /* Фоновий білий колір з макета */
     min-height: 100vh;
     padding: 60px 20px;
+
     display: flex;
     justify-content: center;
     font-family: 'Montserrat', sans-serif;
@@ -23,8 +24,8 @@
     padding: 40px 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     background-color: #FFFFFF;
+    margin-top: 10px;
 }
 
 .side-nav {
@@ -72,16 +73,28 @@
     color: #333;
     padding: 12px 15px;
     font-weight: 500;
-    margin-top: auto;
+    margin-top: 90px;
 }
 
 /* Контентна область (права частина) */
 .profile-content {
     padding: 50px;
-    width: 75%;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* М'яка тінь */
+    width: 98%;
+    height: 600px;
+     background: #fff;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+    padding: 50px;
+    margin-top: 40px;
     background-color: white; 
 }
+
+
+.profile-content-wrap {
+    flex: 1;
+    overflow: visible;
+     padding: 20px 0;
+}
+
 
 .info-grid {
     display: grid;
@@ -92,9 +105,9 @@
 .data-block {
     background: #FFFFFF;
     padding: 30px;
-    border: 1px solid #F0F0F0;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
-    border-radius: 4px;
+    border: 1px solid #ffffff;
+    /* box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03); */
+    
     position: relative;
     min-height: 160px;
 }
@@ -158,6 +171,7 @@
     font-size: 14px;
     font-family: inherit;
     box-sizing: border-box;
+    margin-top: 10px;
 }
 
 .edit-input:focus {
@@ -371,7 +385,7 @@
     font-size: 15px;
 }
 
-.prod-meta {
+.prod-meta { 
     font-size: 13px;
     color: #777;
     display: flex;
@@ -413,20 +427,100 @@
     margin-left: 5px;
 }
 
-.btn-to-telegram {
-    display: inline-block;
-    padding: 10px 30px;
-    background-color: #0000FF; 
-    color: #FFFFFF;
-    text-decoration: none;
-    border-radius: 40px;
-    font-weight: 500;
-    font-size: 15px;
-    transition: 0.3s;
-    margin-top: 15px;
-    position: absolute;
-} 
 
-.btn-to-telegram:hover {
-    background-color: #0000CC;
+.mm{
+    bottom: 260px;
+    position: relative;
+}
+
+
+
+
+
+
+
+
+
+/* Мобільні пристрої (iPhone 14 Plus та подібні) */
+@media (max-width: 768px) {
+    .profile-bg {
+        padding: 20px 10px;
+        display: block; /* Прибираємо flex з фону для простішого потоку */
+    }
+
+    .profile-card {
+        display: flex;
+        flex-direction: column; /* Вишиковуємо елементи в стовпчик */
+        min-height: auto;
+    }
+
+    /* Сайдбар тепер не обмежує кнопку всередині */
+    .profile-sidebar {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        display: contents; /* ЦЯ МАГІЯ змушує дітей сайдбара поводитися як прямі нащадки profile-card */
+    }
+
+    /* Тепер order буде працювати! */
+    .side-nav {
+        order: 1; /* Меню зверху */
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        margin-top: 80px;
+    }
+
+    .profile-content-wrap {
+        order: 2; /* Контент посередині */
+        width: 100%;
+        padding: 0;
+    }
+
+    .logout-btn {
+        order: 3; /* Кнопка в самому низу */
+        margin: 30px auto; /* Центруємо */
+        width: fit-content;
+        display: flex;
+        justify-content: center;
+        padding: 15px 30px;
+        border-top: none; 
+        font-weight: 600;
+    }
+
+    /* Виправлення відступів всередині контенту */
+    .profile-content {
+        margin-top: 10px;
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 5px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr; /* Одна колонка */
+        gap: 15px;
+    }
+
+    .data-block {
+        padding: 15px;
+    }
+
+    /* Скидаємо таблицю в самий низ */
+    .mm {
+        position: static;
+        margin-top: 20px;
+        bottom: auto;
+    }
+}
+
+/* Додаткові виправлення для дрібних екранів */
+@media (max-width: 480px) {
+    .block-header h3 {
+        font-size: 16px;
+    }
+
+    .user-val {
+        font-size: 14px;
+    }
 }
