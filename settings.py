@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-#yy%gdu0obif+8#jg^g=1$hkz9qcu*d8s3px%mgr-**9irm54k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -131,3 +131,17 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+# --- НАЛАШТУВАННЯ SMTP GMAIL ---
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'studgov@itstep.org' 
+
+# 16-значний App Password від Google (без пробілів)
+EMAIL_HOST_PASSWORD = 'qzjvlqnnniojddpw' 
+
+# Адреса, яка буде відображатися у полі "Від кого"
+DEFAULT_FROM_EMAIL = 'IT SHOP <studgov@itstep.org>'

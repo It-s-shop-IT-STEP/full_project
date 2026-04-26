@@ -87,14 +87,30 @@
     border-radius: 50%;
     display: inline-block;
     cursor: pointer;
-    margin-right: 10px;
+    margin-right: 5px;
     border: 2px solid #eee;
     transition: 0.2s;
     position: relative;
 }
 
-.color-dot.active {
+.color-dot.black.active {
     border: 2px solid #000;
+    transform: scale(1.1);
+}
+.color-dot.white.active {
+    border: 2px solid #fff;
+    transform: scale(1.1);
+}
+.color-dot.blue.active {
+    border: 2px solid #0000FF;
+    transform: scale(1.1);
+}
+.color-dot.red.active {
+    border: 2px solid #FF0000;
+    transform: scale(1.1);
+}
+.color-dot.grey.active {
+    border: 2px solid #808080;
     transform: scale(1.1);
 }
 
@@ -104,7 +120,8 @@
 .color-dot.black { background-color: #000; }
 .color-dot.white { background-color: #fff; border: 1px solid #ddd; }
 .color-dot.grey { background-color: #808080; }
-
+.color-dot.blue { background-color: #0000FF; }
+.color-dot.red { background-color: #FF0000; }
 
 /* Секція деталей */
 .product-details {

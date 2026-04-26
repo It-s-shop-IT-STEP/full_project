@@ -30,7 +30,7 @@ function addToCart(btn) {
     cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     
     // Шукаємо за унікальним ключем (id-колір-розмір)
-    const item = cart.find(i => i.id === data.id);
+    item = cart.find(i => i.id === data.id);
     
     if (item) {
         item.price = actualPrice; // ПРИМУСОВО ОНОВЛЮЄМО ЦІНУ
@@ -53,7 +53,7 @@ function toggleFavorite(btn) {
     btn.classList.toggle('active');
 
     favorites = JSON.parse(localStorage.getItem('it_shop_favorites')) || [];
-    const index = favorites.findIndex(i => i.id === data.id);
+    index = favorites.findIndex(i => i.id === data.id);
 
     if (index > -1) {
         favorites.splice(index, 1);
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // --- ФУНКЦІЯ ВІДНОВЛЕННЯ СТАНУ ІКОНОК ---
     function restoreActiveStates() {
         // Отримуємо актуальні дані з глобальних масивів або LocalStorage
-        const currentFavIds = favorites.map(item => String(item.id));
+        currentFavIds = favorites.map(item => String(item.id));
 
         // Підсвічуємо кнопки обраного
         document.querySelectorAll('.wishlist-btn').forEach(btn => {

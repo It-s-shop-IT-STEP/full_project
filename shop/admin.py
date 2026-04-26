@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import ProfileMessage
 from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
+from django.contrib.admin.helpers import ActionForm
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
@@ -17,6 +18,25 @@ def clear_discount(modeladmin, request, queryset):
     queryset.update(discount_percentage=0)
 clear_discount.short_description = "Прибрати всі знижки"
 
+# 1. Створюємо форму, яка додасть поле "Знижка" в адмін-панель
+class DiscountActionForm(ActionForm):
+    custom_discount = forms.IntegerField(required=False, label="%", min_value=0, max_value=100)
+
+# 2. Функція дії
+def apply_custom_discount(modeladmin, request, queryset):
+    # Отримуємо значення з нашого нового поля
+    discount = request.POST.get('custom_discount')
+    
+    if not discount:
+        modeladmin.message_user(request, "Помилка: Введіть число у поле знижки поруч із кнопкою 'Виконати'.", level='error')
+        return
+
+    # Оновлюємо товари
+    updated = queryset.update(discount_percentage=int(discount))
+    modeladmin.message_user(request, f"Успішно встановлено знижку {discount}% для {updated} товарів.")
+
+apply_custom_discount.short_description = "Застосувати введену знижку (%%)"
+
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1 # Скільки порожніх полів для фото виводити відразу
@@ -29,11 +49,12 @@ class ProductColorInline(admin.StackedInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    action_form = DiscountActionForm
     readonly_fields = ('article',)
     inlines = [ProductColorInline]
     list_display = ('name', 'price', 'discount_percentage', 'article')
     list_editable = ('discount_percentage',)
-    actions = [apply_10_percent_discount, clear_discount]
+    actions = [apply_10_percent_discount, apply_custom_discount, clear_discount]
 
 @admin.register(ProductColor)
 class ProductColorAdmin(admin.ModelAdmin):

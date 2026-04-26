@@ -142,7 +142,7 @@ function updateUIList(items, listUI, inputUI, filter) {
 // --- 3. ВІДПРАВКА ЗАМОВЛЕННЯ ---
 
 async function sendOrderToTelegram() {
-    const cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
+    cart = JSON.parse(localStorage.getItem('it_shop_cart')) || [];
     if (cart.length === 0) return alert("Кошик порожній!");
 
     // 1. Отримуємо дані
@@ -213,7 +213,6 @@ async function sendOrderToTelegram() {
                 modal.style.display = 'flex';
             }
         } else {
-            const err = await res.json();
             // Виводимо конкретну помилку від Django (наприклад, про id)
             alert("Помилка: " + (err.message || "Спробуйте ще раз"));
         }
@@ -250,7 +249,7 @@ function renderPreview() {
     const previewContainer = document.getElementById('order-preview-items');
     if (!previewContainer) return;
 
-    const cart = getCartData();
+    cart = getCartData();
     const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
     
     previewContainer.innerHTML = cart.map(i => `
